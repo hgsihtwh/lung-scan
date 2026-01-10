@@ -51,7 +51,7 @@ cd lung-scan
 
 2. Создайте файл переменных окружения:
 ```bash
-cp backend/.env.example backend/.env
+cp .env.example .env
 ```
 
 3. Запустите все сервисы:
