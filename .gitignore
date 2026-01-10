@@ -1,0 +1,37 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+__pycache__/
+
+# Build
+dist/
+build/
+
+# Environment
+.env
+*.env.local
+
+# Database
+*.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Data
+backend/data/raw/*
+backend/data/processed/*
+!backend/data/.gitkeep
+
+# Cache
+.ruff_cache/
+*.pyc
+
+# Logs
+*.log
