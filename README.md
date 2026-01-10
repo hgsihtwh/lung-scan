@@ -117,30 +117,3 @@ Model API будет доступен на http://localhost:8001
 | `HOST` | Хост сервера | `0.0.0.0` |
 | `PORT` | Порт сервера | `8000` |
 | `MODEL_API_URL` | URL API модели | `http://localhost:8001/predict` |
-
-## API Endpoints
-
-### Auth
-- `POST /api/auth/register` — Регистрация
-- `POST /api/auth/login` — Авторизация
-
-### Scans
-- `GET /api/scans/` — Список исследований
-- `GET /api/scans/{id}` — Детали исследования
-- `POST /api/scans/upload` — Загрузка DICOM архива
-- `GET /api/scans/{id}/slices` — Список срезов
-- `GET /api/scans/{id}/slices/{number}` — Получить срез
-
-### Analysis
-- `POST /api/scans/{id}/analyze` — Запустить AI анализ
-
-### Feedback
-- `POST /api/scans/{id}/comments` — Сохранить комментарий
-- `POST /api/scans/{id}/feedback` — Сохранить фидбек
-
-### Reports
-- `GET /api/scans/{id}/report` — Скачать Excel отчёт
-
-## Лицензия
-
-MIT
