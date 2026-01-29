@@ -117,3 +117,16 @@ Model API будет доступен на http://localhost:8001
 | `HOST` | Хост сервера | `0.0.0.0` |
 | `PORT` | Порт сервера | `8000` |
 | `MODEL_API_URL` | URL API модели | `http://localhost:8001/predict` |
+
+
+### Скриншоты работы сервиса:
+<img width="2553" height="1274" alt="image" src="https://github.com/user-attachments/assets/8169ab21-c0f8-4259-8d66-aa1a1519ba7f" />
+---
+<img width="2545" height="1272" alt="image" src="https://github.com/user-attachments/assets/af8a73ac-c6e7-413d-a209-4354b35f02d0" />
+---
+<img width="2531" height="1287" alt="image" src="https://github.com/user-attachments/assets/269db37f-f347-4c16-9bef-e383cfe3239e" />
+---
+<img width="2558" height="1284" alt="image" src="https://github.com/user-attachments/assets/83d9ede5-f865-47bb-8004-f08ce3210e32" />
+
+
+
