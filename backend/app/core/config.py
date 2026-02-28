@@ -20,6 +20,14 @@ class Settings(BaseSettings):
     # Model API
     MODEL_API_URL: str = "http://localhost:8001/predict"
 
+    # Email Settings
+    SMTP_HOST: str
+    SMTP_PORT: int
+    SMTP_USER: str
+    SMTP_PASSWORD: str
+    SMTP_FROM_EMAIL: str
+    SMTP_FROM_NAME: str = "Lung Scan"
+
     @property
     def cors_origins_list(self) -> list[str]:
         return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
