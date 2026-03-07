@@ -55,6 +55,39 @@ class VerificationService:
             print(f"[VERIFICATION] Failed to delete code for {email}: {e}")
             return False
 
+    def generate_reset_token(self) -> str:
+        import secrets
+
+        return secrets.token_urlsafe(32)
+
+    def save_reset_token(self, email: str, token: str) -> bool:
+        try:
+            key = f"reset_token:{token}"
+            ttl = 3600  # 1 час
+            self.redis_client.setex(key, ttl, email)
+            print(f"[PASSWORD_RESET] Token saved for {email}")
+            return True
+        except Exception as e:
+            print(f"[PASSWORD_RESET] Failed to save token for {email}: {e}")
+            return False
+
+    def verify_reset_token(self, token: str) -> str | None:
+        try:
+            key = f"reset_token:{token}"
+            email = self.redis_client.get(key)
+
+            if not email:
+                print("[PASSWORD_RESET] Invalid or expired token")
+                return None
+
+            self.redis_client.delete(key)
+            print(f"[PASSWORD_RESET] Token verified for {email}")
+            return email
+
+        except Exception as e:
+            print(f"[PASSWORD_RESET] Error verifying token: {e}")
+            return None
+
     def get_ttl(self, email: str) -> int:
         try:
             key = f"verification:{email}"
