@@ -113,3 +113,52 @@ class EmailService:
         """
 
         return EmailService.send_email(to_email, subject, html_content)
+
+    @staticmethod
+    def send_password_reset_email(to_email: str, reset_token: str) -> bool:
+        subject = "Reset Your Password - Lung Scan"
+
+        reset_url = f"{settings.FRONTEND_URL}/reset-password?token={reset_token}"
+
+        html_content = f"""
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #233970;">Reset Your Password</h2>
+
+                    <p>We received a request to reset your password for your Lung Scan account.</p>
+
+                    <p>Click the button below to reset your password:</p>
+
+                    <div style="margin: 30px 0; text-align: center;">
+                        <a href="{reset_url}" 
+                           style="display: inline-block; padding: 15px 30px; background-color: #233970; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                            Reset Password
+                        </a>
+                    </div>
+
+                    <p>Or copy and paste this link into your browser:</p>
+                    <p style="word-break: break-all; color: #233970;">{reset_url}</p>
+
+                    <div style="margin: 30px 0; padding: 15px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                        <p style="margin: 0; font-size: 14px;">
+                            <strong>! Important:</strong> This link will expire in 1 hour.
+                        </p>
+                    </div>
+
+                    <p>If you didn't request a password reset, please ignore this email. Your password will remain unchanged.</p>
+
+                    <p>Best regards,<br>
+                    <strong>Lung Scan Team</strong></p>
+
+                    <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+
+                    <p style="font-size: 12px; color: #666;">
+                        This is an automated message, please do not reply.
+                    </p>
+                </div>
+            </body>
+            </html>
+            """
+
+        return EmailService.send_email(to_email, subject, html_content)
