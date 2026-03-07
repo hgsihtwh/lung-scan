@@ -1,4 +1,11 @@
-from .auth import Token, UserLogin, UserRegister, UserResponse
+from .auth import (
+    ResendCode,
+    Token,
+    UserLogin,
+    UserRegister,
+    UserResponse,
+    VerifyCode,
+)
 from .feedback import CommentCreate, FeedbackCreate, FeedbackResponse
 from .report import AnalysisResult, ReportResponse
 from .scan import ScanDetailResponse, ScanResponse, UploadResponse
@@ -9,6 +16,8 @@ __all__ = [
     "UserLogin",
     "UserRegister",
     "UserResponse",
+    "VerifyCode",
+    "ResendCode",
     # Scan
     "ScanDetailResponse",
     "ScanResponse",
