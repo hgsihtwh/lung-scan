@@ -54,6 +54,8 @@ cd lung-scan
 cp .env.example .env
 ```
 
+Заполните `.env` (см. раздел "Переменные окружения").
+
 3. Запустите все сервисы:
 ```bash
 docker-compose up --build
@@ -66,6 +68,12 @@ docker-compose up --build
 
 ## Локальная разработка (без Docker)
 
+### Требования
+
+- Node.js 20+
+- Python 3.12+
+- [uv](https://docs.astral.sh/uv/) (Python package manager)
+
 ### Frontend
 ```bash
 cd frontend
@@ -76,21 +84,34 @@ npm run dev
 Frontend будет доступен на http://localhost:5173
 
 ### Backend
+
+1. Установите uv (если ещё не установлен):
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-pip install -e .
+# Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# macOS/Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-Создайте `.env` файл:
+2. Установите зависимости:
 ```bash
+cd backend
+uv sync
+```
+
+3. Создайте `.env` файл в **корне проекта** (не в папке backend!):
+```bash
+cd ..
 cp .env.example .env
 ```
 
-Запустите сервер:
+Заполните переменные окружения (см. раздел ниже).
+
+4. Запустите сервер:
 ```bash
-uvicorn app.main:app --reload
+cd backend
+uv run uvicorn app.main:app --reload
 ```
 
 Backend будет доступен на http://localhost:8000
@@ -105,18 +126,28 @@ Model API будет доступен на http://localhost:8001
 
 ## Переменные окружения
 
-### Backend (.env)
-
 | Переменная | Описание | Пример |
 |------------|----------|--------|
+| **Security** |
 | `SECRET_KEY` | Секретный ключ для JWT токенов | `your-secret-key-here` |
 | `ALGORITHM` | Алгоритм шифрования JWT | `HS256` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Время жизни токена (минуты) | `10080` |
+| **Database** |
 | `DATABASE_URL` | URL базы данных | `sqlite:///./sql_app.db` |
+| **CORS** |
 | `CORS_ORIGINS` | Разрешённые origins для CORS | `http://localhost:5173` |
+| **Server** |
 | `HOST` | Хост сервера | `0.0.0.0` |
 | `PORT` | Порт сервера | `8000` |
+| **Model API** |
 | `MODEL_API_URL` | URL API модели | `http://localhost:8001/predict` |
+| **Email (Gmail)** |
+| `SMTP_HOST` | SMTP сервер | `smtp.gmail.com` |
+| `SMTP_PORT` | SMTP порт | `587` |
+| `SMTP_USER` | Gmail адрес | `your-email@gmail.com` |
+| `SMTP_PASSWORD` | App Password (16 символов) | `abcdefghijklmnop` |
+| `SMTP_FROM_EMAIL` | Email отправителя | `your-email@gmail.com` |
+| `SMTP_FROM_NAME` | Имя отправителя | `Lung Scan` |
 
 
 ### Скриншоты работы сервиса:
