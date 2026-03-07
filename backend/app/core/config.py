@@ -28,6 +28,9 @@ class Settings(BaseSettings):
     SMTP_FROM_EMAIL: str
     SMTP_FROM_NAME: str = "Lung Scan"
 
+    # Redis
+    REDIS_URL: str = "redis://localhost:6379"
+
     @property
     def cors_origins_list(self) -> list[str]:
         return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
