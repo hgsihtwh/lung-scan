@@ -35,6 +35,45 @@ class EmailService:
             return False
 
     @staticmethod
+    def send_verification_code(to_email: str, code: str) -> bool:
+        subject = "Your Verification Code - Chest Scan"
+
+        html_content = f"""
+            <html>
+            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+                <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #233970;">Verification Code</h2>
+
+                    <p>Thank you for registering with Chest Scan!</p>
+
+                    <p>Please use the following code to complete your registration:</p>
+
+                    <div style="margin: 30px 0; padding: 20px; background-color: #f5f3ea; border-radius: 8px; text-align: center;">
+                        <p style="margin: 0; font-size: 14px; color: #666;">Your verification code:</p>
+                        <p style="margin: 10px 0; font-size: 32px; font-weight: bold; color: #233970; letter-spacing: 8px;">
+                            {code}
+                        </p>
+                        <p style="margin: 0; font-size: 12px; color: #999;">This code will expire in 5 minutes</p>
+                    </div>
+
+                    <p>If you didn't request this code, please ignore this email.</p>
+
+                    <p>Best regards,<br>
+                    <strong>Chest Scan Team</strong></p>
+
+                    <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
+
+                    <p style="font-size: 12px; color: #666;">
+                        This is an automated message, please do not reply.
+                    </p>
+                </div>
+            </body>
+            </html>
+            """
+
+        return EmailService.send_email(to_email, subject, html_content)
+
+    @staticmethod
     def send_welcome_email(to_email: str, user_name: str) -> bool:
         subject = "Welcome to Chest Scan!"
 
