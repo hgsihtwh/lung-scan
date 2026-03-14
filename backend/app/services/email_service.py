@@ -6,12 +6,11 @@ from ..core.config import settings
 
 
 class EmailService:
-
     @staticmethod
     def send_email(
-            to_email: str,
-            subject: str,
-            html_content: str,
+        to_email: str,
+        subject: str,
+        html_content: str,
     ) -> bool:
         try:
             msg = MIMEMultipart("alternative")
@@ -83,7 +82,7 @@ class EmailService:
             <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
                 <h2 style="color: #233970;">Welcome to Chest Scan!</h2>
 
-                <p>Hi {user_name or 'there'},</p>
+                <p>Hi {user_name or "there"},</p>
 
                 <p>Thank you for registering with Chest Scan. Your account has been successfully created.</p>
 
@@ -116,7 +115,7 @@ class EmailService:
 
     @staticmethod
     def send_password_reset_email(to_email: str, reset_token: str) -> bool:
-        subject = "Reset Your Password - Lung Scan"
+        subject = "Reset Your Password - Chest Scan"
 
         reset_url = f"{settings.FRONTEND_URL}/reset-password?token={reset_token}"
 
@@ -126,13 +125,13 @@ class EmailService:
                 <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
                     <h2 style="color: #233970;">Reset Your Password</h2>
 
-                    <p>We received a request to reset your password for your Lung Scan account.</p>
+                    <p>We received a request to reset your password for your Chest Scan account.</p>
 
                     <p>Click the button below to reset your password:</p>
 
-                    <div style="margin: 30px 0; text-align: center;">
+                    <div style="margin: 15px 0; text-align: center;">
                         <a href="{reset_url}" 
-                           style="display: inline-block; padding: 15px 30px; background-color: #233970; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                           style="display: inline-block; padding: 10px 25px; background-color: #233970; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;">
                             Reset Password
                         </a>
                     </div>
@@ -140,7 +139,7 @@ class EmailService:
                     <p>Or copy and paste this link into your browser:</p>
                     <p style="word-break: break-all; color: #233970;">{reset_url}</p>
 
-                    <div style="margin: 30px 0; padding: 15px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 4px;">
+                    <div style="margin: 30px 0; padding: 15px; background-color: #f5f3ea; border-left: 4px solid #233970; border-radius: 4px;">
                         <p style="margin: 0; font-size: 14px;">
                             <strong>! Important:</strong> This link will expire in 1 hour.
                         </p>
@@ -149,7 +148,7 @@ class EmailService:
                     <p>If you didn't request a password reset, please ignore this email. Your password will remain unchanged.</p>
 
                     <p>Best regards,<br>
-                    <strong>Lung Scan Team</strong></p>
+                    <strong>Chest Scan Team</strong></p>
 
                     <hr style="border: none; border-top: 1px solid #ddd; margin: 30px 0;">
 
