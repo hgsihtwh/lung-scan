@@ -27,6 +27,15 @@ class Token(BaseModel):
     token_type: str = "bearer"
 
 
+class ForgotPassword(BaseModel):
+    email: EmailStr
+
+
+class ResetPassword(BaseModel):
+    token: str = Field(..., min_length=1)
+    new_password: str = Field(..., min_length=4, max_length=72)
+
+
 class UserResponse(BaseModel):
     id: int
     email: str

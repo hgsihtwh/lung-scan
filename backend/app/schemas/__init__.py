@@ -1,5 +1,7 @@
 from .auth import (
+    ForgotPassword,
     ResendCode,
+    ResetPassword,
     Token,
     UserLogin,
     UserRegister,
@@ -18,6 +20,8 @@ __all__ = [
     "UserResponse",
     "VerifyCode",
     "ResendCode",
+    "ForgotPassword",
+    "ResetPassword",
     # Scan
     "ScanDetailResponse",
     "ScanResponse",
