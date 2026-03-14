@@ -8,7 +8,14 @@ from ..core.config import settings
 from ..core.security import create_access_token, get_password_hash, verify_password
 from ..database import get_db
 from ..models import User
-from ..schemas import ResendCode, Token, UserRegister, UserResponse, VerifyCode
+from ..schemas import (
+    ForgotPassword,
+    ResendCode,
+    ResetPassword,
+    Token,
+    UserRegister,
+    VerifyCode,
+)
 from ..services import EmailService, VerificationService
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
@@ -92,7 +99,7 @@ async def verify_code(verify_data: VerifyCode, db: Session = Depends(get_db)):
         db.rollback()
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Registration failed: {str(e)}",
+            detail=f"Registration failed: {e!s}",
         )
 
 
@@ -147,3 +154,68 @@ async def login(
     )
 
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.post("/forgot-password", status_code=status.HTTP_200_OK)
+async def forgot_password(forgot_data: ForgotPassword, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == forgot_data.email).first()
+
+    if not user:
+        return {
+            "status": "success",
+            "message": "If this email is registered, you will receive a password reset link",
+        }
+
+    reset_token = verification_service.generate_reset_token()
+
+    if not verification_service.save_reset_token(forgot_data.email, reset_token):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to generate reset token",
+        )
+
+    if not EmailService.send_password_reset_email(forgot_data.email, reset_token):
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="Failed to send reset email",
+        )
+
+    return {
+        "status": "success",
+        "message": "If this email is registered, you will receive a password reset link",
+    }
+
+
+@router.post("/reset-password", status_code=status.HTTP_200_OK)
+async def reset_password(reset_data: ResetPassword, db: Session = Depends(get_db)):
+    email = verification_service.verify_reset_token(reset_data.token)
+
+    if not email:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired reset token",
+        )
+
+    user = db.query(User).filter(User.email == email).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+
+    try:
+        user.hashed_password = get_password_hash(reset_data.new_password)
+        db.commit()
+
+        return {
+            "status": "success",
+            "message": "Password successfully reset",
+        }
+
+    except Exception as e:
+        db.rollback()
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to reset password: {e!s}",
+        )
