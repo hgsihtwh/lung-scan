@@ -2,6 +2,7 @@ export const ROUTES = {
   HOME: '/',
   AUTH: '/auth',
   PROFILE: '/profile',
+  RESET_PASSWORD: '/reset-password',
 }
 
 export const API_ROUTES = {

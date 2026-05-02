@@ -4,7 +4,7 @@ import { Header, Footer, Hero, About } from './components/layout'
 import { FileUploadZone } from './components/upload'
 import { DicomViewer } from './components/viewer'
 import { ProfilePage } from './components/profile'
-import { AuthPage } from './pages'
+import { AuthPage, ResetPasswordPage } from './pages'
 import lungAscii from './assets/blue-lung-ascii.svg'
 
 const ProtectedRoute = ({ children }) => {
@@ -67,6 +67,8 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
