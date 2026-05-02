@@ -1,11 +1,12 @@
 from pathlib import Path
+from typing import Literal
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from ...database import get_db
-from ...models import Scan, User
+from ...models import Report, Scan, User
 from ...schemas import ScanDetailResponse, ScanResponse
 from ...services import DicomService
 from ..deps import get_current_user
@@ -17,15 +18,30 @@ PROCESSED_DIR = Path("data/processed")
 
 @router.get("/", response_model=list[ScanResponse])
 async def get_scans(
+    search: str | None = Query(None),
+    status_filter: str | None = Query(None, alias="status"),
+    verdict: str | None = Query(None),
+    sort_order: Literal["asc", "desc"] = Query("desc"),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    scans = (
+    query = (
         db.query(Scan)
+        .outerjoin(Scan.report)
         .filter(Scan.user_id == current_user.id)
-        .order_by(Scan.created_at.desc())
-        .all()
     )
+
+    if search:
+        query = query.filter(Scan.patient_name.ilike(f"%{search}%"))
+
+    if status_filter:
+        query = query.filter(Scan.status == status_filter)
+
+    if verdict:
+        query = query.filter(Report.verdict == verdict)
+
+    order_col = Scan.created_at.asc() if sort_order == "asc" else Scan.created_at.desc()
+    scans = query.order_by(order_col).all()
 
     result = []
     for scan in scans:
