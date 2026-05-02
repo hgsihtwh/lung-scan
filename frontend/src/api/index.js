@@ -7,6 +7,7 @@ export {
   getSliceNumbers,
   getSlice,
   analyzeScans,
+  getAnalysisStatus,
   saveFeedback,
   saveComment,
 } from './scans'

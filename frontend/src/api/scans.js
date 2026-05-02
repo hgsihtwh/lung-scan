@@ -52,6 +52,10 @@ export const analyzeScans = async (scanId, token) => {
   })
 }
 
+export const getAnalysisStatus = async (scanId, token) => {
+  return apiClient(`/api/scans/${scanId}/status`, { token })
+}
+
 export const saveFeedback = async (scanId, isAccurate, token) => {
   return apiClient(`/api/scans/${scanId}/feedback`, {
     method: 'POST',
