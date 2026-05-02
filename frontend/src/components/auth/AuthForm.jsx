@@ -1,10 +1,11 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { register, login, verifyCode, resendCode } from '@/api'
+import { register, login, verifyCode, resendCode, forgotPassword } from '@/api'
 import { useAuthStore } from '@/store'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
 import VerifyCodeForm from './VerifyCodeForm'
+import ForgotPasswordForm from './ForgotPasswordForm'
 
 const AuthForm = () => {
   const navigate = useNavigate()
@@ -14,6 +15,7 @@ const AuthForm = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [pendingEmail, setPendingEmail] = useState('')
+  const [forgotSuccess, setForgotSuccess] = useState(false)
 
   const validateForm = (formData) => {
     const { email, password, confirmPassword } = formData
@@ -113,6 +115,18 @@ const AuthForm = () => {
     }
   }
 
+  const handleForgotPassword = async (email) => {
+    setError('')
+    setLoading(true)
+    const result = await forgotPassword(email)
+    setLoading(false)
+    if (!result.success) {
+      setError(result.error)
+      return
+    }
+    setForgotSuccess(true)
+  }
+
   const handleResendCode = async () => {
     setError('')
     const result = await resendCode(pendingEmail)
@@ -125,12 +139,13 @@ const AuthForm = () => {
     setMode(newMode)
     setError('')
     setPendingEmail('')
+    setForgotSuccess(false)
   }
 
   return (
     <div className="max-w-[400px]">
-      {/* Mode Switcher*/}
-      {mode !== 'verify' && (
+      {/* Mode Switcher — скрываем на шагах verify и forgot */}
+      {mode !== 'verify' && mode !== 'forgot' && (
         <div className="flex gap-8 mb-12">
           <button
             onClick={() => switchMode('signin')}
@@ -163,10 +178,21 @@ const AuthForm = () => {
         </div>
       )}
 
+      {mode === 'forgot' && (
+        <div className="mb-12">
+          <h2 className="font-outfit text-[45px] font-semibold text-primary-dark">RESET</h2>
+        </div>
+      )}
+
       {/* Form Container */}
       <div className="border-2 border-primary-dark rounded-2xl p-8 bg-primary-beige">
         {mode === 'signin' && (
-          <LoginForm onSubmit={handleLogin} loading={loading} error={error} />
+          <LoginForm
+            onSubmit={handleLogin}
+            onForgotPassword={() => switchMode('forgot')}
+            loading={loading}
+            error={error}
+          />
         )}
         {mode === 'signup' && (
           <RegisterForm onSubmit={handleRegister} loading={loading} error={error} />
@@ -180,9 +206,18 @@ const AuthForm = () => {
             error={error}
           />
         )}
+        {mode === 'forgot' && (
+          <ForgotPasswordForm
+            onSubmit={handleForgotPassword}
+            onBack={() => switchMode('signin')}
+            loading={loading}
+            error={error}
+            success={forgotSuccess}
+          />
+        )}
 
-        {/* Switch mode link*/}
-        {mode !== 'verify' && (
+        {/* Switch mode link — скрываем на шагах verify и forgot */}
+        {mode !== 'verify' && mode !== 'forgot' && (
           <div className="text-center mt-6">
             <span className="font-outfit font-normal text-xs text-primary-dark opacity-60">
               {mode === 'signin' ? 'not a member? ' : 'already have an account? '}

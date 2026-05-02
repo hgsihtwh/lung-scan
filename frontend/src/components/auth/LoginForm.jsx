@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 
-const LoginForm = ({ onSubmit, loading, error }) => {
+const LoginForm = ({ onSubmit, onForgotPassword, loading, error }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -50,6 +50,7 @@ const LoginForm = ({ onSubmit, loading, error }) => {
           <label className="font-outfit font-normal text-[18px] text-primary-dark">PASSWORD</label>
           <button
             type="button"
+            onClick={onForgotPassword}
             className="font-outfit font-normal text-xs text-primary-dark opacity-60 hover:opacity-100 transition-opacity"
           >
             forgot password?
