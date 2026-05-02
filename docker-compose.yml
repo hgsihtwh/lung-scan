@@ -31,6 +31,21 @@ services:
     ports:
       - "8001:8000"
 
+  worker:
+    build: ./backend
+    volumes:
+      - ./backend/app:/app/app
+      - ./backend/data:/app/data
+    env_file:
+      - ./.env
+    environment:
+      - MODEL_API_URL=http://model:8000/predict
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+      - model
+    command: celery -A app.celery_app worker --loglevel=info
+
   redis:
     image: redis:7-alpine
     ports:
