@@ -16,6 +16,10 @@ const ProfilePage = () => {
 
   const [scans, setScans] = useState([])
   const [loading, setLoading] = useState(true)
+
+  const [searchInput, setSearchInput] = useState('')
+  const [debouncedSearch, setDebouncedSearch] = useState('')
+  const [verdict, setVerdict] = useState('')
   const [sortOrder, setSortOrder] = useState('desc')
 
   useEffect(() => {
@@ -23,17 +27,24 @@ const ProfilePage = () => {
   }, [])
 
   useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchInput), 400)
+    return () => clearTimeout(timer)
+  }, [searchInput])
+
+  useEffect(() => {
     const loadScans = async () => {
       if (!token) return
 
+      setLoading(true)
       try {
-        const result = await getScans(token)
+        const result = await getScans(token, {
+          search: debouncedSearch,
+          verdict,
+          sort_order: sortOrder,
+        })
 
         if (result.success) {
-          const sorted = result.data.sort((a, b) => {
-            return new Date(b.created_at) - new Date(a.created_at)
-          })
-          setScans(sorted)
+          setScans(result.data)
         }
       } catch (err) {
         console.error('Failed to load scans:', err)
@@ -43,19 +54,7 @@ const ProfilePage = () => {
     }
 
     loadScans()
-  }, [token])
-
-  const handleSortChange = (newOrder) => {
-    setSortOrder(newOrder)
-
-    const sorted = [...scans].sort((a, b) => {
-      const dateA = new Date(a.created_at)
-      const dateB = new Date(b.created_at)
-      return newOrder === 'desc' ? dateB - dateA : dateA - dateB
-    })
-
-    setScans(sorted)
-  }
+  }, [token, debouncedSearch, verdict, sortOrder])
 
   const handleScanClick = (scanId) => {
     setCurrentScanId(scanId)
@@ -80,7 +79,14 @@ const ProfilePage = () => {
             HISTORY OF RESEARCHES
           </h2>
 
-          <HistoryControls sortOrder={sortOrder} onSortChange={handleSortChange} />
+          <HistoryControls
+            search={searchInput}
+            onSearchChange={setSearchInput}
+            verdict={verdict}
+            onVerdictChange={setVerdict}
+            sortOrder={sortOrder}
+            onSortChange={setSortOrder}
+          />
 
           {/* Content */}
           {loading ? (

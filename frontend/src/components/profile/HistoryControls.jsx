@@ -1,25 +1,53 @@
-import { Filter, ArrowUpDown } from 'lucide-react'
+import { ArrowUpDown, Search } from 'lucide-react'
 
-const HistoryControls = ({ sortOrder, onSortChange }) => {
-  const handleSort = () => {
-    onSortChange(sortOrder === 'desc' ? 'asc' : 'desc')
-  }
+const VERDICT_OPTIONS = [
+  { label: 'All', value: '' },
+  { label: 'Normal', value: 'Normal' },
+  { label: 'Abnormal', value: 'Abnormal' },
+]
 
+const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sortOrder, onSortChange }) => {
   return (
-    <div className="flex items-center gap-4 mb-8">
+    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
+      <div className="relative flex-1 max-w-xs">
+        <Search
+          size={16}
+          className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-dark opacity-40 pointer-events-none"
+        />
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => onSearchChange(e.target.value)}
+          placeholder="Search by patient"
+          className="w-full pl-9 pr-3 py-2 text-sm font-outfit bg-transparent border border-primary-dark/20 rounded-lg focus:outline-none focus:border-primary-navy text-primary-dark placeholder:opacity-40"
+        />
+      </div>
+
+      <div className="flex items-center gap-1">
+        {VERDICT_OPTIONS.map(({ label, value }) => (
+          <button
+            key={label}
+            onClick={() => onVerdictChange(value)}
+            className={`px-3 py-1.5 text-xs font-outfit rounded-lg transition-colors ${
+              verdict === value
+                ? 'bg-primary-navy text-white'
+                : 'text-primary-dark opacity-60 hover:opacity-100'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       <button
-        onClick={handleSort}
+        onClick={() => onSortChange(sortOrder === 'desc' ? 'asc' : 'desc')}
         className="p-2 hover:opacity-70 transition-opacity"
-        title={sortOrder === 'desc' ? 'Sorted: Newest first' : 'Sorted: Oldest first'}
+        title={sortOrder === 'desc' ? 'Newest first' : 'Oldest first'}
       >
         <ArrowUpDown
           size={20}
-          className={`text-primary-dark ${sortOrder === 'asc' ? 'rotate-180' : ''}`}
+          className={`text-primary-dark transition-transform ${sortOrder === 'asc' ? 'rotate-180' : ''}`}
         />
-      </button>
-
-      <button className="p-2 hover:opacity-70 transition-opacity" title="Filter (coming soon)">
-        <Filter size={20} className="text-primary-dark" />
       </button>
     </div>
   )

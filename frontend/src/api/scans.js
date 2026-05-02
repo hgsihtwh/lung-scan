@@ -11,8 +11,14 @@ export const uploadDicom = async (file, token) => {
   })
 }
 
-export const getScans = async (token) => {
-  return apiClient('/api/scans/', { token })
+export const getScans = async (token, params = {}) => {
+  const query = new URLSearchParams()
+  if (params.search) query.set('search', params.search)
+  if (params.status) query.set('status', params.status)
+  if (params.verdict) query.set('verdict', params.verdict)
+  if (params.sort_order) query.set('sort_order', params.sort_order)
+  const qs = query.toString()
+  return apiClient(`/api/scans/${qs ? `?${qs}` : ''}`, { token })
 }
 
 export const getScanDetails = async (scanId, token) => {
