@@ -9,7 +9,7 @@ const PageLayout = ({ children, showBackground = true, className = '' }) => {
   const isProfilePage = location.pathname === '/profile'
 
   return (
-    <div className="min-h-screen bg-primary-beige relative flex flex-col overflow-x-hidden">
+    <div className="min-h-screen bg-primary-beige relative flex flex-col overflow-hidden">
       {/* ASCII art background */}
       {showBackground && (
         <img
