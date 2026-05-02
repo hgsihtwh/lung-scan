@@ -1,4 +1,4 @@
-export { register, login } from './auth'
+export { register, login, verifyCode, resendCode, forgotPassword, resetPassword } from './auth'
 
 export {
   uploadDicom,
