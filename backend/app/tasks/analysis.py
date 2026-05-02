@@ -13,9 +13,6 @@ def run_analysis(self, scan_id: int) -> dict:
         if not scan:
             return {"status": "failed", "error": "Scan not found"}
 
-        scan.status = "processing"
-        db.commit()
-
         result = AnalysisService.run_analysis(scan.file_id)
 
         if scan.report:

@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { analyzeScans, getAnalysisStatus, getScanDetails } from '@/api'
 import { useAuthStore, useScanStore } from '@/store'
 
@@ -18,6 +18,8 @@ export const useAnalysis = () => {
       pollTimer.current = null
     }
   }, [])
+
+  useEffect(() => stopPolling, [stopPolling])
 
   const pollStatus = useCallback(async (scanId) => {
     const result = await getAnalysisStatus(scanId, token)
