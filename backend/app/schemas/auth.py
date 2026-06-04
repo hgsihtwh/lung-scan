@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, Field
 
+from pydantic import BaseModel
+
 
 class UserRegister(BaseModel):
     email: EmailStr
@@ -43,3 +45,13 @@ class UserResponse(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class TokenPair(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+
+
+class RefreshRequest(BaseModel):
+    refresh_token: str
