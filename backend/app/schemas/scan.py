@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ScanResponse(BaseModel):
@@ -27,7 +27,7 @@ class ScanDetailResponse(ScanResponse):
 
 
 class UploadResponse(BaseModel):
-    status: str
+    status: str = Field(..., max_length=50)
     scan_id: int
-    message: str
-    slice_count: int
+    message: str = Field(..., max_length=500)
+    slice_count: int | None = None
