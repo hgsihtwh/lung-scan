@@ -13,6 +13,7 @@ from .auth import (
 from .feedback import CommentCreate, FeedbackCreate, FeedbackResponse
 from .report import AnalysisResult, ReportResponse
 from .scan import ScanDetailResponse, ScanResponse, UploadResponse
+from .auth import ChangePassword, UpdateProfile 
 
 __all__ = [
     "AnalysisResult",
