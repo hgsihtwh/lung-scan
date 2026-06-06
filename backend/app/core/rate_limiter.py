@@ -1,6 +1,6 @@
 import time
 
-import redis
+import redis.asyncio as aioredis
 from fastapi import Request
 from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
@@ -23,7 +23,7 @@ GLOBAL_LIMIT = (200, 60)  # 200 req/min
 class RateLimitMiddleware(BaseHTTPMiddleware):
     def __init__(self, app) -> None:
         super().__init__(app)
-        self.redis = redis.from_url(settings.REDIS_URL, decode_responses=True)
+        self.redis = aioredis.from_url(settings.REDIS_URL, decode_responses=True)
 
     async def dispatch(self, request: Request, call_next):
         ip = self._get_client_ip(request)
@@ -31,7 +31,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
         limit, period = self._get_limit_for_path(path)
 
-        allowed, retry_after = self._check_rate_limit(ip, path, limit, period)
+        allowed, retry_after = await self._check_rate_limit(ip, path, limit, period)
 
         if not allowed:
             return JSONResponse(
@@ -54,11 +54,11 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
 
     def _get_limit_for_path(self, path: str) -> tuple[int, int]:
         for route, limits in RATE_LIMITS.items():
-            if path.endswith(route) or route in path:
+            if path == route or path.endswith(route):
                 return limits
         return GLOBAL_LIMIT
 
-    def _check_rate_limit(
+    async def _check_rate_limit(
         self, ip: str, path: str, limit: int, period: int
     ) -> tuple[bool, int]:
         # Ключ: ip + путь + текущее окно времени
@@ -69,15 +69,15 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             pipe = self.redis.pipeline()
             pipe.incr(key)
             pipe.expire(key, period)
-            results = pipe.execute()
+            results = await pipe.execute()
             count = results[0]
 
             if count > limit:
-                ttl = self.redis.ttl(key)
+                ttl = await self.redis.ttl(key)
                 return False, ttl if ttl > 0 else period
 
             return True, 0
 
-        except redis.RedisError:
+        except aioredis.RedisError:
             # Если Redis недоступен — пропускаем запрос (fail open)
             return True, 0
