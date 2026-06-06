@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
@@ -247,8 +247,6 @@ async def refresh_tokens(
     refresh_data: RefreshRequest, db: Session = Depends(get_db)
 ):
     """Обновляет пару токенов по refresh токену."""
-    from datetime import datetime
- 
     db_token = (
         db.query(RefreshToken)
         .filter(RefreshToken.token == refresh_data.refresh_token)
@@ -267,7 +265,7 @@ async def refresh_tokens(
             detail="Refresh token has been revoked",
         )
  
-    if db_token.expires_at < datetime.utcnow():
+    if db_token.expires_at < datetime.now(timezone.utc).replace(tzinfo=None):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Refresh token has expired",
