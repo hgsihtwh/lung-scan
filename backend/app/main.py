@@ -36,7 +36,7 @@ async def http_exception_handler(request: Request, exc: StarletteHTTPException):
     logger.warning(f"HTTP {exc.status_code} на {request.url.path}: {exc.detail}")
     return JSONResponse(
         status_code=exc.status_code,
-        content={"detail": exc.detail, "status_code": exc.status_code},
+        content={"detail": exc.detail},
     )
 
 
@@ -49,7 +49,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     logger.warning(f"Ошибка валидации на {request.url.path}: {errors}")
     return JSONResponse(
         status_code=422,
-        content={"detail": "Ошибка валидации данных", "errors": errors},
+        content={"detail": "Validation error", "errors": errors},
     )
 
 
@@ -58,7 +58,7 @@ async def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
     logger.error(f"Ошибка БД на {request.url.path}: {exc!s}")
     return JSONResponse(
         status_code=500,
-        content={"detail": "Внутренняя ошибка сервера"},
+        content={"detail": "Internal server error"},
     )
 
 
@@ -67,7 +67,7 @@ async def jwt_exception_handler(request: Request, exc: JWTError):
     logger.warning(f"JWT ошибка на {request.url.path}: {exc!s}")
     return JSONResponse(
         status_code=401,
-        content={"detail": "Невалидный токен"},
+        content={"detail": "Invalid token"},
     )
 
 
@@ -76,7 +76,7 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
     logger.error(f"Необработанная ошибка на {request.url.path}: {exc!s}", exc_info=True)
     return JSONResponse(
         status_code=500,
-        content={"detail": "Внутренняя ошибка сервера"},
+        content={"detail": "Internal server error"},
     )
 
 
