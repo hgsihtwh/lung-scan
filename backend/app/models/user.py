@@ -15,3 +15,4 @@ class User(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
 
     scans = relationship("Scan", back_populates="owner", cascade="all, delete-orphan")
+    refresh_tokens = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")

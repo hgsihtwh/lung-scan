@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .api import auth_router, v1_router
 from .core.config import settings
+from .core.logger import LoggingMiddleware, logger
+from .core.rate_limiter import RateLimitMiddleware
 from .database import Base, engine
 
 Base.metadata.create_all(bind=engine)
@@ -21,8 +23,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.add_middleware(RateLimitMiddleware)
+app.add_middleware(LoggingMiddleware)
+
 app.include_router(auth_router)
 app.include_router(v1_router)
+
+logger.info("LungScan API started")
 
 
 @app.get("/")

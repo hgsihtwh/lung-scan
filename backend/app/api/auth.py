@@ -1,22 +1,31 @@
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
 from ..core.config import settings
-from ..core.security import create_access_token, get_password_hash, verify_password
+from ..core.security import (
+    create_access_token,
+    create_refresh_token,
+    get_password_hash,
+    get_refresh_token_expires,
+    verify_password,
+)
 from ..database import get_db
-from ..models import User
+from ..models import RefreshToken, User
 from ..schemas import (
     ForgotPassword,
+    RefreshRequest,
     ResendCode,
     ResetPassword,
     Token,
+    TokenPair,
     UserRegister,
     VerifyCode,
 )
 from ..services import EmailService, VerificationService
+
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
 
@@ -135,25 +144,37 @@ async def resend_code(resend_data: ResendCode):
     }
 
 
-@router.post("/login", response_model=Token)
+@router.post("/login", response_model=TokenPair)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
     user = db.query(User).filter(User.email == form_data.username).first()
-
+ 
     if not user or not verify_password(form_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
+ 
     access_token = create_access_token(
         data={"sub": user.email},
         expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
     )
-
-    return {"access_token": access_token, "token_type": "bearer"}
+ 
+    refresh_token_value = create_refresh_token()
+    db_refresh_token = RefreshToken(
+        token=refresh_token_value,
+        user_id=user.id,
+        expires_at=get_refresh_token_expires(),
+    )
+    db.add(db_refresh_token)
+    db.commit()
+ 
+    return TokenPair(
+        access_token=access_token,
+        refresh_token=refresh_token_value,
+    )
 
 
 @router.post("/forgot-password", status_code=status.HTTP_200_OK)
@@ -219,3 +240,78 @@ async def reset_password(reset_data: ResetPassword, db: Session = Depends(get_db
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to reset password: {e!s}",
         )
+    
+
+@router.post("/refresh", response_model=TokenPair)
+async def refresh_tokens(
+    refresh_data: RefreshRequest, db: Session = Depends(get_db)
+):
+    """Обновляет пару токенов по refresh токену."""
+    db_token = (
+        db.query(RefreshToken)
+        .filter(RefreshToken.token == refresh_data.refresh_token)
+        .first()
+    )
+ 
+    if not db_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid refresh token",
+        )
+ 
+    if db_token.revoked:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token has been revoked",
+        )
+ 
+    if db_token.expires_at < datetime.now(timezone.utc).replace(tzinfo=None):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Refresh token has expired",
+        )
+ 
+    user = db.query(User).filter(User.id == db_token.user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+        )
+ 
+    db_token.revoked = True
+ 
+    new_access_token = create_access_token(
+        data={"sub": user.email},
+        expires_delta=timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES),
+    )
+    new_refresh_token_value = create_refresh_token()
+    new_db_token = RefreshToken(
+        token=new_refresh_token_value,
+        user_id=user.id,
+        expires_at=get_refresh_token_expires(),
+    )
+    db.add(new_db_token)
+    db.commit()
+ 
+    return TokenPair(
+        access_token=new_access_token,
+        refresh_token=new_refresh_token_value,
+    )
+ 
+@router.post("/logout", status_code=status.HTTP_200_OK)
+async def logout(
+    refresh_data: RefreshRequest, db: Session = Depends(get_db)
+):
+    """Ревокация refresh токена — выход из системы."""
+    db_token = (
+        db.query(RefreshToken)
+        .filter(RefreshToken.token == refresh_data.refresh_token)
+        .first()
+    )
+ 
+    if db_token and not db_token.revoked:
+        db_token.revoked = True
+        db.commit()
+ 
+    return {"status": "success", "message": "Logged out successfully"}
+ 
