@@ -34,7 +34,6 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
 
 
 def create_refresh_token() -> str:
-    """Генерирует криптографически стойкий refresh токен."""
     return secrets.token_urlsafe(64)
 
 

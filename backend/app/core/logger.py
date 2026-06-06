@@ -19,12 +19,10 @@ def setup_logger() -> logging.Logger:
         datefmt="%Y-%m-%d %H:%M:%S",
     )
 
-    # Консоль
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(formatter)
 
-    # Файл — ротация 5MB, хранить 5 файлов
     file_handler = RotatingFileHandler(
         LOG_DIR / "app.log",
         maxBytes=5 * 1024 * 1024,
@@ -34,7 +32,6 @@ def setup_logger() -> logging.Logger:
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
 
-    # Отдельный файл только для ошибок
     error_handler = RotatingFileHandler(
         LOG_DIR / "errors.log",
         maxBytes=5 * 1024 * 1024,
@@ -59,7 +56,6 @@ class LoggingMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
         start = time.time()
 
-        # Не логируем health-check — засорит логи
         if request.url.path in ("/health", "/"):
             return await call_next(request)
 

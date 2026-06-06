@@ -7,17 +7,16 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from .config import settings
 
-# Лимиты: (количество запросов, период в секундах)
+
 RATE_LIMITS: dict[str, tuple[int, int]] = {
-    "/api/auth/login": (10, 60),        # 10 req/min — защита от брутфорса
-    "/api/auth/register": (5, 60),      # 5 req/min
-    "/api/auth/forgot-password": (5, 60),  # 5 req/min
-    "/api/auth/resend-code": (3, 60),   # 3 req/min
-    "/scans/upload": (20, 3600),        # 20 загрузок/час
+    "/api/auth/login": (10, 60),
+    "/api/auth/register": (5, 60),
+    "/api/auth/forgot-password": (5, 60),
+    "/api/auth/resend-code": (3, 60),
+    "/scans/upload": (20, 3600),
 }
 
-# Глобальный лимит для всех остальных эндпоинтов
-GLOBAL_LIMIT = (200, 60)  # 200 req/min
+GLOBAL_LIMIT = (200, 60)
 
 
 class RateLimitMiddleware(BaseHTTPMiddleware):
@@ -46,7 +45,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
     def _get_client_ip(self, request: Request) -> str:
-        # Учитываем proxy заголовки (nginx, docker)
         forwarded_for = request.headers.get("X-Forwarded-For")
         if forwarded_for:
             return forwarded_for.split(",")[0].strip()
@@ -61,7 +59,6 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
     async def _check_rate_limit(
         self, ip: str, path: str, limit: int, period: int
     ) -> tuple[bool, int]:
-        # Ключ: ip + путь + текущее окно времени
         window = int(time.time()) // period
         key = f"rate_limit:{ip}:{path}:{window}"
 
@@ -79,5 +76,4 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             return True, 0
 
         except aioredis.RedisError:
-            # Если Redis недоступен — пропускаем запрос (fail open)
             return True, 0
