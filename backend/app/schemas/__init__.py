@@ -1,4 +1,6 @@
 from .auth import (
+    ChangePassword,
+    UpdateProfile,
     ForgotPassword,
     RefreshRequest,
     ResendCode,
@@ -12,10 +14,13 @@ from .auth import (
 )
 from .feedback import CommentCreate, FeedbackCreate, FeedbackResponse
 from .report import AnalysisResult, ReportResponse
-from .scan import ScanDetailResponse, ScanResponse, UploadResponse
+from .scan import PaginatedScansResponse, ScanDetailResponse, ScanResponse, UploadResponse
 
 __all__ = [
     "AnalysisResult",
+    "PaginatedScansResponse",
+    "ChangePassword",
+    "UpdateProfile",
     "CommentCreate",
     "FeedbackCreate",
     "FeedbackResponse",
