@@ -2,9 +2,19 @@ from datetime import datetime
 
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
+
 class UserRegister(BaseModel):
     email: EmailStr
-    password: str = Field(..., min_length=4, max_length=72)
+    password: str = Field(..., min_length=8, max_length=72)
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if not any(c.isdigit() for c in v):
+            raise ValueError("Пароль должен содержать хотя бы одну цифру")
+        if not any(c.isalpha() for c in v):
+            raise ValueError("Пароль должен содержать хотя бы одну букву")
+        return v
 
 
 class UserLogin(BaseModel):
@@ -32,7 +42,16 @@ class ForgotPassword(BaseModel):
 
 class ResetPassword(BaseModel):
     token: str = Field(..., min_length=1)
-    new_password: str = Field(..., min_length=4, max_length=72)
+    new_password: str = Field(..., min_length=8, max_length=72)
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if not any(c.isdigit() for c in v):
+            raise ValueError("Пароль должен содержать хотя бы одну цифру")
+        if not any(c.isalpha() for c in v):
+            raise ValueError("Пароль должен содержать хотя бы одну букву")
+        return v
 
 
 class UserResponse(BaseModel):
