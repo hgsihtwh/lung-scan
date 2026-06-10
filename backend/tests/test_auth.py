@@ -1,5 +1,3 @@
-import pytest
-from fastapi.testclient import TestClient
 from app.models import User
 from app.core.security import get_password_hash
 
@@ -105,27 +103,10 @@ def test_register_validation_invalid_email(client):
     assert response.status_code == 422
 
 
-def test_login_validation_wrong_format(client):
-    """Логин с неверным форматом данных."""
+def test_login_rejects_json_body(client):
+    # Login endpoint expects form-data, not JSON
     response = client.post(
         "/api/auth/login",
-        json={"username": "notanemail", "password": "test"},
-    )
-    assert response.status_code == 422
-
-
-def test_change_password_validation(client, db):
-    """Смена пароля — слабый новый пароль."""
-    create_user(db)
-    login = client.post(
-        "/api/auth/login",
-        data={"username": "test@example.com", "password": "TestPass123"},
-    )
-    token = login.json()["access_token"]
-
-    response = client.put(
-        "/api/users/me/password",
-        json={"current_password": "TestPass123", "new_password": "weak"},
-        headers={"Authorization": f"Bearer {token}"},
+        json={"username": "test@example.com", "password": "TestPass123"},
     )
     assert response.status_code == 422

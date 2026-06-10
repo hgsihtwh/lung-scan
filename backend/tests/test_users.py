@@ -70,7 +70,7 @@ def test_change_password_success(client, db):
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 200
-    assert response.json()["status"] == "success"
+    assert response.json()["message"] == "Password changed successfully"
 
 
 def test_change_password_wrong_current(client, db):
@@ -93,3 +93,14 @@ def test_change_password_same_as_current(client, db):
         headers={"Authorization": f"Bearer {token}"},
     )
     assert response.status_code == 400
+
+
+def test_change_password_weak_new_password(client, db):
+    create_user(db)
+    token = get_token(client)
+    response = client.put(
+        "/api/users/me/password",
+        json={"current_password": "TestPass123", "new_password": "weak"},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 422
