@@ -19,17 +19,17 @@ from .database import get_db
 app = FastAPI(
     title="LungScan API",
     description="""
-API для анализа КТ снимков грудной клетки.
+API for chest CT scan analysis.
 
-Сервис предоставляет возможность загружать DICOM архивы,
-запускать AI анализ и получать результаты с вердиктом о наличии патологии.
+Upload DICOM archives, run AI-powered analysis,
+and receive detailed reports with pathology verdicts.
 
-Возможности:
-- Регистрация и авторизация с подтверждением email
-- Загрузка DICOM архивов (.zip)
-- AI анализ снимков
-- Получение детальных отчётов
-- Refresh токены для безопасной авторизации
+Features:
+- Registration and authentication with email verification
+- DICOM archive upload (.zip)
+- AI scan analysis
+- Detailed PDF reports
+- Refresh token rotation for secure sessions
     """,
     version="1.0.0",
     contact={
@@ -40,14 +40,14 @@ API для анализа КТ снимков грудной клетки.
         "name": "MIT",
     },
     openapi_tags=[
-        {"name": "Authentication", "description": "Регистрация, вход, управление токенами и восстановление пароля"},
-        {"name": "Scans", "description": "Получение списка и деталей сканов с пагинацией и фильтрацией"},
-        {"name": "Upload", "description": "Загрузка DICOM архивов"},
-        {"name": "Analysis", "description": "Запуск AI анализа и получение статуса"},
-        {"name": "Feedback", "description": "Обратная связь по результатам анализа"},
-        {"name": "Reports", "description": "Скачивание PDF отчётов"},
-        {"name": "Users", "description": "Управление профилем пользователя"},
-        {"name": "Admin", "description": "Административные операции — очистка файлов"},
+        {"name": "Authentication", "description": "Registration, login, token management and password recovery"},
+        {"name": "Scans", "description": "List and detail scans with pagination and filtering"},
+        {"name": "Upload", "description": "Upload DICOM archives"},
+        {"name": "Analysis", "description": "Trigger AI analysis and poll status"},
+        {"name": "Feedback", "description": "Submit feedback on analysis results"},
+        {"name": "Reports", "description": "Download PDF reports"},
+        {"name": "Users", "description": "User profile management"},
+        {"name": "Admin", "description": "Administrative operations — file cleanup"},
     ],
 )
 
@@ -119,13 +119,12 @@ app.include_router(v1_router)
 logger.info("LungScan API started")
 
 
-@app.get("/", tags=["default"], summary="Корневой эндпоинт")
+@app.get("/", tags=["default"], summary="Root endpoint")
 async def root():
     return {"message": "LungScan API", "status": "running"}
 
 
 @app.get("/health", tags=["default"], summary="Health check")
-@app.get("/health")
 async def health(db: Session = Depends(get_db)):
     db_status = "ok"
     redis_status = "ok"
