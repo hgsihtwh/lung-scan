@@ -1,10 +1,12 @@
 from .auth import (
+    ChangePassword,
     ForgotPassword,
     RefreshRequest,
     ResendCode,
     ResetPassword,
     Token,
     TokenPair,
+    UpdateProfile,
     UserLogin,
     UserRegister,
     UserResponse,
@@ -16,6 +18,7 @@ from .scan import ScanDetailResponse, ScanResponse, UploadResponse
 
 __all__ = [
     "AnalysisResult",
+    "ChangePassword",
     "CommentCreate",
     "FeedbackCreate",
     "FeedbackResponse",
@@ -28,6 +31,7 @@ __all__ = [
     "ScanResponse",
     "Token",
     "TokenPair",
+    "UpdateProfile",
     "UploadResponse",
     "UserLogin",
     "UserRegister",

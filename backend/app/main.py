@@ -10,9 +10,7 @@ from .api import auth_router, v1_router
 from .core.config import settings
 from .core.logger import LoggingMiddleware, logger
 from .core.rate_limiter import RateLimitMiddleware
-from .database import Base, engine
-
-Base.metadata.create_all(bind=engine)
+from .database import Base
 
 app = FastAPI(
     title="LungScan API",
