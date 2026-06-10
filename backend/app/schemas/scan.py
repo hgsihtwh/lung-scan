@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ScanResponse(BaseModel):
@@ -31,3 +31,11 @@ class UploadResponse(BaseModel):
     scan_id: int
     message: str
     slice_count: int
+
+
+class PaginatedScansResponse(BaseModel):
+    items: list[ScanResponse]
+    total: int
+    page: int
+    size: int
+    pages: int

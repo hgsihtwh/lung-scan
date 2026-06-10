@@ -5,13 +5,17 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080  # 7 дней
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080  # 7 days
 
     # Database
     DATABASE_URL: str = "sqlite:///./sql_app.db"
 
     # CORS
     CORS_ORIGINS: str = "http://localhost:5173"
+
+    # Environment
+    ENVIRONMENT: str = "development"
+    ADMIN_EMAILS: str = ""
 
     # Server
     HOST: str = "0.0.0.0"
@@ -35,8 +39,15 @@ class Settings(BaseSettings):
     FRONTEND_URL: str = "http://localhost:5173"
 
     @property
+    def is_production(self) -> bool:
+        return self.ENVIRONMENT == "production"
+
+    @property
     def cors_origins_list(self) -> list[str]:
-        return [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
+        origins = [origin.strip() for origin in self.CORS_ORIGINS.split(",")]
+        if self.is_production:
+            return [o for o in origins if "localhost" not in o]
+        return origins
 
     class Config:
         env_file = "../.env"
