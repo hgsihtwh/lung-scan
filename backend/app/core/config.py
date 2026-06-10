@@ -5,7 +5,7 @@ class Settings(BaseSettings):
     # Security
     SECRET_KEY: str
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080  # 7 дней
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080  # 7 days
 
     # Database
     DATABASE_URL: str = "sqlite:///./sql_app.db"
