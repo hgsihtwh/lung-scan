@@ -19,6 +19,8 @@ RUN groupadd -r appuser && useradd -r -g appuser appuser
 COPY --from=builder /app/.venv /app/.venv
 
 COPY app ./app
+COPY migrations ./migrations
+COPY alembic.ini ./alembic.ini
 
 RUN mkdir -p data/raw data/processed logs && \
     chown -R appuser:appuser /app
