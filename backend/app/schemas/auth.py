@@ -11,9 +11,9 @@ class UserRegister(BaseModel):
     @classmethod
     def validate_password(cls, v: str) -> str:
         if not any(c.isdigit() for c in v):
-            raise ValueError("Пароль должен содержать хотя бы одну цифру")
+            raise ValueError("Password must contain at least one digit")
         if not any(c.isalpha() for c in v):
-            raise ValueError("Пароль должен содержать хотя бы одну букву")
+            raise ValueError("Password must contain at least one letter")
         return v
 
 
@@ -48,9 +48,9 @@ class ResetPassword(BaseModel):
     @classmethod
     def validate_password(cls, v: str) -> str:
         if not any(c.isdigit() for c in v):
-            raise ValueError("Пароль должен содержать хотя бы одну цифру")
+            raise ValueError("Password must contain at least one digit")
         if not any(c.isalpha() for c in v):
-            raise ValueError("Пароль должен содержать хотя бы одну букву")
+            raise ValueError("Password must contain at least one letter")
         return v
 
 
@@ -81,9 +81,9 @@ class ChangePassword(BaseModel):
     @classmethod
     def validate_password(cls, v: str) -> str:
         if not any(c.isdigit() for c in v):
-            raise ValueError("Пароль должен содержать хотя бы одну цифру")
+            raise ValueError("Password must contain at least one digit")
         if not any(c.isalpha() for c in v):
-            raise ValueError("Пароль должен содержать хотя бы одну букву")
+            raise ValueError("Password must contain at least one letter")
         return v
 
 
