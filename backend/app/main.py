@@ -18,8 +18,37 @@ from .database import get_db
 
 app = FastAPI(
     title="LungScan API",
-    description="API for chest CT scan analysis",
+    description="""
+API for chest CT scan analysis.
+
+Upload DICOM archives, run AI-powered analysis,
+and receive detailed reports with pathology verdicts.
+
+Features:
+- Registration and authentication with email verification
+- DICOM archive upload (.zip)
+- AI scan analysis
+- Detailed PDF reports
+- Refresh token rotation for secure sessions
+    """,
     version="1.0.0",
+    contact={
+        "name": "LungScan Team",
+        "email": "support@lungscan.dev",
+    },
+    license_info={
+        "name": "MIT",
+    },
+    openapi_tags=[
+        {"name": "Authentication", "description": "Registration, login, token management and password recovery"},
+        {"name": "Scans", "description": "List and detail scans with pagination and filtering"},
+        {"name": "Upload", "description": "Upload DICOM archives"},
+        {"name": "Analysis", "description": "Trigger AI analysis and poll status"},
+        {"name": "Feedback", "description": "Submit feedback on analysis results"},
+        {"name": "Reports", "description": "Download PDF reports"},
+        {"name": "Users", "description": "User profile management"},
+        {"name": "Admin", "description": "Administrative operations — file cleanup"},
+    ],
 )
 
 app.add_middleware(
@@ -31,7 +60,6 @@ app.add_middleware(
     expose_headers=["X-Total-Count"],
     max_age=600,
 )
-
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(LoggingMiddleware)
 
@@ -91,12 +119,12 @@ app.include_router(v1_router)
 logger.info("LungScan API started")
 
 
-@app.get("/")
+@app.get("/", tags=["default"], summary="Root endpoint")
 async def root():
     return {"message": "LungScan API", "status": "running"}
 
 
-@app.get("/health")
+@app.get("/health", tags=["default"], summary="Health check")
 async def health(db: Session = Depends(get_db)):
     db_status = "ok"
     redis_status = "ok"
