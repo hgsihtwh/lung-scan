@@ -34,3 +34,13 @@ async def get_current_user(
         raise credentials_exception
 
     return user
+
+
+async def require_admin(current_user: User = Depends(get_current_user)) -> User:
+    admin_emails = {e.strip() for e in settings.ADMIN_EMAILS.split(",") if e.strip()}
+    if current_user.email not in admin_emails:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin access required",
+        )
+    return current_user

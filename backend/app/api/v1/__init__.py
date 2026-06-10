@@ -6,6 +6,7 @@ from .reports import router as reports_router
 from .scans import router as scans_router
 from .upload import router as upload_router
 from .users import router as users_router
+from .admin import router as admin_router
 
 router = APIRouter(prefix="/api")
 
