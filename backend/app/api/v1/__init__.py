@@ -6,6 +6,7 @@ from .reports import router as reports_router
 from .scans import router as scans_router
 from .upload import router as upload_router
 from .users import router as users_router
+from .admin import router as admin_router
 
 router = APIRouter(prefix="/api")
 
@@ -15,3 +16,4 @@ router.include_router(analysis_router, tags=["Analysis"])
 router.include_router(feedback_router, tags=["Feedback"])
 router.include_router(reports_router, tags=["Reports"])
 router.include_router(users_router, tags=["Users"])
+router.include_router(admin_router, tags=["Admin"])
