@@ -7,6 +7,15 @@ class UserRegister(BaseModel):
     email: EmailStr
     password: str = Field(..., min_length=8, max_length=72)
 
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if not any(c.isdigit() for c in v):
+            raise ValueError("Password must contain at least one digit")
+        if not any(c.isalpha() for c in v):
+            raise ValueError("Password must contain at least one letter")
+        return v
+
 
 class UserLogin(BaseModel):
     email: EmailStr
@@ -34,6 +43,15 @@ class ForgotPassword(BaseModel):
 class ResetPassword(BaseModel):
     token: str = Field(..., min_length=1)
     new_password: str = Field(..., min_length=8, max_length=72)
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if not any(c.isdigit() for c in v):
+            raise ValueError("Password must contain at least one digit")
+        if not any(c.isalpha() for c in v):
+            raise ValueError("Password must contain at least one letter")
+        return v
 
 
 class UserResponse(BaseModel):
@@ -63,9 +81,9 @@ class ChangePassword(BaseModel):
     @classmethod
     def validate_password(cls, v: str) -> str:
         if not any(c.isdigit() for c in v):
-            raise ValueError("Пароль должен содержать хотя бы одну цифру")
+            raise ValueError("Password must contain at least one digit")
         if not any(c.isalpha() for c in v):
-            raise ValueError("Пароль должен содержать хотя бы одну букву")
+            raise ValueError("Password must contain at least one letter")
         return v
 
 

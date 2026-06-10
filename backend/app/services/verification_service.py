@@ -9,7 +9,7 @@ from ..core.config import settings
 class VerificationService:
     def __init__(self) -> None:
         self.redis_client = redis.from_url(settings.REDIS_URL, decode_responses=True)
-        self.code_ttl = 300  # 5 минут
+        self.code_ttl = 300  # 5 minutes
 
     def generate_code(self) -> str:
         return "".join(random.choices(string.digits, k=6))
@@ -63,7 +63,7 @@ class VerificationService:
     def save_reset_token(self, email: str, token: str) -> bool:
         try:
             key = f"reset_token:{token}"
-            ttl = 3600  # 1 час
+            ttl = 3600  # 1 hour
             self.redis_client.setex(key, ttl, email)
             print(f"[PASSWORD_RESET] Token saved for {email}")
             return True

@@ -6,7 +6,7 @@ from .core.config import settings
 
 engine = create_engine(
     settings.DATABASE_URL,
-    connect_args={"check_same_thread": False},  # Нужно для SQLite
+    connect_args={"check_same_thread": False},  # required for SQLite
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

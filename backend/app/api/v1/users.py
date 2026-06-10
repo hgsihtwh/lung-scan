@@ -12,7 +12,6 @@ router = APIRouter(prefix="/users")
 
 @router.get("/me", response_model=UserResponse)
 async def get_profile(current_user: User = Depends(get_current_user)):
-    """Получить профиль текущего пользователя."""
     return current_user
 
 
@@ -22,7 +21,6 @@ async def update_profile(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Обновить профиль текущего пользователя."""
     if profile_data.email and profile_data.email != current_user.email:
         existing = db.query(User).filter(User.email == profile_data.email).first()
         if existing:
@@ -31,9 +29,8 @@ async def update_profile(
                 detail="Email already in use",
             )
         current_user.email = profile_data.email
-
-    db.commit()
-    db.refresh(current_user)
+        db.commit()
+        db.refresh(current_user)
     return current_user
 
 
@@ -43,20 +40,19 @@ async def change_password(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Сменить пароль авторизованного пользователя."""
     if not verify_password(password_data.current_password, current_user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Текущий пароль неверен",
+            detail="Current password is incorrect",
         )
 
     if password_data.current_password == password_data.new_password:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Новый пароль должен отличаться от текущего",
+            detail="New password must differ from the current one",
         )
 
     current_user.hashed_password = get_password_hash(password_data.new_password)
     db.commit()
 
-    return {"status": "success", "message": "Пароль успешно изменён"}
+    return {"message": "Password changed successfully"}
