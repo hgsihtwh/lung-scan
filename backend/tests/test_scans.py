@@ -1,3 +1,5 @@
+import uuid
+
 from app.models import User, Scan
 from app.core.security import get_password_hash
 
@@ -12,8 +14,8 @@ def create_user(db, email="test@example.com", password="TestPass123"):
 
 def create_scan(db, user_id, patient_name="Test Patient"):
     scan = Scan(
-        file_id=f"test_batch_{patient_name}",
-        file_hash=f"hash_{patient_name}",
+        file_id=f"test_{uuid.uuid4().hex}",
+        file_hash=f"hash_{uuid.uuid4().hex}",
         patient_name=patient_name,
         status="completed",
         slice_count=10,
@@ -110,7 +112,6 @@ def test_get_scan_not_found(client, db):
 
 
 def test_get_scans_isolation(client, db):
-    """Пользователь видит только свои сканы."""
     user1 = create_user(db, email="user1@example.com")
     create_user(db, email="user2@example.com", password="TestPass456")
     create_scan(db, user1.id)

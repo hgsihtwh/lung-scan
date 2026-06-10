@@ -31,14 +31,11 @@ def db():
 @pytest.fixture(scope="function")
 def client(db):
     def override_get_db():
-        try:
-            yield db
-        finally:
-            pass
+        yield db
 
     app.dependency_overrides[get_db] = override_get_db
 
-    # Отключаем rate limiter в тестах
+    # Disable rate limiter in tests
     with patch.object(RateLimitMiddleware, "_check_rate_limit", new_callable=AsyncMock, return_value=(True, 0)):
         with TestClient(app) as c:
             yield c
