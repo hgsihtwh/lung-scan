@@ -52,7 +52,7 @@ async def register(user_data: UserRegister, db: Session = Depends(get_db)):
     hashed_password = get_password_hash(user_data.password)
     verification_service.redis_client.setex(
         f"password:{user_data.email}",
-        300,  # 5 минут
+        300,  # 5 minutes
         hashed_password,
     )
 
@@ -114,7 +114,6 @@ async def verify_code(verify_data: VerifyCode, db: Session = Depends(get_db)):
 
 @router.post("/resend-code", status_code=status.HTTP_200_OK)
 async def resend_code(resend_data: ResendCode):
-    """Повторная отправка кода верификации"""
     password_key = f"password:{resend_data.email}"
     if not verification_service.redis_client.exists(password_key):
         raise HTTPException(
@@ -246,7 +245,6 @@ async def reset_password(reset_data: ResetPassword, db: Session = Depends(get_db
 async def refresh_tokens(
     refresh_data: RefreshRequest, db: Session = Depends(get_db)
 ):
-    """Обновляет пару токенов по refresh токену."""
     db_token = (
         db.query(RefreshToken)
         .filter(RefreshToken.token == refresh_data.refresh_token)
@@ -302,7 +300,6 @@ async def refresh_tokens(
 async def logout(
     refresh_data: RefreshRequest, db: Session = Depends(get_db)
 ):
-    """Ревокация refresh токена — выход из системы."""
     db_token = (
         db.query(RefreshToken)
         .filter(RefreshToken.token == refresh_data.refresh_token)
