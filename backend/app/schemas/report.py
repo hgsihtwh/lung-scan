@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ReportResponse(BaseModel):
@@ -17,4 +17,4 @@ class ReportResponse(BaseModel):
 class AnalysisResult(BaseModel):
     status: str
     verdict: str | None = None
-    probability: float | None = None
+    probability: float | None = Field(None, ge=0.0, le=1.0)

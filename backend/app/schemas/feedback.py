@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field
 
 class FeedbackCreate(BaseModel):
     is_accurate: bool
-    user_comment: str | None = None
+    user_comment: str | None = Field(None, max_length=1000)
 
 
 class FeedbackResponse(BaseModel):

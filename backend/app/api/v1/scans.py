@@ -7,21 +7,23 @@ from sqlalchemy.orm import Session
 
 from ...database import get_db
 from ...models import Report, Scan, User
-from ...schemas import ScanDetailResponse, ScanResponse
 from ...services import DicomService
 from ..deps import get_current_user
+from ...schemas import PaginatedScansResponse, ScanDetailResponse, ScanResponse
 
 router = APIRouter(prefix="/scans")
 
 PROCESSED_DIR = Path("data/processed")
 
 
-@router.get("/", response_model=list[ScanResponse])
+@router.get("/", response_model=PaginatedScansResponse)
 async def get_scans(
     search: str | None = Query(None),
     status_filter: str | None = Query(None, alias="status"),
     verdict: str | None = Query(None),
     sort_order: Literal["asc", "desc"] = Query("desc"),
+    page: int = Query(1, ge=1),
+    size: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -41,11 +43,15 @@ async def get_scans(
         query = query.filter(Report.verdict == verdict)
 
     order_col = Scan.created_at.asc() if sort_order == "asc" else Scan.created_at.desc()
-    scans = query.order_by(order_col).all()
+    query = query.order_by(order_col)
 
-    result = []
+    total = query.count()
+    pages = (total + size - 1) // size
+    scans = query.offset((page - 1) * size).limit(size).all()
+
+    items = []
     for scan in scans:
-        scan_dict = {
+        items.append({
             "id": scan.id,
             "file_id": scan.file_id,
             "patient_name": scan.patient_name,
@@ -54,10 +60,15 @@ async def get_scans(
             "created_at": scan.created_at,
             "verdict": scan.report.verdict if scan.report else None,
             "probability": scan.report.probability if scan.report else None,
-        }
-        result.append(scan_dict)
+        })
 
-    return result
+    return PaginatedScansResponse(
+        items=items,
+        total=total,
+        page=page,
+        size=size,
+        pages=pages,
+    )
 
 
 @router.get("/{scan_id}", response_model=ScanDetailResponse)
