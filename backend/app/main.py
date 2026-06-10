@@ -1,26 +1,24 @@
-from fastapi import FastAPI, Request
+import redis as sync_redis
+
+from fastapi import Depends, FastAPI, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from jose import JWTError
+from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
+from sqlalchemy.orm import Session
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .api import auth_router, v1_router
 from .core.config import settings
 from .core.logger import LoggingMiddleware, logger
 from .core.rate_limiter import RateLimitMiddleware
-from .database import Base, engine, get_db
-
-from sqlalchemy import text
-from sqlalchemy.orm import Session
-
-
-Base.metadata.create_all(bind=engine)
+from .database import get_db
 
 app = FastAPI(
     title="LungScan API",
-    description="API для анализа КТ грудной клетки",
+    description="API for chest CT scan analysis",
     version="1.0.0",
 )
 
@@ -38,7 +36,7 @@ app.add_middleware(LoggingMiddleware)
 
 @app.exception_handler(StarletteHTTPException)
 async def http_exception_handler(request: Request, exc: StarletteHTTPException):
-    logger.warning(f"HTTP {exc.status_code} на {request.url.path}: {exc.detail}")
+    logger.warning(f"HTTP {exc.status_code} at {request.url.path}: {exc.detail}")
     return JSONResponse(
         status_code=exc.status_code,
         content={"detail": exc.detail},
@@ -51,7 +49,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
     for error in exc.errors():
         field = " → ".join(str(x) for x in error["loc"] if x != "body")
         errors.append({"field": field, "message": error["msg"]})
-    logger.warning(f"Ошибка валидации на {request.url.path}: {errors}")
+    logger.warning(f"Validation error at {request.url.path}: {errors}")
     return JSONResponse(
         status_code=422,
         content={"detail": "Validation error", "errors": errors},
@@ -60,7 +58,7 @@ async def validation_exception_handler(request: Request, exc: RequestValidationE
 
 @app.exception_handler(SQLAlchemyError)
 async def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
-    logger.error(f"Ошибка БД на {request.url.path}: {exc!s}")
+    logger.error(f"Database error at {request.url.path}: {exc!s}")
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal server error"},
@@ -69,7 +67,7 @@ async def sqlalchemy_exception_handler(request: Request, exc: SQLAlchemyError):
 
 @app.exception_handler(JWTError)
 async def jwt_exception_handler(request: Request, exc: JWTError):
-    logger.warning(f"JWT ошибка на {request.url.path}: {exc!s}")
+    logger.warning(f"JWT error at {request.url.path}: {exc!s}")
     return JSONResponse(
         status_code=401,
         content={"detail": "Invalid token"},
@@ -78,7 +76,7 @@ async def jwt_exception_handler(request: Request, exc: JWTError):
 
 @app.exception_handler(Exception)
 async def unhandled_exception_handler(request: Request, exc: Exception):
-    logger.error(f"Необработанная ошибка на {request.url.path}: {exc!s}", exc_info=True)
+    logger.error(f"Unhandled error at {request.url.path}: {exc!s}", exc_info=True)
     return JSONResponse(
         status_code=500,
         content={"detail": "Internal server error"},
@@ -98,8 +96,6 @@ async def root():
 
 @app.get("/health")
 async def health(db: Session = Depends(get_db)):
-    import redis as sync_redis
-
     db_status = "ok"
     redis_status = "ok"
 
