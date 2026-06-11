@@ -59,18 +59,18 @@ async def get_patients(
     page: int = Query(1, ge=1),
     size: int = Query(20, ge=1, le=100),
     db: Session = Depends(get_db),
-    _: User = Depends(require_doctor),
+    current_user: User = Depends(require_doctor),
 ):
-    query = db.query(User).filter(User.role == ROLE_PATIENT)
+    patients = current_user.assigned_patients
     if search:
-        query = query.filter(User.email.ilike(f"%{search}%"))
+        patients = [p for p in patients if search.lower() in p.email.lower()]
 
-    total = query.count()
-    pages = (total + size - 1) // size
-    patients = query.offset((page - 1) * size).limit(size).all()
+    total = len(patients)
+    pages = max(1, (total + size - 1) // size)
+    offset = (page - 1) * size
 
     return PaginatedPatientsResponse(
-        items=patients,
+        items=patients[offset:offset + size],
         total=total,
         page=page,
         size=size,
