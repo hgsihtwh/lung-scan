@@ -82,3 +82,7 @@ export const saveComment = async (scanId, comment, token) => {
     body: JSON.stringify({ comment }),
   })
 }
+
+export const deleteScan = async (scanId, token) => {
+  return apiClient(`/api/scans/${scanId}`, { method: 'DELETE', token })
+}

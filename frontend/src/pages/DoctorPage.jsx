@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { PageLayout } from '@/components/layout'
 import { DicomViewer } from '@/components/viewer'
 import { useAuthStore, useScanStore } from '@/store'
-import { getPatients, getPatientScans, getDoctorScans } from '@/api'
+import { getPatients, getPatientScans, getDoctorScans, deleteScan } from '@/api'
 import { formatDate } from '@/utils/helpers'
 import { initCornerstone } from '@/utils/cornerstone'
 import HistoryControls from '@/components/profile/HistoryControls'
@@ -257,6 +257,13 @@ const MyScansTab = ({ token }) => {
     setViewing(false)
   }
 
+  const handleDelete = async (scanId) => {
+    const result = await deleteScan(scanId, token)
+    if (result.success) {
+      setScans((prev) => prev.filter((s) => s.id !== scanId))
+    }
+  }
+
   if (viewing) {
     return <DicomViewer onBack={handleBack} />
   }
@@ -282,6 +289,7 @@ const MyScansTab = ({ token }) => {
           scans={scans}
           token={token}
           onScanClick={handleScanClick}
+          onDelete={handleDelete}
           hasMore={hasMore}
           onLoadMore={() => setPage((p) => p + 1)}
         />

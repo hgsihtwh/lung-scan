@@ -1,6 +1,6 @@
 import StudyCard from './StudyCard'
 
-const StudyGrid = ({ scans, token, onScanClick, hasMore = false, onLoadMore }) => {
+const StudyGrid = ({ scans, token, onScanClick, onDelete, hasMore = false, onLoadMore }) => {
   if (scans.length === 0) {
     return (
       <div className="text-center py-12">
@@ -13,7 +13,7 @@ const StudyGrid = ({ scans, token, onScanClick, hasMore = false, onLoadMore }) =
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {scans.map((scan) => (
-          <StudyCard key={scan.id} scan={scan} token={token} onClick={() => onScanClick(scan.id)} />
+          <StudyCard key={scan.id} scan={scan} token={token} onClick={() => onScanClick(scan.id)} onDelete={onDelete} />
         ))}
       </div>
 

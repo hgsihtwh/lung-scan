@@ -12,6 +12,7 @@ export {
   getAnalysisStatus,
   saveFeedback,
   saveComment,
+  deleteScan,
 } from './scans'
 
 export { downloadScanReport } from './reports'
