@@ -25,7 +25,7 @@ const ConfirmModal = ({ isOpen, email, onConfirm, onCancel }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div
         className="rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl"
-        style={{ backgroundColor: '#F5F3EA' }}
+        style={{ backgroundColor: '#EFEDE3' }}
       >
         <h3 className="font-outfit font-semibold text-xl text-primary-dark mb-3">
           Delete user?
@@ -91,7 +91,6 @@ const MaintenanceBlock = ({ token }) => {
       style={{ backgroundColor: '#EFEDE3' }}
     >
       <div className="flex items-center gap-2 mb-6">
-        <Settings size={18} className="text-primary-dark opacity-60" />
         <h3 className="font-outfit font-semibold text-xl text-primary-dark">
           System Maintenance
         </h3>
