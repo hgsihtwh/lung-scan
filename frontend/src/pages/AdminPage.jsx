@@ -10,6 +10,31 @@ import {
 } from '@/api'
 import { formatDate } from '@/utils/helpers'
 
+const Section = ({ title, children, defaultOpen = true }) => {
+  const [open, setOpen] = useState(defaultOpen)
+  return (
+    <div className="mt-8 rounded-2xl" style={{ backgroundColor: '#EFEDE3' }}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between px-6 py-6 text-left"
+        style={{ borderRadius: open ? '16px 16px 0 0' : '16px' }}
+      >
+        <h3 className="font-outfit font-semibold text-xl text-primary-dark">{title}</h3>
+        <ChevronDown
+          size={20}
+          className="text-primary-dark opacity-50 transition-transform flex-shrink-0"
+          style={{ transform: open ? 'rotate(180deg)' : 'rotate(0deg)' }}
+        />
+      </button>
+      {open && (
+        <div className="px-6 pb-8" style={{ borderTop: '1px solid rgba(28,28,28,0.08)', borderRadius: '0 0 16px 16px' }}>
+          <div className="pt-6">{children}</div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 const ROLES = ['patient', 'doctor', 'admin']
 
 const ROLE_OPTIONS = ROLES.map((r) => ({ label: r, value: r }))
@@ -86,17 +111,7 @@ const MaintenanceBlock = ({ token }) => {
   }
 
   return (
-    <div
-      className="mt-16 rounded-2xl px-6 py-8"
-      style={{ backgroundColor: '#EFEDE3' }}
-    >
-      <div className="flex items-center gap-2 mb-6">
-        <h3 className="font-outfit font-semibold text-xl text-primary-dark">
-          System Maintenance
-        </h3>
-      </div>
-
-      <div className="flex flex-col sm:flex-row gap-6">
+    <div className="flex flex-col sm:flex-row gap-6">
         {/* Old files */}
         <div className="flex-1">
           <p className="font-outfit text-sm text-primary-dark opacity-70 mb-3">
@@ -142,7 +157,6 @@ const MaintenanceBlock = ({ token }) => {
             <p className="mt-2 font-outfit text-sm text-primary-dark opacity-70">{orphanedResult}</p>
           )}
         </div>
-      </div>
     </div>
   )
 }
@@ -287,25 +301,17 @@ const AssignmentsBlock = ({ token }) => {
     load()
   }, [token])
 
-  return (
-    <div className="mt-16 rounded-2xl px-6 py-8" style={{ backgroundColor: '#EFEDE3' }}>
-      <h3 className="font-outfit font-semibold text-xl text-primary-dark mb-6">
-        Assignments
-      </h3>
-
-      {loading ? (
-        <div className="text-center py-8">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-navy mx-auto" />
-        </div>
-      ) : doctors.length === 0 ? (
-        <p className="font-outfit text-sm text-primary-dark opacity-60">No doctors registered yet.</p>
-      ) : (
-        <div className="space-y-3">
-          {doctors.map((d) => (
-            <DoctorRow key={d.id} doctor={d} token={token} allPatients={allPatients} />
-          ))}
-        </div>
-      )}
+  return loading ? (
+    <div className="text-center py-8">
+      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-navy mx-auto" />
+    </div>
+  ) : doctors.length === 0 ? (
+    <p className="font-outfit text-sm text-primary-dark opacity-60">No doctors registered yet.</p>
+  ) : (
+    <div className="space-y-3">
+      {doctors.map((d) => (
+        <DoctorRow key={d.id} doctor={d} token={token} allPatients={allPatients} />
+      ))}
     </div>
   )
 }
@@ -385,12 +391,7 @@ const AdminPage = () => {
           ADMIN PANEL
         </h2>
 
-        {/* User Management block */}
-        <div className="rounded-2xl px-6 py-8" style={{ backgroundColor: '#EFEDE3' }}>
-          <h3 className="font-outfit font-semibold text-xl text-primary-dark mb-6">
-            User Management
-          </h3>
-
+        <Section title="User Management">
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-4 mb-6">
             <input
@@ -428,38 +429,35 @@ const AdminPage = () => {
             <>
               <div className="space-y-3">
                 {users.map((u) => (
-                <div
-                  key={u.id}
-                  className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 rounded-2xl"
-                  style={{ backgroundColor: '#E1DFD5' }}
-                >
-                  <div className="flex-1 min-w-0">
-                    <p className="font-outfit font-medium text-base text-primary-dark truncate">{u.email}</p>
-                    <p className="font-outfit text-sm text-primary-dark opacity-60">
-                      ID: {u.id} · Registered {formatDate(u.created_at)}
-                    </p>
+                  <div
+                    key={u.id}
+                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 rounded-2xl"
+                    style={{ backgroundColor: '#E1DFD5' }}
+                  >
+                    <div className="flex-1 min-w-0">
+                      <p className="font-outfit font-medium text-base text-primary-dark truncate">{u.email}</p>
+                      <p className="font-outfit text-sm text-primary-dark opacity-60">
+                        ID: {u.id} · Registered {formatDate(u.created_at)}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <Select
+                        value={u.role}
+                        onChange={(newRole) => handleRoleChange(u.id, newRole)}
+                        options={ROLE_OPTIONS}
+                        disabled={updatingId === u.id}
+                      />
+                      <button
+                        onClick={() => setConfirmTarget(u)}
+                        className="p-2 rounded-full hover:bg-red-50 text-primary-dark opacity-40 hover:opacity-80 hover:text-red-600 transition-all"
+                        title="Delete user"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </div>
-
-                  <div className="flex items-center gap-3">
-                    <Select
-                      value={u.role}
-                      onChange={(newRole) => handleRoleChange(u.id, newRole)}
-                      options={ROLE_OPTIONS}
-                      disabled={updatingId === u.id}
-                    />
-                    <button
-                      onClick={() => setConfirmTarget(u)}
-                      className="p-2 rounded-full hover:bg-red-50 text-primary-dark opacity-40 hover:opacity-80 hover:text-red-600 transition-all"
-                      title="Delete user"
-                    >
-                      <Trash2 size={16} />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-              {/* Pagination */}
+                ))}
+              </div>
               {pages > 1 && (
                 <div className="flex items-center gap-4 mt-8">
                   <button
@@ -483,11 +481,15 @@ const AdminPage = () => {
               )}
             </>
           )}
-        </div>{/* end User Management block */}
+        </Section>
 
-        <AssignmentsBlock token={token} />
+        <Section title="Assignments">
+          <AssignmentsBlock token={token} />
+        </Section>
 
-        <MaintenanceBlock token={token} />
+        <Section title="System Maintenance">
+          <MaintenanceBlock token={token} />
+        </Section>
       </div>
 
       <ConfirmModal
