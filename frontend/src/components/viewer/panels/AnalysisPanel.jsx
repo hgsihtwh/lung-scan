@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { analyzeScans, getScanDetails } from '@/api'
 import { useAuthStore, useScanStore } from '@/store'
 
-const AnalysisPanel = () => {
+const AnalysisPanel = ({ readOnly = false }) => {
   const { token } = useAuthStore()
   const { currentScanId, currentScanDetails, setCurrentScanDetails } = useScanStore()
 
@@ -78,13 +78,15 @@ const AnalysisPanel = () => {
         </div>
       )}
 
-      <button
-        onClick={handleStartAnalysis}
-        disabled={isAnalyzing || hasVerdict}
-        className="w-full h-10 sm:h-11 md:h-12 bg-primary-navy text-primary-beige font-outfit font-normal text-[15px] rounded-full hover:bg-primary-navyDark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        {isAnalyzing ? 'Analyzing...' : hasVerdict ? 'Analysis Complete' : 'Start Analysis'}
-      </button>
+      {!readOnly && (
+        <button
+          onClick={handleStartAnalysis}
+          disabled={isAnalyzing || hasVerdict}
+          className="w-full h-10 sm:h-11 md:h-12 bg-primary-navy text-primary-beige font-outfit font-normal text-[15px] rounded-full hover:bg-primary-navyDark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isAnalyzing ? 'Analyzing...' : hasVerdict ? 'Analysis Complete' : 'Start Analysis'}
+        </button>
+      )}
     </div>
   )
 }

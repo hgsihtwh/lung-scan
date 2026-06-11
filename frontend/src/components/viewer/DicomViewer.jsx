@@ -10,7 +10,7 @@ import ThumbnailGrid from './ThumbnailGrid'
 
 import { AnalysisPanel, CommentsPanel, FeedbackPanel, ExportPanel } from './panels'
 
-const DicomViewer = ({ onBack }) => {
+const DicomViewer = ({ onBack, readOnly = false }) => {
   const { token } = useAuthStore()
   const {
     currentScanId,
@@ -136,9 +136,9 @@ const DicomViewer = ({ onBack }) => {
 
         {/* Right: Panels */}
         <div className="space-y-4 lg:space-y-6">
-          <AnalysisPanel />
-          <CommentsPanel />
-          <FeedbackPanel />
+          <AnalysisPanel readOnly={readOnly} />
+          <CommentsPanel readOnly={readOnly} />
+          {!readOnly && <FeedbackPanel />}
           <ExportPanel />
         </div>
       </div>

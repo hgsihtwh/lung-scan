@@ -94,7 +94,7 @@ const ScansPage = () => {
         </h2>
 
         {viewing ? (
-          <DicomViewer onBack={handleBack} />
+          <DicomViewer onBack={handleBack} readOnly />
         ) : (
           <>
             <HistoryControls
