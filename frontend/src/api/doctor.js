@@ -13,3 +13,10 @@ export const getPatientScans = async (token, patientId, { search, status, verdic
   if (verdict) params.set('verdict', verdict)
   return apiClient(`/api/doctor/patients/${patientId}/scans?${params}`, { token })
 }
+
+export const getDoctorScans = async (token, { search, verdict, sort_order = 'desc', page = 1, size = 20 } = {}) => {
+  const params = new URLSearchParams({ page, size, sort_order })
+  if (search) params.set('search', search)
+  if (verdict) params.set('verdict', verdict)
+  return apiClient(`/api/doctor/scans?${params}`, { token })
+}
