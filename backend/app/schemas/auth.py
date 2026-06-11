@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, EmailStr, Field, field_validator
 
@@ -57,10 +58,15 @@ class ResetPassword(BaseModel):
 class UserResponse(BaseModel):
     id: int
     email: str
+    role: str
     created_at: datetime
 
     class Config:
         from_attributes = True
+
+
+class UpdateRoleRequest(BaseModel):
+    role: Literal["patient", "doctor", "admin"]
 
 
 class TokenPair(BaseModel):
