@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PageLayout } from '@/components/layout'
 import { useAuthStore, useScanStore } from '@/store'
@@ -9,6 +9,8 @@ import ProfileInfo from './ProfileInfo'
 import HistoryControls from './HistoryControls'
 import StudyGrid from './StudyGrid'
 
+const PAGE_SIZE = 20
+
 const ProfilePage = () => {
   const navigate = useNavigate()
   const { token } = useAuthStore()
@@ -16,11 +18,15 @@ const ProfilePage = () => {
 
   const [scans, setScans] = useState([])
   const [loading, setLoading] = useState(true)
+  const [hasMore, setHasMore] = useState(false)
+  const [page, setPage] = useState(1)
 
   const [searchInput, setSearchInput] = useState('')
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [verdict, setVerdict] = useState('')
   const [sortOrder, setSortOrder] = useState('desc')
+
+  const prevFiltersRef = useRef({ search: '', verdict: '', sortOrder: 'desc' })
 
   useEffect(() => {
     initCornerstone()
@@ -32,19 +38,35 @@ const ProfilePage = () => {
   }, [searchInput])
 
   useEffect(() => {
+    const filtersChanged =
+      prevFiltersRef.current.search !== debouncedSearch ||
+      prevFiltersRef.current.verdict !== verdict ||
+      prevFiltersRef.current.sortOrder !== sortOrder
+
+    prevFiltersRef.current = { search: debouncedSearch, verdict, sortOrder }
+
+    if (filtersChanged && page !== 1) {
+      setPage(1)
+      return
+    }
+
+    const currentPage = filtersChanged ? 1 : page
+
     const loadScans = async () => {
       if (!token) return
-
       setLoading(true)
       try {
         const result = await getScans(token, {
           search: debouncedSearch,
           verdict,
           sort_order: sortOrder,
+          page: currentPage,
+          size: PAGE_SIZE,
         })
-
         if (result.success) {
-          setScans(result.data)
+          const items = result.data.items ?? []
+          setScans(prev => currentPage === 1 ? items : [...prev, ...items])
+          setHasMore(result.data.page < result.data.pages)
         }
       } catch (err) {
         console.error('Failed to load scans:', err)
@@ -54,7 +76,7 @@ const ProfilePage = () => {
     }
 
     loadScans()
-  }, [token, debouncedSearch, verdict, sortOrder])
+  }, [token, debouncedSearch, verdict, sortOrder, page])
 
   const handleScanClick = (scanId) => {
     setCurrentScanId(scanId)
@@ -95,7 +117,13 @@ const ProfilePage = () => {
               <p className="font-outfit text-primary-dark">Loading studies...</p>
             </div>
           ) : (
-            <StudyGrid scans={scans} token={token} onScanClick={handleScanClick} />
+            <StudyGrid
+            scans={scans}
+            token={token}
+            onScanClick={handleScanClick}
+            hasMore={hasMore}
+            onLoadMore={() => setPage(p => p + 1)}
+          />
           )}
         </div>
       </div>
