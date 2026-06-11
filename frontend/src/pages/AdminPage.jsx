@@ -196,10 +196,11 @@ const DoctorRow = ({ doctor, token, allPatients }) => {
   ]
 
   return (
-    <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#EFEDE3' }}>
+    <div style={{ backgroundColor: '#E1DFD5', borderRadius: '16px' }}>
       <button
         onClick={handleExpand}
         className="w-full flex items-center justify-between px-6 py-4 text-left"
+        style={{ borderRadius: expanded ? '16px 16px 0 0' : '16px' }}
       >
         <div>
           <p className="font-outfit font-medium text-base text-primary-dark">{doctor.email}</p>
@@ -215,7 +216,7 @@ const DoctorRow = ({ doctor, token, allPatients }) => {
       </button>
 
       {expanded && (
-        <div className="px-6 pb-5 border-t border-primary-dark/10">
+        <div className="px-6 pb-5" style={{ borderTop: '1px solid rgba(28,28,28,0.1)', borderRadius: '0 0 16px 16px' }}>
           {loadingAssigned ? (
             <p className="font-outfit text-sm text-primary-dark opacity-60 pt-4">Loading...</p>
           ) : (
@@ -385,47 +386,53 @@ const AdminPage = () => {
           ADMIN PANEL
         </h2>
 
-        {/* Filters */}
-        <div className="flex flex-wrap items-center gap-4 mb-6">
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder="Search by email..."
-            className="px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none w-full max-w-xs"
-            style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
-          />
-          <Select
-            value={roleFilter}
-            onChange={setRoleFilter}
-            options={ROLE_FILTER_OPTIONS}
-            placeholder="All roles"
-          />
-        </div>
+        {/* User Management block */}
+        <div className="rounded-2xl px-6 py-8" style={{ backgroundColor: '#EFEDE3' }}>
+          <h3 className="font-outfit font-semibold text-xl text-primary-dark mb-6">
+            User Management
+          </h3>
 
-        <p className="font-outfit text-sm text-primary-dark opacity-60 mb-6">
-          Total users: {total}
-        </p>
-
-        {error && (
-          <div className="mb-4 font-outfit text-sm text-red-600">{error}</div>
-        )}
-
-        {loading ? (
-          <div className="text-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-navy mx-auto mb-4" />
-            <p className="font-outfit text-primary-dark">Loading users...</p>
+          {/* Filters */}
+          <div className="flex flex-wrap items-center gap-4 mb-6">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search by email..."
+              className="px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none w-full max-w-xs"
+              style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+            />
+            <Select
+              value={roleFilter}
+              onChange={setRoleFilter}
+              options={ROLE_FILTER_OPTIONS}
+              placeholder="All roles"
+            />
           </div>
-        ) : users.length === 0 ? (
-          <p className="font-outfit text-primary-dark opacity-60 py-12">No users found.</p>
-        ) : (
-          <>
-            <div className="space-y-3">
-              {users.map((u) => (
+
+          <p className="font-outfit text-sm text-primary-dark opacity-60 mb-6">
+            Total users: {total}
+          </p>
+
+          {error && (
+            <div className="mb-4 font-outfit text-sm text-red-600">{error}</div>
+          )}
+
+          {loading ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-navy mx-auto mb-4" />
+              <p className="font-outfit text-primary-dark">Loading users...</p>
+            </div>
+          ) : users.length === 0 ? (
+            <p className="font-outfit text-primary-dark opacity-60 py-12">No users found.</p>
+          ) : (
+            <>
+              <div className="space-y-3">
+                {users.map((u) => (
                 <div
                   key={u.id}
                   className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 rounded-2xl"
-                  style={{ backgroundColor: '#EFEDE3' }}
+                  style={{ backgroundColor: '#E1DFD5' }}
                 >
                   <div className="flex-1 min-w-0">
                     <p className="font-outfit font-medium text-base text-primary-dark truncate">{u.email}</p>
@@ -453,30 +460,31 @@ const AdminPage = () => {
               ))}
             </div>
 
-            {/* Pagination */}
-            {pages > 1 && (
-              <div className="flex items-center gap-4 mt-8">
-                <button
-                  onClick={() => setPage((p) => Math.max(1, p - 1))}
-                  disabled={page === 1}
-                  className="px-4 py-2 rounded-full font-outfit text-sm bg-primary-navy text-primary-beige disabled:opacity-40"
-                >
-                  ← Prev
-                </button>
-                <span className="font-outfit text-sm text-primary-dark opacity-60">
-                  {page} / {pages}
-                </span>
-                <button
-                  onClick={() => setPage((p) => Math.min(pages, p + 1))}
-                  disabled={page === pages}
-                  className="px-4 py-2 rounded-full font-outfit text-sm bg-primary-navy text-primary-beige disabled:opacity-40"
-                >
-                  Next →
-                </button>
-              </div>
-            )}
-          </>
-        )}
+              {/* Pagination */}
+              {pages > 1 && (
+                <div className="flex items-center gap-4 mt-8">
+                  <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page === 1}
+                    className="px-4 py-2 rounded-full font-outfit text-sm bg-primary-navy text-primary-beige disabled:opacity-40"
+                  >
+                    ← Prev
+                  </button>
+                  <span className="font-outfit text-sm text-primary-dark opacity-60">
+                    {page} / {pages}
+                  </span>
+                  <button
+                    onClick={() => setPage((p) => Math.min(pages, p + 1))}
+                    disabled={page === pages}
+                    className="px-4 py-2 rounded-full font-outfit text-sm bg-primary-navy text-primary-beige disabled:opacity-40"
+                  >
+                    Next →
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </div>{/* end User Management block */}
 
         <AssignmentsBlock token={token} />
 
