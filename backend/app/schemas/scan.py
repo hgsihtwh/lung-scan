@@ -2,6 +2,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
+from .auth import UserResponse
+
 
 class ScanResponse(BaseModel):
     id: int
@@ -35,6 +37,14 @@ class UploadResponse(BaseModel):
 
 class PaginatedScansResponse(BaseModel):
     items: list[ScanResponse]
+    total: int
+    page: int
+    size: int
+    pages: int
+
+
+class PaginatedPatientsResponse(BaseModel):
+    items: list[UserResponse]
     total: int
     page: int
     size: int

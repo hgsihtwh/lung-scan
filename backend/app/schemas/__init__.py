@@ -8,6 +8,7 @@ from .auth import (
     Token,
     TokenPair,
     UpdateProfile,
+    UpdateRoleRequest,
     UserLogin,
     UserRegister,
     UserResponse,
@@ -15,7 +16,7 @@ from .auth import (
 )
 from .feedback import CommentCreate, FeedbackCreate, FeedbackResponse
 from .report import AnalysisResult, ReportResponse
-from .scan import ScanDetailResponse, ScanResponse, UploadResponse, PaginatedScansResponse
+from .scan import PaginatedPatientsResponse, PaginatedScansResponse, ScanDetailResponse, ScanResponse, UploadResponse
 
 __all__ = [
     "AnalysisResult",
@@ -25,6 +26,7 @@ __all__ = [
     "FeedbackCreate",
     "FeedbackResponse",
     "ForgotPassword",
+    "PaginatedPatientsResponse",
     "PaginatedScansResponse",
     "RefreshRequest",
     "ResendCode",
@@ -35,6 +37,7 @@ __all__ = [
     "Token",
     "TokenPair",
     "UpdateProfile",
+    "UpdateRoleRequest",
     "UploadResponse",
     "UserLogin",
     "UserRegister",

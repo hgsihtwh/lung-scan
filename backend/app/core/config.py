@@ -15,7 +15,7 @@ class Settings(BaseSettings):
 
     # Environment
     ENVIRONMENT: str = "development"
-    ADMIN_EMAILS: str = ""
+    FIRST_ADMIN_EMAIL: str = ""
 
     # Server
     HOST: str = "0.0.0.0"
