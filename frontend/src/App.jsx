@@ -81,12 +81,13 @@ function MainPage() {
   const { currentStep } = useUIStore()
 
   const role = user?.role
+  const isAdmin = role === 'admin'
   const shouldShowViewer = currentStep === 'viewer' || (isAuthenticated && currentScanId)
 
   const renderRoleBlock = () => {
     if (!isAuthenticated) return null
     if (role === 'doctor') return <DoctorBlock />
-    if (role === 'admin') return <AdminBlock />
+    if (isAdmin) return <AdminBlock />
     return shouldShowViewer ? <DicomViewer /> : <FileUploadZone />
   }
 
@@ -101,8 +102,8 @@ function MainPage() {
 
       <div className="relative z-20">
         <Header />
-        <Hero />
-        <About />
+        {!isAdmin && <Hero />}
+        {!isAdmin && <About />}
         {renderRoleBlock()}
         <Footer />
       </div>

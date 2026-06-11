@@ -33,12 +33,14 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="flex items-center gap-6">
-            <a
-              href="/#about"
-              className="font-outfit font-normal text-base sm:text-lg md:text-[20px] text-primary-dark hover:opacity-70 transition-opacity"
-            >
-              About
-            </a>
+            {role !== 'admin' && (
+              <a
+                href="/#about"
+                className="font-outfit font-normal text-base sm:text-lg md:text-[20px] text-primary-dark hover:opacity-70 transition-opacity"
+              >
+                About
+              </a>
+            )}
 
             {isAuthenticated ? (
               <>
