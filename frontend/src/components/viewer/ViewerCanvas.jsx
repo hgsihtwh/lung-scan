@@ -13,8 +13,11 @@ const ViewerCanvas = ({ scanId, currentSlice, token, sliceNumbers }) => {
     if (viewerRef.current && !isViewerEnabled && sliceNumbers.length > 0) {
       try {
         cornerstone.enable(viewerRef.current)
+        // Force resize so canvas matches the actual rendered dimensions
+        setTimeout(() => {
+          if (viewerRef.current) cornerstone.resize(viewerRef.current, true)
+        }, 0)
         setIsViewerEnabled(true)
-        console.log('Cornerstone enabled')
       } catch (err) {
         console.error('Failed to enable cornerstone:', err)
       }
@@ -174,7 +177,7 @@ const ViewerCanvas = ({ scanId, currentSlice, token, sliceNumbers }) => {
       className="relative rounded-xl sm:rounded-2xl overflow-hidden"
       style={{ aspectRatio: '4/3', backgroundColor: '#000' }}
     >
-      <div ref={viewerRef} className="w-full h-full" style={{ width: '100%', height: '100%' }} />
+      <div ref={viewerRef} className="absolute inset-0" />
 
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
