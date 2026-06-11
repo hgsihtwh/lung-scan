@@ -1,9 +1,13 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuthStore } from '@/store'
+
+const NAV_LINK_CLASS =
+  'font-outfit font-normal text-base sm:text-lg md:text-[20px] text-primary-navy hover:opacity-70 transition-opacity'
 
 const Header = () => {
   const navigate = useNavigate()
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, user } = useAuthStore()
+  const role = user?.role
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-primary-beige z-30 pt-8 sm:pt-12 md:pt-[60px]">
@@ -37,17 +41,23 @@ const Header = () => {
             </a>
 
             {isAuthenticated ? (
-              <button
-                onClick={() => navigate('/profile')}
-                className="font-outfit font-normal text-base sm:text-lg md:text-[20px] text-primary-navy hover:opacity-70 transition-opacity"
-              >
-                Profile
-              </button>
+              <>
+                {role === 'doctor' && (
+                  <button onClick={() => navigate('/doctor')} className={NAV_LINK_CLASS}>
+                    Patients
+                  </button>
+                )}
+                {role === 'admin' && (
+                  <button onClick={() => navigate('/admin')} className={NAV_LINK_CLASS}>
+                    Admin
+                  </button>
+                )}
+                <button onClick={() => navigate('/profile')} className={NAV_LINK_CLASS}>
+                  Profile
+                </button>
+              </>
             ) : (
-              <button
-                onClick={() => navigate('/auth')}
-                className="font-outfit font-normal text-base sm:text-lg md:text-[20px] text-primary-navy hover:opacity-70 transition-opacity"
-              >
+              <button onClick={() => navigate('/auth')} className={NAV_LINK_CLASS}>
                 Sign In
               </button>
             )}
