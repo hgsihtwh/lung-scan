@@ -1,5 +1,9 @@
 import { apiClient } from './client'
 
+export const getMe = async (token) => {
+  return apiClient('/api/v1/users/me', { token })
+}
+
 export const register = async (email, password) => {
   return apiClient('/api/auth/register', {
     method: 'POST',

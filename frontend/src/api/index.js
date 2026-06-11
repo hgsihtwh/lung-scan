@@ -1,4 +1,6 @@
-export { register, login, verifyCode, resendCode, forgotPassword, resetPassword } from './auth'
+export { register, login, verifyCode, resendCode, forgotPassword, resetPassword, getMe } from './auth'
+export { getPatients, getPatientScans } from './doctor'
+export { getUsers, updateUserRole } from './admin'
 
 export {
   uploadDicom,
