@@ -19,5 +19,6 @@ class User(Base):
     role = Column(String, nullable=False, default=ROLE_PATIENT, server_default=ROLE_PATIENT)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-    scans = relationship("Scan", back_populates="owner", cascade="all, delete-orphan")
+    scans = relationship("Scan", foreign_keys="[Scan.user_id]", back_populates="owner", cascade="all, delete-orphan")
+    uploaded_scans = relationship("Scan", foreign_keys="[Scan.uploaded_by_id]", back_populates="uploader")
     refresh_tokens = relationship("RefreshToken", back_populates="user", cascade="all, delete-orphan")

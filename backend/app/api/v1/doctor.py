@@ -6,10 +6,51 @@ from sqlalchemy.orm import Session
 from ...database import get_db
 from ...models import Report, Scan, User
 from ...models.user import ROLE_PATIENT
-from ...schemas import PaginatedScansResponse, PaginatedPatientsResponse, UserResponse
-from ..deps import get_current_user, require_doctor
+from ...schemas import PaginatedScansResponse, PaginatedPatientsResponse, ScanResponse, UserResponse
+from ..deps import require_doctor
 
 router = APIRouter(prefix="/doctor")
+
+
+@router.get("/scans", response_model=PaginatedScansResponse)
+async def get_doctor_scans(
+    search: str | None = Query(None),
+    verdict: str | None = Query(None),
+    sort_order: Literal["asc", "desc"] = Query("desc"),
+    page: int = Query(1, ge=1),
+    size: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_doctor),
+):
+    query = db.query(Scan).outerjoin(Scan.report).filter(Scan.uploaded_by_id == current_user.id)
+
+    if search:
+        query = query.filter(Scan.patient_name.ilike(f"%{search}%"))
+    if verdict:
+        query = query.filter(Report.verdict == verdict)
+
+    order_col = Scan.created_at.asc() if sort_order == "asc" else Scan.created_at.desc()
+    query = query.order_by(order_col)
+
+    total = query.count()
+    pages = (total + size - 1) // size
+    scans = query.offset((page - 1) * size).limit(size).all()
+
+    items = [
+        {
+            "id": scan.id,
+            "file_id": scan.file_id,
+            "patient_name": scan.patient_name,
+            "status": scan.status,
+            "slice_count": scan.slice_count,
+            "created_at": scan.created_at,
+            "verdict": scan.report.verdict if scan.report else None,
+            "probability": scan.report.probability if scan.report else None,
+        }
+        for scan in scans
+    ]
+
+    return PaginatedScansResponse(items=items, total=total, page=page, size=size, pages=pages)
 
 
 @router.get("/patients", response_model=PaginatedPatientsResponse)

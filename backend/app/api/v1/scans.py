@@ -3,6 +3,7 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import FileResponse
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from ...database import get_db
@@ -79,7 +80,10 @@ async def get_scan(
 ):
     scan = (
         db.query(Scan)
-        .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+        .filter(
+            Scan.id == scan_id,
+            or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id),
+        )
         .first()
     )
 
@@ -112,7 +116,10 @@ async def get_slices(
 ):
     scan = (
         db.query(Scan)
-        .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+        .filter(
+            Scan.id == scan_id,
+            or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id),
+        )
         .first()
     )
 
@@ -137,7 +144,10 @@ async def get_slice(
 ):
     scan = (
         db.query(Scan)
-        .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+        .filter(
+            Scan.id == scan_id,
+            or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id),
+        )
         .first()
     )
 

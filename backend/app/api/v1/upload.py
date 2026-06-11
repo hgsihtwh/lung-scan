@@ -1,11 +1,12 @@
-from fastapi import APIRouter, Depends, File, HTTPException, UploadFile, status
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile, status
 from sqlalchemy.orm import Session
 
 from ...database import get_db
 from ...models import Scan, User
+from ...models.user import ROLE_PATIENT
 from ...schemas import UploadResponse
 from ...services import DicomService
-from ..deps import get_current_user
+from ..deps import require_doctor
 
 router = APIRouter(prefix="/scans")
 
@@ -15,8 +16,9 @@ router = APIRouter(prefix="/scans")
 )
 async def upload_dicom(
     file: UploadFile = File(...),
+    patient_id: int | None = Form(None),
     db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
+    current_user: User = Depends(require_doctor),
 ):
     try:
         if not file.filename or not file.filename.endswith(".zip"):
@@ -25,18 +27,29 @@ async def upload_dicom(
                 detail="Only ZIP archives are supported",
             )
 
+        if patient_id is not None:
+            patient = db.query(User).filter(
+                User.id == patient_id, User.role == ROLE_PATIENT
+            ).first()
+            if not patient:
+                raise HTTPException(
+                    status_code=status.HTTP_404_NOT_FOUND,
+                    detail="Patient not found",
+                )
+
         file_content = await file.read()
         file_hash = DicomService.calculate_hash(file_content)
-        print(f"[DEBUG] File hash: {file_hash}")
 
         existing_scan = (
             db.query(Scan)
-            .filter(Scan.file_hash == file_hash, Scan.user_id == current_user.id)
+            .filter(
+                Scan.file_hash == file_hash,
+                Scan.uploaded_by_id == current_user.id,
+            )
             .first()
         )
 
         if existing_scan:
-            print(f"[DEBUG] Found existing scan by hash with ID: {existing_scan.id}")
             return UploadResponse(
                 status="exists",
                 scan_id=existing_scan.id,
@@ -55,9 +68,6 @@ async def upload_dicom(
                 detail=str(e),
             )
 
-        print(f"[DEBUG] Patient: {dicom_data['patient_name']}")
-        print(f"[DEBUG] Unique slices: {dicom_data['slice_count']}")
-
         new_scan = Scan(
             file_id=batch_id,
             file_hash=file_hash,
@@ -65,14 +75,13 @@ async def upload_dicom(
             patient_name=dicom_data["patient_name"],
             status="completed",
             slice_count=dicom_data["slice_count"],
-            user_id=current_user.id,
+            user_id=patient_id,
+            uploaded_by_id=current_user.id,
         )
 
         db.add(new_scan)
         db.commit()
         db.refresh(new_scan)
-
-        print(f"[DEBUG] Created new scan with ID: {new_scan.id}")
 
         return UploadResponse(
             status="success",
