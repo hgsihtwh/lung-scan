@@ -1,8 +1,11 @@
 import { apiClient, API_URL } from './client'
 
-export const uploadDicom = async (file, token) => {
+export const uploadDicom = async (file, token, patientId = null) => {
   const formData = new FormData()
   formData.append('file', file)
+  if (patientId !== null && patientId !== '') {
+    formData.append('patient_id', patientId)
+  }
 
   return apiClient('/api/scans/upload', {
     method: 'POST',
