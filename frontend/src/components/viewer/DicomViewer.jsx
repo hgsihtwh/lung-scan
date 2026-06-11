@@ -10,7 +10,7 @@ import ThumbnailGrid from './ThumbnailGrid'
 
 import { AnalysisPanel, CommentsPanel, FeedbackPanel, ExportPanel } from './panels'
 
-const DicomViewer = () => {
+const DicomViewer = ({ onBack }) => {
   const { token } = useAuthStore()
   const {
     currentScanId,
@@ -64,7 +64,8 @@ const DicomViewer = () => {
 
   const handleChangeStudy = () => {
     resetScan()
-    setCurrentStep('upload')
+    if (onBack) onBack()
+    else setCurrentStep('upload')
   }
 
   if (isLoadingScan) {
