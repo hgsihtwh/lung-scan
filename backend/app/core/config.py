@@ -8,7 +8,7 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080  # 7 days
 
     # Database
-    DATABASE_URL: str = "sqlite:///./sql_app.db"
+    DATABASE_URL: str = "sqlite:///./data/sql_app.db"
 
     # CORS
     CORS_ORIGINS: str = "http://localhost:5173"
