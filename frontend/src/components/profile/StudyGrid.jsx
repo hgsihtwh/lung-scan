@@ -1,16 +1,6 @@
-import { useState } from 'react'
 import StudyCard from './StudyCard'
 
-const StudyGrid = ({ scans, token, onScanClick }) => {
-  const [displayCount, setDisplayCount] = useState(12)
-
-  const visibleScans = scans.slice(0, displayCount)
-  const hasMore = displayCount < scans.length
-
-  const handleShowMore = () => {
-    setDisplayCount((prev) => prev + 12)
-  }
-
+const StudyGrid = ({ scans, token, onScanClick, hasMore = false, onLoadMore }) => {
   if (scans.length === 0) {
     return (
       <div className="text-center py-12">
@@ -21,21 +11,19 @@ const StudyGrid = ({ scans, token, onScanClick }) => {
 
   return (
     <>
-      {/* Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {visibleScans.map((scan) => (
+        {scans.map((scan) => (
           <StudyCard key={scan.id} scan={scan} token={token} onClick={() => onScanClick(scan.id)} />
         ))}
       </div>
 
-      {/* Show More */}
       {hasMore && (
         <div className="flex justify-center mt-12">
           <button
-            onClick={handleShowMore}
+            onClick={onLoadMore}
             className="font-outfit font-normal text-base text-primary-navy hover:opacity-70 transition-opacity underline"
           >
-            Show more ({scans.length - displayCount} remaining)
+            Show more
           </button>
         </div>
       )}
