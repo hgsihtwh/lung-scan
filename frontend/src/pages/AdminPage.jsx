@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react'
-import { Trash2, Settings } from 'lucide-react'
+import { Trash2, Settings, ChevronDown, X } from 'lucide-react'
 import { PageLayout } from '@/components/layout'
 import { Select } from '@/components/ui'
 import { useAuthStore } from '@/store'
-import { getUsers, updateUserRole, deleteUser, cleanupOldFiles, cleanupOrphanedFiles } from '@/api'
+import {
+  getUsers, updateUserRole, deleteUser,
+  getDoctors, getDoctorAssignedPatients, assignPatient, unassignPatient,
+  cleanupOldFiles, cleanupOrphanedFiles,
+} from '@/api'
 import { formatDate } from '@/utils/helpers'
 
 const ROLES = ['patient', 'doctor', 'admin']
@@ -140,6 +144,168 @@ const MaintenanceBlock = ({ token }) => {
           )}
         </div>
       </div>
+    </div>
+  )
+}
+
+// ── Assignments block ────────────────────────────────────────────────────────
+
+const DoctorRow = ({ doctor, token, allPatients }) => {
+  const [expanded, setExpanded] = useState(false)
+  const [assigned, setAssigned] = useState(null)
+  const [loadingAssigned, setLoadingAssigned] = useState(false)
+  const [selectedPatientId, setSelectedPatientId] = useState('')
+  const [assigning, setAssigning] = useState(false)
+
+  const load = async () => {
+    setLoadingAssigned(true)
+    const result = await getDoctorAssignedPatients(token, doctor.id)
+    if (result.success) setAssigned(result.data.items)
+    setLoadingAssigned(false)
+  }
+
+  const handleExpand = () => {
+    const next = !expanded
+    setExpanded(next)
+    if (next && assigned === null) load()
+  }
+
+  const handleAssign = async () => {
+    if (!selectedPatientId) return
+    setAssigning(true)
+    const result = await assignPatient(token, doctor.id, Number(selectedPatientId))
+    if (result.success) {
+      const patient = allPatients.find((p) => String(p.id) === selectedPatientId)
+      if (patient) setAssigned((prev) => [...(prev || []), patient])
+      setSelectedPatientId('')
+    }
+    setAssigning(false)
+  }
+
+  const handleUnassign = async (patientId) => {
+    const result = await unassignPatient(token, doctor.id, patientId)
+    if (result.success) setAssigned((prev) => prev.filter((p) => p.id !== patientId))
+  }
+
+  const assignedIds = new Set((assigned || []).map((p) => String(p.id)))
+  const patientOptions = [
+    { label: 'Select patient...', value: '' },
+    ...allPatients
+      .filter((p) => !assignedIds.has(String(p.id)))
+      .map((p) => ({ label: p.email, value: String(p.id) })),
+  ]
+
+  return (
+    <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: '#EFEDE3' }}>
+      <button
+        onClick={handleExpand}
+        className="w-full flex items-center justify-between px-6 py-4 text-left"
+      >
+        <div>
+          <p className="font-outfit font-medium text-base text-primary-dark">{doctor.email}</p>
+          <p className="font-outfit text-sm text-primary-dark opacity-60">
+            {assigned !== null ? `${assigned.length} patient(s) assigned` : 'Click to expand'}
+          </p>
+        </div>
+        <ChevronDown
+          size={18}
+          className="text-primary-dark opacity-50 transition-transform"
+          style={{ transform: expanded ? 'rotate(180deg)' : 'rotate(0deg)' }}
+        />
+      </button>
+
+      {expanded && (
+        <div className="px-6 pb-5 border-t border-primary-dark/10">
+          {loadingAssigned ? (
+            <p className="font-outfit text-sm text-primary-dark opacity-60 pt-4">Loading...</p>
+          ) : (
+            <>
+              {/* Assigned patients */}
+              <div className="flex flex-wrap gap-2 pt-4 mb-4 min-h-[36px]">
+                {assigned && assigned.length > 0 ? assigned.map((p) => (
+                  <span
+                    key={p.id}
+                    className="flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full font-outfit text-sm"
+                    style={{ backgroundColor: '#E1DFD5', color: '#1C1C1C' }}
+                  >
+                    {p.email}
+                    <button
+                      onClick={() => handleUnassign(p.id)}
+                      className="hover:text-red-600 transition-colors"
+                    >
+                      <X size={13} />
+                    </button>
+                  </span>
+                )) : (
+                  <p className="font-outfit text-sm text-primary-dark opacity-40">No patients assigned</p>
+                )}
+              </div>
+
+              {/* Add patient */}
+              <div className="flex items-center gap-3">
+                <div className="flex-1 max-w-xs">
+                  <Select
+                    value={selectedPatientId}
+                    onChange={setSelectedPatientId}
+                    options={patientOptions}
+                    placeholder="Select patient..."
+                    searchable
+                  />
+                </div>
+                <button
+                  onClick={handleAssign}
+                  disabled={!selectedPatientId || assigning}
+                  className="px-5 py-2 rounded-full font-outfit text-sm bg-primary-navy text-primary-beige hover:opacity-80 transition-opacity disabled:opacity-40"
+                >
+                  {assigning ? 'Adding...' : 'Add'}
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const AssignmentsBlock = ({ token }) => {
+  const [doctors, setDoctors] = useState([])
+  const [allPatients, setAllPatients] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true)
+      const [docRes, patRes] = await Promise.all([
+        getDoctors(token, { size: 100 }),
+        getUsers(token, { role: 'patient', size: 100 }),
+      ])
+      if (docRes.success) setDoctors(docRes.data.items)
+      if (patRes.success) setAllPatients(patRes.data.items)
+      setLoading(false)
+    }
+    load()
+  }, [token])
+
+  return (
+    <div className="mt-16 rounded-2xl px-6 py-8" style={{ backgroundColor: '#EFEDE3' }}>
+      <h3 className="font-outfit font-semibold text-xl text-primary-dark mb-6">
+        Assignments
+      </h3>
+
+      {loading ? (
+        <div className="text-center py-8">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary-navy mx-auto" />
+        </div>
+      ) : doctors.length === 0 ? (
+        <p className="font-outfit text-sm text-primary-dark opacity-60">No doctors registered yet.</p>
+      ) : (
+        <div className="space-y-3">
+          {doctors.map((d) => (
+            <DoctorRow key={d.id} doctor={d} token={token} allPatients={allPatients} />
+          ))}
+        </div>
+      )}
     </div>
   )
 }
@@ -311,6 +477,8 @@ const AdminPage = () => {
             )}
           </>
         )}
+
+        <AssignmentsBlock token={token} />
 
         <MaintenanceBlock token={token} />
       </div>
