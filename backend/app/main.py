@@ -47,7 +47,8 @@ Features:
         {"name": "Feedback", "description": "Submit feedback on analysis results"},
         {"name": "Reports", "description": "Download PDF reports"},
         {"name": "Users", "description": "User profile management"},
-        {"name": "Admin", "description": "Administrative operations — file cleanup"},
+        {"name": "Admin", "description": "Administrative operations — file cleanup and user role management"},
+        {"name": "Doctor", "description": "Doctor operations — patient list and their scans"},
     ],
 )
 
@@ -115,6 +116,25 @@ async def unhandled_exception_handler(request: Request, exc: Exception):
 
 app.include_router(auth_router)
 app.include_router(v1_router)
+
+
+@app.on_event("startup")
+async def bootstrap_first_admin() -> None:
+    if not settings.FIRST_ADMIN_EMAIL:
+        return
+    from .database import SessionLocal
+    from .models import User
+    from .models.user import ROLE_ADMIN
+    db = SessionLocal()
+    try:
+        user = db.query(User).filter(User.email == settings.FIRST_ADMIN_EMAIL).first()
+        if user and user.role != ROLE_ADMIN:
+            user.role = ROLE_ADMIN
+            db.commit()
+            logger.info(f"Bootstrapped admin: {settings.FIRST_ADMIN_EMAIL}")
+    finally:
+        db.close()
+
 
 logger.info("LungScan API started")
 
