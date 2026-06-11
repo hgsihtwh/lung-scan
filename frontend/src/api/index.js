@@ -14,4 +14,4 @@ export {
   saveComment,
 } from './scans'
 
-export { downloadScanReport, downloadPdfReport, downloadRegistry } from './reports'
+export { downloadScanReport } from './reports'
