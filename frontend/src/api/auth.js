@@ -1,7 +1,7 @@
 import { apiClient } from './client'
 
 export const getMe = async (token) => {
-  return apiClient('/api/v1/users/me', { token })
+  return apiClient('/api/users/me', { token })
 }
 
 export const register = async (email, password) => {
