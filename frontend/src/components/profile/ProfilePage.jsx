@@ -13,8 +13,9 @@ const PAGE_SIZE = 20
 
 const ProfilePage = () => {
   const navigate = useNavigate()
-  const { token } = useAuthStore()
+  const { token, user } = useAuthStore()
   const { setCurrentScanId } = useScanStore()
+  const isAdmin = user?.role === 'admin'
 
   const [scans, setScans] = useState([])
   const [loading, setLoading] = useState(true)
@@ -95,37 +96,38 @@ const ProfilePage = () => {
           <ProfileInfo />
         </div>
 
-        {/* History Section */}
-        <div className="pb-12 sm:pb-16 md:pb-20">
-          <h2 className="font-outfit font-semibold text-[30px] text-primary-dark mb-8 sm:mb-10 lg:mb-[50px]">
-            HISTORY OF RESEARCHES
-          </h2>
+        {/* History Section — hidden for admin */}
+        {!isAdmin && (
+          <div className="pb-12 sm:pb-16 md:pb-20">
+            <h2 className="font-outfit font-semibold text-[30px] text-primary-dark mb-8 sm:mb-10 lg:mb-[50px]">
+              HISTORY OF RESEARCHES
+            </h2>
 
-          <HistoryControls
-            search={searchInput}
-            onSearchChange={setSearchInput}
-            verdict={verdict}
-            onVerdictChange={setVerdict}
-            sortOrder={sortOrder}
-            onSortChange={setSortOrder}
-          />
+            <HistoryControls
+              search={searchInput}
+              onSearchChange={setSearchInput}
+              verdict={verdict}
+              onVerdictChange={setVerdict}
+              sortOrder={sortOrder}
+              onSortChange={setSortOrder}
+            />
 
-          {/* Content */}
-          {loading ? (
-            <div className="text-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-navy mx-auto mb-4"></div>
-              <p className="font-outfit text-primary-dark">Loading studies...</p>
-            </div>
-          ) : (
-            <StudyGrid
-            scans={scans}
-            token={token}
-            onScanClick={handleScanClick}
-            hasMore={hasMore}
-            onLoadMore={() => setPage(p => p + 1)}
-          />
-          )}
-        </div>
+            {loading ? (
+              <div className="text-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-navy mx-auto mb-4"></div>
+                <p className="font-outfit text-primary-dark">Loading studies...</p>
+              </div>
+            ) : (
+              <StudyGrid
+                scans={scans}
+                token={token}
+                onScanClick={handleScanClick}
+                hasMore={hasMore}
+                onLoadMore={() => setPage(p => p + 1)}
+              />
+            )}
+          </div>
+        )}
       </div>
     </PageLayout>
   )
