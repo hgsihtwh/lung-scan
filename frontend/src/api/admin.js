@@ -14,3 +14,24 @@ export const updateUserRole = async (token, userId, role) => {
     body: JSON.stringify({ role }),
   })
 }
+
+export const deleteUser = async (token, userId) => {
+  return apiClient(`/api/admin/users/${userId}`, {
+    method: 'DELETE',
+    token,
+  })
+}
+
+export const cleanupOldFiles = async (token, days) => {
+  return apiClient(`/api/admin/cleanup/old-files?days=${days}`, {
+    method: 'POST',
+    token,
+  })
+}
+
+export const cleanupOrphanedFiles = async (token) => {
+  return apiClient('/api/admin/cleanup/orphaned-files', {
+    method: 'POST',
+    token,
+  })
+}

@@ -21,7 +21,7 @@ export const apiClient = async (endpoint, options = {}) => {
       headers,
     })
 
-    const data = await response.json()
+    const data = response.status === 204 ? null : await response.json()
 
     if (!response.ok) {
       if (data.errors?.length) {
