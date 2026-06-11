@@ -82,6 +82,8 @@ function MainPage() {
 
   const role = user?.role
   const isAdmin = role === 'admin'
+
+  if (isAdmin) return <Navigate to="/admin" replace />
   const shouldShowViewer = currentStep === 'viewer' || (isAuthenticated && currentScanId)
 
   const renderRoleBlock = () => {
