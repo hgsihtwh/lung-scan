@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 
 from ...database import get_db
 from ...models import User
-from ...schemas import UpdateRoleRequest, UserResponse
+from ...schemas import PaginatedUsersResponse, UpdateRoleRequest, UserResponse
 from ...services.cleanup_service import CleanupService
 from ..deps import require_admin
 
@@ -27,6 +27,26 @@ async def cleanup_orphaned_files(
 ):
     result = CleanupService.cleanup_orphaned_files(db)
     return {"message": "Orphaned file cleanup complete", **result}
+
+
+@router.get("/users", response_model=PaginatedUsersResponse)
+async def list_users(
+    search: str | None = Query(None),
+    role: str | None = Query(None),
+    page: int = Query(1, ge=1),
+    size: int = Query(20, ge=1, le=100),
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    query = db.query(User)
+    if search:
+        query = query.filter(User.email.ilike(f"%{search}%"))
+    if role:
+        query = query.filter(User.role == role)
+    total = query.count()
+    pages = (total + size - 1) // size
+    users = query.order_by(User.created_at.desc()).offset((page - 1) * size).limit(size).all()
+    return PaginatedUsersResponse(items=users, total=total, page=page, size=size, pages=pages)
 
 
 @router.patch("/users/{user_id}/role", response_model=UserResponse)
