@@ -29,12 +29,6 @@ async def start_analysis(
     if not scan:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
 
-    if scan.status == "processing":
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Analysis already in progress",
-        )
-
     scan.status = "processing"
     db.commit()
 

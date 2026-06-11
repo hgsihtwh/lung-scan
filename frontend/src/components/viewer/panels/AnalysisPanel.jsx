@@ -1,6 +1,9 @@
-import { useState } from 'react'
-import { analyzeScans, getScanDetails } from '@/api'
+import { useState, useEffect, useRef } from 'react'
+import { analyzeScans, getAnalysisStatus, getScanDetails } from '@/api'
 import { useAuthStore, useScanStore } from '@/store'
+
+const POLL_INTERVAL = 2000
+const POLL_TIMEOUT = 120000
 
 const AnalysisPanel = ({ readOnly = false }) => {
   const { token } = useAuthStore()
@@ -8,37 +11,62 @@ const AnalysisPanel = ({ readOnly = false }) => {
 
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [analysisError, setAnalysisError] = useState('')
+  const pollRef = useRef(null)
+  const pollStartRef = useRef(null)
+
+  useEffect(() => {
+    return () => { if (pollRef.current) clearInterval(pollRef.current) }
+  }, [])
+
+  const stopPolling = () => {
+    if (pollRef.current) {
+      clearInterval(pollRef.current)
+      pollRef.current = null
+    }
+  }
+
+  const startPolling = (scanId) => {
+    pollStartRef.current = Date.now()
+    pollRef.current = setInterval(async () => {
+      if (Date.now() - pollStartRef.current > POLL_TIMEOUT) {
+        stopPolling()
+        setIsAnalyzing(false)
+        setAnalysisError('Analysis timed out. Please try again.')
+        return
+      }
+
+      const statusResult = await getAnalysisStatus(scanId, token)
+      if (!statusResult.success) return
+
+      const { status } = statusResult.data
+      if (status === 'completed') {
+        stopPolling()
+        const detailsResult = await getScanDetails(scanId, token)
+        if (detailsResult.success) setCurrentScanDetails(detailsResult.data)
+        setIsAnalyzing(false)
+      } else if (status === 'failed') {
+        stopPolling()
+        setIsAnalyzing(false)
+        setAnalysisError('Analysis failed. Please try again.')
+      }
+    }, POLL_INTERVAL)
+  }
 
   const handleStartAnalysis = async () => {
     if (!currentScanId || !token) return
 
+    stopPolling()
     setIsAnalyzing(true)
     setAnalysisError('')
 
-    try {
-      console.log('Starting analysis for scan:', currentScanId)
-
-      const result = await analyzeScans(currentScanId, token)
-
-      console.log('Analysis result:', result)
-
-      if (!result.success) {
-        setAnalysisError(result.error)
-        setIsAnalyzing(false)
-        return
-      }
-
-      const detailsResult = await getScanDetails(currentScanId, token)
-      if (detailsResult.success) {
-        setCurrentScanDetails(detailsResult.data)
-      }
-
+    const result = await analyzeScans(currentScanId, token)
+    if (!result.success) {
+      setAnalysisError(result.error)
       setIsAnalyzing(false)
-    } catch (err) {
-      console.error('Analysis error:', err)
-      setAnalysisError('Analysis failed. Please try again.')
-      setIsAnalyzing(false)
+      return
     }
+
+    startPolling(currentScanId)
   }
 
   const hasVerdict = !!currentScanDetails?.verdict
