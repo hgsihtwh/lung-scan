@@ -44,10 +44,20 @@ const Header = () => {
 
             {isAuthenticated ? (
               <>
-                {role === 'doctor' && (
-                  <button onClick={() => navigate('/doctor')} className={NAV_LINK_CLASS}>
-                    Patients
+                {role === 'patient' && (
+                  <button onClick={() => navigate('/scans')} className={NAV_LINK_CLASS}>
+                    My Scans
                   </button>
+                )}
+                {role === 'doctor' && (
+                  <>
+                    <button onClick={() => navigate('/upload')} className={NAV_LINK_CLASS}>
+                      Upload
+                    </button>
+                    <button onClick={() => navigate('/doctor')} className={NAV_LINK_CLASS}>
+                      Patients
+                    </button>
+                  </>
                 )}
                 {role === 'admin' && (
                   <button onClick={() => navigate('/admin')} className={NAV_LINK_CLASS}>

@@ -1,10 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { useAuthStore, useScanStore, useUIStore } from './store'
+import { useAuthStore } from './store'
 import { Header, Footer, Hero, About } from './components/layout'
-import { FileUploadZone } from './components/upload'
-import { DicomViewer } from './components/viewer'
 import { ProfilePage } from './components/profile'
-import { AuthPage, ResetPasswordPage, DoctorPage, AdminPage } from './pages'
+import { AuthPage, ResetPasswordPage, DoctorPage, AdminPage, UploadPage, ScansPage } from './pages'
 import lungAscii from './assets/blue-lung-ascii.svg'
 
 const ProtectedRoute = ({ children }) => {
@@ -20,78 +18,10 @@ const RoleRoute = ({ children, roles }) => {
   return children
 }
 
-function DoctorBlock() {
-  const { user } = useAuthStore()
-  return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] py-16">
-      <div
-        className="rounded-2xl px-8 py-10 max-w-lg"
-        style={{ backgroundColor: '#EFEDE3' }}
-      >
-        <p className="font-outfit text-sm text-primary-dark opacity-60 uppercase tracking-widest mb-3">
-          Doctor panel
-        </p>
-        <h3 className="font-outfit font-semibold text-2xl text-primary-dark mb-2">
-          Welcome, {user?.email}
-        </h3>
-        <p className="font-outfit text-base text-primary-dark opacity-70 mb-8">
-          View your patients and their CT scan results.
-        </p>
-        <a
-          href="/doctor"
-          className="inline-block px-6 py-3 rounded-full bg-primary-navy text-primary-beige font-outfit text-base hover:bg-primary-navyDark transition-colors"
-        >
-          Go to Patients →
-        </a>
-      </div>
-    </div>
-  )
-}
-
-function AdminBlock() {
-  return (
-    <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] py-16">
-      <div
-        className="rounded-2xl px-8 py-10 max-w-lg"
-        style={{ backgroundColor: '#EFEDE3' }}
-      >
-        <p className="font-outfit text-sm text-primary-dark opacity-60 uppercase tracking-widest mb-3">
-          Administrative panel
-        </p>
-        <h3 className="font-outfit font-semibold text-2xl text-primary-dark mb-2">
-          User management
-        </h3>
-        <p className="font-outfit text-base text-primary-dark opacity-70 mb-8">
-          Manage user accounts and assign roles.
-        </p>
-        <a
-          href="/admin"
-          className="inline-block px-6 py-3 rounded-full bg-primary-navy text-primary-beige font-outfit text-base hover:bg-primary-navyDark transition-colors"
-        >
-          Open Admin Panel →
-        </a>
-      </div>
-    </div>
-  )
-}
-
 function MainPage() {
-  const { isAuthenticated, user } = useAuthStore()
-  const { currentScanId } = useScanStore()
-  const { currentStep } = useUIStore()
+  const { user } = useAuthStore()
 
-  const role = user?.role
-  const isAdmin = role === 'admin'
-
-  if (isAdmin) return <Navigate to="/admin" replace />
-  const shouldShowViewer = currentStep === 'viewer' || (isAuthenticated && currentScanId)
-
-  const renderRoleBlock = () => {
-    if (!isAuthenticated) return null
-    if (role === 'doctor') return <DoctorBlock />
-    if (isAdmin) return <AdminBlock />
-    return shouldShowViewer ? <DicomViewer /> : <FileUploadZone />
-  }
+  if (user?.role === 'admin') return <Navigate to="/admin" replace />
 
   return (
     <div className="min-h-screen bg-primary-beige relative">
@@ -101,12 +31,10 @@ function MainPage() {
         className="absolute -right-10 -top-20 w-[1200px] pointer-events-none select-none z-10"
         style={{ opacity: 0.9 }}
       />
-
       <div className="relative z-20">
         <Header />
-        {!isAdmin && <Hero />}
-        {!isAdmin && <About />}
-        {renderRoleBlock()}
+        <Hero />
+        <About />
         <Footer />
       </div>
     </div>
@@ -132,6 +60,24 @@ function App() {
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/scans"
+          element={
+            <RoleRoute roles={['patient']}>
+              <ScansPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/upload"
+          element={
+            <RoleRoute roles={['doctor']}>
+              <UploadPage />
+            </RoleRoute>
           }
         />
 
