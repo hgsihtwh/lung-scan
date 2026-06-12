@@ -14,7 +14,7 @@ import { initCornerstone } from '@/utils/cornerstone'
 const VerdictDot = ({ cx, cy, payload, selected, onToggle }) => {
   if (cx == null || cy == null) return null
   const isSelected = selected.includes(payload.id)
-  const color = payload.verdict === 'Normal' ? '#1F7819' : payload.verdict ? '#7E2F2F' : '#9CA3AF'
+  const color = payload.verdict === 'Normal' ? '#003DD6' : payload.verdict ? 'var(--color-text)' : 'var(--color-text-muted)'
   return (
     <circle
       cx={cx} cy={cy}
@@ -31,7 +31,7 @@ const VerdictDot = ({ cx, cy, payload, selected, onToggle }) => {
 const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null
   const d = payload[0].payload
-  const verdictColor = d.verdict === 'Normal' ? '#1F7819' : d.verdict ? '#7E2F2F' : '#9CA3AF'
+  const verdictColor = d.verdict === 'Normal' ? '#003DD6' : d.verdict ? 'var(--color-text)' : 'var(--color-text-muted)'
   return (
     <div className="rounded-xl px-4 py-3 shadow-lg" style={{ backgroundColor: 'var(--color-bg)' }}>
       <p className="font-outfit font-medium text-sm text-primary-dark">{d.date}</p>
@@ -201,8 +201,8 @@ const DynamicsPage = () => {
                 const isSelected = selected.includes(scan.id)
                 const isDisabled = selected.length >= 2 && !isSelected
                 const verdictColor = scan.verdict === 'Normal'
-                  ? '#1F7819'
-                  : scan.verdict ? '#7E2F2F' : '#9CA3AF'
+                  ? '#003DD6'
+                  : scan.verdict ? 'var(--color-text)' : 'var(--color-text-muted)'
 
                 return (
                   <div

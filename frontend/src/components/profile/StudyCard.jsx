@@ -34,9 +34,9 @@ const StudyCard = ({ scan, token, onClick, onDelete }) => {
   const [confirmOpen, setConfirmOpen] = useState(false)
 
   const getStatusColor = () => {
-    if (!scan.verdict) return '#9CA3AF'
-    if (scan.verdict === 'Normal') return '#1F7819'
-    return '#7E2F2F'
+    if (!scan.verdict) return 'var(--color-text-muted)'
+    if (scan.verdict === 'Normal') return '#003DD6'
+    return 'var(--color-text)'
   }
 
   const getStatusText = () => {

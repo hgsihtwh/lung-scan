@@ -3,34 +3,34 @@
 @tailwind utilities;
 
 :root {
-  --color-bg: #EFEDE3;
-  --color-surface: #E1DFD5;
-  --color-surface-alt: #F5F3EA;
-  --color-border: #BEBCB3;
-  --color-text: #302F2C;
-  --color-text-muted: #787771;
-  --color-navy: #1E3A5F;
-  --color-navy-dark: #152844;
-  --color-navy-accent: #233970;
-  --color-annotation: #4A6FA5;
-  --color-annotation-fill: rgba(35, 57, 112, 0.12);
-  --color-chart-grid: #D2D1C8;
+  --color-bg: #F6F6F6;
+  --color-surface: #EEEEEE;
+  --color-surface-alt: #F6F6F6;
+  --color-border: rgba(20, 20, 20, 0.12);
+  --color-text: #141414;
+  --color-text-muted: rgba(20, 20, 20, 0.45);
+  --color-navy: #003DD6;
+  --color-navy-dark: #0030B0;
+  --color-navy-accent: #003DD6;
+  --color-annotation: #003DD6;
+  --color-annotation-fill: rgba(0, 61, 214, 0.1);
+  --color-chart-grid: rgba(20, 20, 20, 0.12);
   --color-overlay-subtle: rgba(0, 0, 0, 0.07);
 }
 
 .dark {
-  --color-bg: #1A1917;
-  --color-surface: #252320;
-  --color-surface-alt: #2E2B28;
-  --color-border: #3D3B38;
-  --color-text: #E8E6DC;
-  --color-text-muted: #9C9A93;
-  --color-navy: #C9B99A;
-  --color-navy-dark: #B5A484;
-  --color-navy-accent: #CDBD9E;
-  --color-annotation: #C9B99A;
-  --color-annotation-fill: rgba(201, 185, 154, 0.15);
-  --color-chart-grid: #3D3B38;
+  --color-bg: #141414;
+  --color-surface: #1C1C1C;
+  --color-surface-alt: #222222;
+  --color-border: rgba(246, 246, 246, 0.12);
+  --color-text: #F6F6F6;
+  --color-text-muted: rgba(246, 246, 246, 0.45);
+  --color-navy: #003DD6;
+  --color-navy-dark: #0030B0;
+  --color-navy-accent: #003DD6;
+  --color-annotation: #003DD6;
+  --color-annotation-fill: rgba(0, 61, 214, 0.15);
+  --color-chart-grid: rgba(246, 246, 246, 0.12);
   --color-overlay-subtle: rgba(255, 255, 255, 0.07);
 }
 
@@ -43,6 +43,37 @@ body {
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--color-bg);
   color: var(--color-text);
+}
+
+.glow-blue {
+  box-shadow: 0 0 24px rgba(0, 61, 214, 0.5), 0 0 6px rgba(0, 61, 214, 0.3);
+}
+
+.glow-text {
+  /* light: no glow */
+}
+
+.dark .glow-text {
+  text-shadow: 0 0 40px rgba(0, 61, 214, 0.6);
+}
+
+.glow-card {
+  /* no glow in light mode */
+}
+
+.dark .glow-card {
+  box-shadow:
+    inset 0 0 60px rgba(0, 61, 214, 0.35),
+    inset -40px -40px 80px rgba(0, 61, 214, 0.15),
+    inset 1px 1px 0px rgba(255, 255, 255, 0.06);
+}
+
+#hero {
+  background: none;
+}
+
+.dark #hero {
+  background: radial-gradient(ellipse 60% 50% at 70% 40%, rgba(0, 61, 214, 0.18) 0%, transparent 70%);
 }
 
 .scroll-styled {

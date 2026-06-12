@@ -99,8 +99,8 @@ const ComparePane = ({ scanId }) => {
   }
 
   const verdictColor = scanDetails?.verdict === 'Normal'
-    ? '#1F7819'
-    : scanDetails?.verdict ? '#7E2F2F' : '#9CA3AF'
+    ? '#003DD6'
+    : scanDetails?.verdict ? 'var(--color-text)' : 'var(--color-text-muted)'
 
   return (
     <div className="space-y-4">
