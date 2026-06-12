@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react'
-import { Trash2, Settings, ChevronDown, X } from 'lucide-react'
+import { Trash2, ChevronDown, X } from 'lucide-react'
 import { PageLayout } from '@/components/layout'
 import { Select } from '@/components/ui'
 import { useAuthStore } from '@/store'
 import {
   getUsers, updateUserRole, deleteUser,
   getDoctors, getDoctorAssignedPatients, assignPatient, unassignPatient,
-  cleanupOldFiles, cleanupOrphanedFiles,
+  cleanupOldFiles, cleanupOrphanedFiles, getAuditLog,
 } from '@/api'
-import { formatDate } from '@/utils/helpers'
+import { formatDate, formatDateTime } from '@/utils/helpers'
 
 const Section = ({ title, children, defaultOpen = true }) => {
   const [open, setOpen] = useState(defaultOpen)
@@ -316,6 +316,232 @@ const AssignmentsBlock = ({ token }) => {
   )
 }
 
+const ACTION_OPTIONS = [
+  { label: 'All actions', value: '' },
+  { label: 'Login', value: 'login' },
+  { label: 'Scan Upload', value: 'scan_upload' },
+  { label: 'Scan View', value: 'scan_view' },
+  { label: 'Scan Analyze', value: 'scan_analyze' },
+  { label: 'Report Download', value: 'report_download' },
+  { label: 'Scan Delete', value: 'scan_delete' },
+  { label: 'Annotation Create', value: 'annotation_create' },
+  { label: 'Role Change', value: 'user_role_change' },
+  { label: 'User Delete', value: 'user_delete' },
+]
+
+const ACTION_BADGE_COLORS = {
+  login: { bg: '#DBEAFE', text: '#1D4ED8' },
+  scan_upload: { bg: '#DCFCE7', text: '#15803D' },
+  scan_view: { bg: '#E0F2FE', text: '#0369A1' },
+  scan_analyze: { bg: '#EDE9FE', text: '#6D28D9' },
+  report_download: { bg: '#DBEAFE', text: '#1D4ED8' },
+  scan_delete: { bg: '#FEE2E2', text: '#991B1B' },
+  annotation_create: { bg: '#DBEAFE', text: '#233970' },
+  user_role_change: { bg: '#FEF9C3', text: '#92400E' },
+  user_delete: { bg: '#FEE2E2', text: '#991B1B' },
+}
+
+const AuditLogBlock = ({ token }) => {
+  const [logs, setLogs] = useState([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pages, setPages] = useState(1)
+  const [loading, setLoading] = useState(false)
+  const [actionFilter, setActionFilter] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+  const [debouncedEmail, setDebouncedEmail] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
+  const [applied, setApplied] = useState({ dateFrom: '', dateTo: '' })
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedEmail(userEmail), 400)
+    return () => clearTimeout(t)
+  }, [userEmail])
+
+  useEffect(() => {
+    setPage(1)
+  }, [actionFilter, debouncedEmail, applied])
+
+  useEffect(() => {
+    const load = async () => {
+      setLoading(true)
+      const result = await getAuditLog(token, {
+        userEmail: debouncedEmail || undefined,
+        action: actionFilter || undefined,
+        dateFrom: applied.dateFrom || undefined,
+        dateTo: applied.dateTo || undefined,
+        page,
+        size: 50,
+      })
+      if (result.success) {
+        setLogs(result.data.items)
+        setTotal(result.data.total)
+        setPages(result.data.pages)
+      }
+      setLoading(false)
+    }
+    load()
+  }, [token, actionFilter, debouncedEmail, applied, page])
+
+  const handleApplyDates = () => setApplied({ dateFrom, dateTo })
+  const handleClearDates = () => {
+    setDateFrom('')
+    setDateTo('')
+    setApplied({ dateFrom: '', dateTo: '' })
+  }
+
+  const badge = (action) => {
+    const c = ACTION_BADGE_COLORS[action] || { bg: '#E1DFD5', text: '#1C1C1C' }
+    const label = ACTION_OPTIONS.find((o) => o.value === action)?.label || action
+    return (
+      <span
+        className="inline-block px-2 py-0.5 rounded-full font-outfit text-xs font-medium"
+        style={{ backgroundColor: c.bg, color: c.text }}
+      >
+        {label}
+      </span>
+    )
+  }
+
+  return (
+    <div>
+      {/* Filters */}
+      <div className="flex flex-wrap items-end gap-4 mb-6">
+        <div>
+          <p className="font-outfit text-xs text-primary-dark opacity-60 mb-1">Action</p>
+          <Select
+            value={actionFilter}
+            onChange={(v) => setActionFilter(v)}
+            options={ACTION_OPTIONS}
+            placeholder="All actions"
+          />
+        </div>
+        <div>
+          <p className="font-outfit text-xs text-primary-dark opacity-60 mb-1">User email</p>
+          <input
+            type="text"
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}
+            placeholder="Filter by email..."
+            className="px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none w-48"
+            style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+          />
+        </div>
+        <div>
+          <p className="font-outfit text-xs text-primary-dark opacity-60 mb-1">From</p>
+          <input
+            type="date"
+            value={dateFrom}
+            onChange={(e) => setDateFrom(e.target.value)}
+            className="px-3 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
+            style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+          />
+        </div>
+        <div>
+          <p className="font-outfit text-xs text-primary-dark opacity-60 mb-1">To</p>
+          <input
+            type="date"
+            value={dateTo}
+            onChange={(e) => setDateTo(e.target.value)}
+            className="px-3 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
+            style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+          />
+        </div>
+        <button
+          onClick={handleApplyDates}
+          className="px-5 py-2.5 rounded-full font-outfit text-sm bg-primary-navy text-primary-beige hover:opacity-80 transition-opacity"
+        >
+          Apply
+        </button>
+        {(applied.dateFrom || applied.dateTo) && (
+          <button
+            onClick={handleClearDates}
+            className="px-5 py-2.5 rounded-full font-outfit text-sm hover:opacity-70 transition-opacity"
+            style={{ backgroundColor: '#E1DFD5', color: '#787771' }}
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
+      <p className="font-outfit text-sm text-primary-dark opacity-60 mb-4">
+        Total records: {total}
+      </p>
+
+      {loading ? (
+        <div className="text-center py-12">
+          <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-primary-navy mx-auto" />
+        </div>
+      ) : logs.length === 0 ? (
+        <p className="font-outfit text-primary-dark opacity-60 py-8">No records found.</p>
+      ) : (
+        <>
+          <div className="overflow-x-auto rounded-2xl" style={{ backgroundColor: '#E1DFD5' }}>
+            <table className="w-full text-sm font-outfit">
+              <thead>
+                <tr style={{ borderBottom: '1px solid rgba(28,28,28,0.08)' }}>
+                  <th className="text-left px-4 py-3 text-primary-dark opacity-60 font-medium whitespace-nowrap">Time</th>
+                  <th className="text-left px-4 py-3 text-primary-dark opacity-60 font-medium">User</th>
+                  <th className="text-left px-4 py-3 text-primary-dark opacity-60 font-medium">Action</th>
+                  <th className="text-left px-4 py-3 text-primary-dark opacity-60 font-medium">Resource</th>
+                  <th className="text-left px-4 py-3 text-primary-dark opacity-60 font-medium">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                {logs.map((log) => (
+                  <tr
+                    key={log.id}
+                    style={{ borderBottom: '1px solid rgba(28,28,28,0.05)' }}
+                  >
+                    <td className="px-4 py-3 text-primary-dark opacity-70 whitespace-nowrap">
+                      {formatDateTime(log.created_at)}
+                    </td>
+                    <td className="px-4 py-3 text-primary-dark">
+                      {log.user_email ?? <span className="opacity-40">—</span>}
+                    </td>
+                    <td className="px-4 py-3">{badge(log.action)}</td>
+                    <td className="px-4 py-3 text-primary-dark opacity-70">
+                      {log.resource_type
+                        ? `${log.resource_type}${log.resource_id != null ? ` #${log.resource_id}` : ''}`
+                        : <span className="opacity-40">—</span>}
+                    </td>
+                    <td className="px-4 py-3 text-primary-dark opacity-60 max-w-[240px] truncate">
+                      {log.details ?? ''}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {pages > 1 && (
+            <div className="flex items-center gap-4 mt-6">
+              <button
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                className="px-4 py-2 rounded-full font-outfit text-sm bg-primary-navy text-primary-beige disabled:opacity-40"
+              >
+                ← Prev
+              </button>
+              <span className="font-outfit text-sm text-primary-dark opacity-60">
+                {page} / {pages}
+              </span>
+              <button
+                onClick={() => setPage((p) => Math.min(pages, p + 1))}
+                disabled={page === pages}
+                className="px-4 py-2 rounded-full font-outfit text-sm bg-primary-navy text-primary-beige disabled:opacity-40"
+              >
+                Next →
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
+  )
+}
+
 const AdminPage = () => {
   const { token } = useAuthStore()
 
@@ -485,6 +711,10 @@ const AdminPage = () => {
 
         <Section title="Assignments">
           <AssignmentsBlock token={token} />
+        </Section>
+
+        <Section title="Audit Log" defaultOpen={false}>
+          <AuditLogBlock token={token} />
         </Section>
 
         <Section title="System Maintenance">
