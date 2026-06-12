@@ -51,10 +51,10 @@ const CommentsPanel = ({ readOnly = false }) => {
           <span className="font-outfit text-xs text-primary-dark opacity-50">Saving...</span>
         )}
         {!readOnly && saveStatus === 'saved' && (
-          <span className="font-outfit text-xs text-green-600">Saved</span>
+          <span className="font-outfit text-xs" style={{ color: '#003DD6' }}>Saved</span>
         )}
         {!readOnly && saveStatus === 'error' && (
-          <span className="font-outfit text-xs text-red-600">Save failed</span>
+          <span className="font-outfit text-xs text-primary-dark opacity-50">Save failed</span>
         )}
       </div>
 

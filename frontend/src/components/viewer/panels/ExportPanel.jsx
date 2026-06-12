@@ -36,8 +36,8 @@ const ExportPanel = ({ comments = '' }) => {
       </h3>
 
       {error && (
-        <div className="mb-3 p-3 bg-red-50 rounded-lg">
-          <p className="font-outfit text-sm text-red-600">{error}</p>
+        <div className="mb-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-surface)' }}>
+          <p className="font-outfit text-sm text-primary-dark opacity-60">{error}</p>
         </div>
       )}
 

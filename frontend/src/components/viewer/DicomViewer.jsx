@@ -115,7 +115,7 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <p className="font-outfit text-lg text-red-600 mb-4">{scanError}</p>
+          <p className="font-outfit text-lg text-primary-dark opacity-60 mb-4">{scanError}</p>
           <button onClick={handleChangeStudy} className="font-outfit text-primary-navy hover:opacity-70">
             Back to Upload
           </button>
