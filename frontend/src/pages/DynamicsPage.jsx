@@ -95,7 +95,7 @@ const DynamicsPage = () => {
   if (comparing && selected.length === 2) {
     return (
       <PageLayout>
-        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-24 sm:pt-32 lg:pt-[150px] pb-12 sm:pb-16 md:pb-20">
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-36 sm:pt-44 lg:pt-[200px] pb-12 sm:pb-16 md:pb-20">
           <button
             onClick={() => setComparing(false)}
             className="font-outfit text-sm text-primary-dark opacity-60 hover:opacity-100 transition-opacity mb-8 flex items-center gap-2"
@@ -116,7 +116,7 @@ const DynamicsPage = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-24 sm:pt-32 lg:pt-[150px] pb-12 sm:pb-16 md:pb-20">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-36 sm:pt-44 lg:pt-[200px] pb-12 sm:pb-16 md:pb-20">
         <button
           onClick={() => navigate(-1)}
           className="font-outfit text-sm text-primary-dark opacity-60 hover:opacity-100 transition-opacity mb-8 flex items-center gap-2"

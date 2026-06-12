@@ -81,7 +81,7 @@ const ScansPage = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-24 sm:pt-32 lg:pt-[150px] pb-12 sm:pb-16 md:pb-20">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-36 sm:pt-44 lg:pt-[200px] pb-12 sm:pb-16 md:pb-20">
         <div className="flex flex-wrap items-start justify-between gap-4 mb-8 sm:mb-10 lg:mb-[50px]">
           <h2 className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px] text-primary-dark">
             MY SCANS

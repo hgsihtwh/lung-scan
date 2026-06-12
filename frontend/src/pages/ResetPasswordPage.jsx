@@ -20,7 +20,7 @@ const ResetPasswordPage = () => {
   if (!token) {
     return (
       <PageLayout>
-        <div className="flex-1 max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-24 sm:pt-32 lg:pt-[150px] pb-12 sm:pb-16 md:pb-20 w-full">
+        <div className="flex-1 max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-36 sm:pt-44 lg:pt-[200px] pb-12 sm:pb-16 md:pb-20 w-full">
           <div className="max-w-[400px]">
             <h2 className="font-outfit text-[45px] font-semibold text-primary-dark mb-12">RESET</h2>
             <div className="border-2 border-primary-dark rounded-2xl p-8 bg-primary-beige">
@@ -71,7 +71,7 @@ const ResetPasswordPage = () => {
 
   return (
     <PageLayout>
-      <div className="flex-1 max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-24 sm:pt-32 lg:pt-[150px] pb-12 sm:pb-16 md:pb-20 w-full">
+      <div className="flex-1 max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-36 sm:pt-44 lg:pt-[200px] pb-12 sm:pb-16 md:pb-20 w-full">
         <div className="max-w-[400px]">
           <div className="mb-12">
             <h2 className="font-outfit text-[45px] font-semibold text-primary-dark">RESET</h2>
