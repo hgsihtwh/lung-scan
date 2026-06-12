@@ -13,10 +13,10 @@ const PAGE_SIZE = 20
 
 const ScansPage = () => {
   const { token } = useAuthStore()
-  const { setCurrentScanId, resetScan } = useScanStore()
+  const { currentScanId, setCurrentScanId, resetScan } = useScanStore()
   const navigate = useNavigate()
 
-  const [viewing, setViewing] = useState(false)
+  const [viewing, setViewing] = useState(!!currentScanId)
 
   const [scans, setScans] = useState([])
   const [loading, setLoading] = useState(true)

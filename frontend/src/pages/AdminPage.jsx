@@ -13,7 +13,7 @@ import { formatDate, formatDateTime } from '@/utils/helpers'
 const Section = ({ title, children, defaultOpen = true, maxHeight = '560px' }) => {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="mt-8 rounded-2xl" style={{ backgroundColor: 'var(--color-bg)' }}>
+    <div className="card mt-8 rounded-2xl" style={{ backgroundColor: 'var(--color-bg)' }}>
       <button
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center justify-between px-6 py-6 text-left"
@@ -217,7 +217,7 @@ const DoctorRow = ({ doctor, token, allPatients }) => {
   ]
 
   return (
-    <div style={{ backgroundColor: 'var(--color-surface)', borderRadius: '16px' }}>
+    <div className="card" style={{ backgroundColor: 'var(--color-surface)', borderRadius: '16px' }}>
       <button
         onClick={handleExpand}
         className="w-full flex items-center justify-between px-6 py-4 text-left"
@@ -665,7 +665,7 @@ const AdminPage = () => {
                 {users.map((u) => (
                   <div
                     key={u.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 rounded-2xl"
+                    className="card flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 rounded-2xl"
                     style={{ backgroundColor: 'var(--color-surface)' }}
                   >
                     <div className="flex-1 min-w-0">

@@ -73,7 +73,7 @@ const AnalysisPanel = ({ readOnly = false }) => {
   const isNormal = currentScanDetails?.verdict === 'Normal'
 
   return (
-    <div className="bg-primary-beige border border-primary-dark rounded-xl sm:rounded-2xl p-5 lg:p-6">
+    <div className="card bg-primary-beige rounded-xl sm:rounded-2xl p-5 lg:p-6">
       <h3 className="font-outfit font-medium text-lg lg:text-xl text-primary-dark mb-4">
         ANALYSIS
       </h3>

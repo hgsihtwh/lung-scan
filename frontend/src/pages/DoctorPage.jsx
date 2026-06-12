@@ -14,7 +14,7 @@ const PAGE_SIZE = 20
 // ── Patients tab ────────────────────────────────────────────────────────────
 
 const PatientsTab = ({ token }) => {
-  const { setCurrentScanId, resetScan } = useScanStore()
+  const { currentScanId, setCurrentScanId, resetScan } = useScanStore()
   const navigate = useNavigate()
   const [patients, setPatients] = useState([])
   const [totalPatients, setTotalPatients] = useState(0)
@@ -28,7 +28,7 @@ const PatientsTab = ({ token }) => {
   const [scans, setScans] = useState([])
   const [scansLoading, setScansLoading] = useState(false)
   const [scansTotal, setScansTotal] = useState(0)
-  const [viewing, setViewing] = useState(false)
+  const [viewing, setViewing] = useState(!!currentScanId)
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 400)
@@ -158,8 +158,8 @@ const PatientsTab = ({ token }) => {
               <button
                 key={p.id}
                 onClick={() => handleSelectPatient(p)}
-                className="w-full flex items-center justify-between px-6 py-4 rounded-2xl text-left transition-all hover:border-primary-navy"
-                style={{ backgroundColor: 'var(--color-bg)', border: '1px solid transparent' }}
+                className="card w-full flex items-center justify-between px-6 py-4 rounded-2xl text-left transition-all"
+                style={{ backgroundColor: 'var(--color-bg)' }}
               >
                 <div>
                   <p className="font-outfit font-medium text-base text-primary-dark">{p.email}</p>
@@ -201,8 +201,8 @@ const PatientsTab = ({ token }) => {
 // ── My Scans tab ─────────────────────────────────────────────────────────────
 
 const MyScansTab = ({ token }) => {
-  const { setCurrentScanId, resetScan } = useScanStore()
-  const [viewing, setViewing] = useState(false)
+  const { currentScanId, setCurrentScanId, resetScan } = useScanStore()
+  const [viewing, setViewing] = useState(!!currentScanId)
 
   const [scans, setScans] = useState([])
   const [loading, setLoading] = useState(true)
