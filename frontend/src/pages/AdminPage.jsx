@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Trash2, ChevronDown, X } from 'lucide-react'
 import { PageLayout } from '@/components/layout'
-import { Select } from '@/components/ui'
+import { Select, DatePicker } from '@/components/ui'
 import { useAuthStore } from '@/store'
 import {
   getUsers, updateUserRole, deleteUser,
@@ -421,25 +421,13 @@ const AuditLogBlock = ({ token }) => {
             style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
           />
         </div>
-        <div>
+        <div className="w-40">
           <p className="font-outfit text-xs text-primary-dark opacity-60 mb-1">From</p>
-          <input
-            type="date"
-            value={dateFrom}
-            onChange={(e) => setDateFrom(e.target.value)}
-            className="px-3 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
-            style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
-          />
+          <DatePicker value={dateFrom} onChange={setDateFrom} placeholder="From" />
         </div>
-        <div>
+        <div className="w-40">
           <p className="font-outfit text-xs text-primary-dark opacity-60 mb-1">To</p>
-          <input
-            type="date"
-            value={dateTo}
-            onChange={(e) => setDateTo(e.target.value)}
-            className="px-3 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
-            style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
-          />
+          <DatePicker value={dateTo} onChange={setDateTo} placeholder="To" />
         </div>
         <button
           onClick={handleApplyDates}
