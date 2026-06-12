@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from app.core.config import settings
 from app.database import Base
-from app.models import User, Scan, Feedback, Report, RefreshToken
+from app.models import Annotation, User, Scan, Feedback, Report, RefreshToken
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
