@@ -19,7 +19,7 @@ const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sor
             type="text"
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
-            placeholder="Search by patient"
+            placeholder="Search by patient email"
             className="w-full pl-9 pr-3 py-2 text-base font-outfit bg-transparent border border-primary-dark/20 rounded-full focus:outline-none focus:border-primary-navy text-primary-dark placeholder:opacity-40"
           />
         </div>
