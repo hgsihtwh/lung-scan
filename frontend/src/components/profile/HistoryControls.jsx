@@ -3,7 +3,7 @@ import { ArrowUpDown, Search } from 'lucide-react'
 const VERDICT_OPTIONS = [
   { label: 'All', value: '' },
   { label: 'Normal', value: 'Normal' },
-  { label: 'Abnormal', value: 'Abnormal' },
+  { label: 'Abnormal', value: 'Pathology' },
 ]
 
 const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sortOrder, onSortChange, noPatient, onNoPatientChange }) => {
