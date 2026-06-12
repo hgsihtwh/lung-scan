@@ -60,7 +60,7 @@ const StudyCard = ({ scan, token, onClick, onDelete }) => {
         onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`card rounded-2xl overflow-hidden transition-all text-left ${isHovered ? 'shadow-lg' : ''}`}
+        className={`card-scan rounded-2xl overflow-hidden transition-all text-left ${isHovered ? 'shadow-lg' : ''}`}
         style={{ backgroundColor: 'var(--color-bg)', borderColor: isHovered ? 'var(--color-navy)' : undefined }}
       >
         <div className="p-5">
