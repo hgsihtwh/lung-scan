@@ -10,7 +10,7 @@ import {
 } from '@/api'
 import { formatDate, formatDateTime } from '@/utils/helpers'
 
-const Section = ({ title, children, defaultOpen = true }) => {
+const Section = ({ title, children, defaultOpen = true, maxHeight = '560px' }) => {
   const [open, setOpen] = useState(defaultOpen)
   return (
     <div className="mt-8 rounded-2xl" style={{ backgroundColor: '#EFEDE3' }}>
@@ -27,7 +27,15 @@ const Section = ({ title, children, defaultOpen = true }) => {
         />
       </button>
       {open && (
-        <div className="px-6 pb-8" style={{ borderTop: '1px solid rgba(28,28,28,0.08)', borderRadius: '0 0 16px 16px' }}>
+        <div
+          className="px-6 pb-8 scroll-styled"
+          style={{
+            borderTop: '1px solid rgba(28,28,28,0.08)',
+            borderRadius: '0 0 16px 16px',
+            maxHeight,
+            overflowY: 'auto',
+          }}
+        >
           <div className="pt-6">{children}</div>
         </div>
       )}
@@ -477,7 +485,7 @@ const AuditLogBlock = ({ token }) => {
         <p className="font-outfit text-primary-dark opacity-60 py-8">No records found.</p>
       ) : (
         <>
-          <div className="overflow-x-auto rounded-2xl" style={{ backgroundColor: '#E1DFD5' }}>
+          <div className="overflow-x-auto rounded-2xl scroll-styled" style={{ backgroundColor: '#E1DFD5' }}>
             <table className="w-full text-sm font-outfit">
               <thead>
                 <tr style={{ borderBottom: '1px solid rgba(28,28,28,0.08)' }}>
@@ -713,7 +721,7 @@ const AdminPage = () => {
           <AssignmentsBlock token={token} />
         </Section>
 
-        <Section title="Audit Log" defaultOpen={false}>
+        <Section title="Audit Log">
           <AuditLogBlock token={token} />
         </Section>
 
