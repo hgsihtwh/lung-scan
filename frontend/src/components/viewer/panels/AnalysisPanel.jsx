@@ -110,7 +110,7 @@ const AnalysisPanel = ({ readOnly = false }) => {
         <button
           onClick={handleStartAnalysis}
           disabled={isAnalyzing || hasVerdict}
-          className="w-full h-10 sm:h-11 md:h-12 bg-primary-navy text-primary-beige font-outfit font-normal text-base rounded-full hover:bg-primary-navyDark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full h-10 sm:h-11 md:h-12 bg-primary-navy text-primary-beige font-outfit font-normal text-base rounded-full hover:bg-primary-navyDark transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none"
         >
           {isAnalyzing ? 'Analyzing...' : hasVerdict ? 'Analysis Complete' : 'Start Analysis'}
         </button>
