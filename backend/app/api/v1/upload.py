@@ -61,6 +61,7 @@ async def upload_dicom(
 
         try:
             extract_dir = DicomService.save_and_extract_zip(file_content, batch_id)
+            anonymized_fields = DicomService.anonymize_dicom_files(extract_dir)
             dicom_data = DicomService.parse_dicom_files(extract_dir)
         except ValueError as e:
             raise HTTPException(
@@ -88,6 +89,7 @@ async def upload_dicom(
             scan_id=new_scan.id,
             message=f"Successfully uploaded {dicom_data['slice_count']} slices",
             slice_count=dicom_data["slice_count"],
+            anonymized_fields=anonymized_fields,
         )
 
     except HTTPException:
