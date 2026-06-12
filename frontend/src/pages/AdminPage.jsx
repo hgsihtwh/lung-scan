@@ -337,17 +337,6 @@ const ACTION_OPTIONS = [
   { label: 'User Delete', value: 'user_delete' },
 ]
 
-const ACTION_BADGE_COLORS = {
-  login: { bg: '#DBEAFE', text: '#1D4ED8' },
-  scan_upload: { bg: '#DCFCE7', text: '#15803D' },
-  scan_view: { bg: '#E0F2FE', text: '#0369A1' },
-  scan_analyze: { bg: '#EDE9FE', text: '#6D28D9' },
-  report_download: { bg: '#DBEAFE', text: '#1D4ED8' },
-  scan_delete: { bg: '#FEE2E2', text: '#991B1B' },
-  annotation_create: { bg: '#DBEAFE', text: 'var(--color-navy-accent)' },
-  user_role_change: { bg: '#FEF9C3', text: '#92400E' },
-  user_delete: { bg: '#FEE2E2', text: '#991B1B' },
-}
 
 const AuditLogBlock = ({ token }) => {
   const [logs, setLogs] = useState([])
@@ -380,7 +369,7 @@ const AuditLogBlock = ({ token }) => {
         dateFrom: applied.dateFrom || undefined,
         dateTo: applied.dateTo || undefined,
         page,
-        size: 50,
+        size: 10,
       })
       if (result.success) {
         setLogs(result.data.items)
@@ -400,13 +389,9 @@ const AuditLogBlock = ({ token }) => {
   }
 
   const badge = (action) => {
-    const c = ACTION_BADGE_COLORS[action] || { bg: 'var(--color-surface)', text: 'var(--color-text)' }
     const label = ACTION_OPTIONS.find((o) => o.value === action)?.label || action
     return (
-      <span
-        className="inline-block px-2 py-0.5 rounded-full font-outfit text-xs font-medium"
-        style={{ backgroundColor: c.bg, color: c.text }}
-      >
+      <span className="font-outfit text-xs font-medium" style={{ color: 'var(--color-navy)' }}>
         {label}
       </span>
     )
