@@ -200,8 +200,9 @@ const MyScansTab = ({ token }) => {
   const [debouncedSearch, setDebouncedSearch] = useState('')
   const [verdict, setVerdict] = useState('')
   const [sortOrder, setSortOrder] = useState('desc')
+  const [noPatient, setNoPatient] = useState(false)
 
-  const prevFiltersRef = useRef({ search: '', verdict: '', sortOrder: 'desc' })
+  const prevFiltersRef = useRef({ search: '', verdict: '', sortOrder: 'desc', noPatient: false })
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(searchInput), 400)
@@ -212,9 +213,10 @@ const MyScansTab = ({ token }) => {
     const filtersChanged =
       prevFiltersRef.current.search !== debouncedSearch ||
       prevFiltersRef.current.verdict !== verdict ||
-      prevFiltersRef.current.sortOrder !== sortOrder
+      prevFiltersRef.current.sortOrder !== sortOrder ||
+      prevFiltersRef.current.noPatient !== noPatient
 
-    prevFiltersRef.current = { search: debouncedSearch, verdict, sortOrder }
+    prevFiltersRef.current = { search: debouncedSearch, verdict, sortOrder, noPatient }
 
     if (filtersChanged && page !== 1) {
       setPage(1)
@@ -230,6 +232,7 @@ const MyScansTab = ({ token }) => {
         const result = await getDoctorScans(token, {
           search: debouncedSearch,
           verdict,
+          no_patient: noPatient,
           sort_order: sortOrder,
           page: currentPage,
           size: PAGE_SIZE,
@@ -245,7 +248,7 @@ const MyScansTab = ({ token }) => {
     }
 
     load()
-  }, [token, debouncedSearch, verdict, sortOrder, page])
+  }, [token, debouncedSearch, verdict, sortOrder, noPatient, page])
 
   const handleScanClick = (scanId) => {
     setCurrentScanId(scanId)
@@ -277,6 +280,8 @@ const MyScansTab = ({ token }) => {
         onVerdictChange={setVerdict}
         sortOrder={sortOrder}
         onSortChange={setSortOrder}
+        noPatient={noPatient}
+        onNoPatientChange={setNoPatient}
       />
 
       {loading ? (
@@ -301,8 +306,8 @@ const MyScansTab = ({ token }) => {
 // ── Page ─────────────────────────────────────────────────────────────────────
 
 const TABS = [
-  { id: 'patients', label: 'PATIENTS' },
-  { id: 'myScans', label: 'MY SCANS' },
+  { id: 'patients', label: 'MY PATIENTS' },
+  { id: 'myScans', label: 'UPLOADS' },
 ]
 
 const DoctorPage = () => {
@@ -317,7 +322,7 @@ const DoctorPage = () => {
     <PageLayout>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-24 sm:pt-32 lg:pt-[150px] pb-12 sm:pb-16 md:pb-20">
         <h2 className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px] text-primary-dark mb-8 sm:mb-10 lg:mb-[50px]">
-          {activeTab === 'patients' ? 'PATIENTS' : 'MY SCANS'}
+          {activeTab === 'patients' ? 'MY PATIENTS' : 'UPLOADS'}
         </h2>
 
         {/* Tabs */}

@@ -16,6 +16,7 @@ router = APIRouter(prefix="/doctor")
 async def get_doctor_scans(
     search: str | None = Query(None),
     verdict: str | None = Query(None),
+    no_patient: bool = Query(False),
     sort_order: Literal["asc", "desc"] = Query("desc"),
     page: int = Query(1, ge=1),
     size: int = Query(20, ge=1, le=100),
@@ -28,6 +29,8 @@ async def get_doctor_scans(
         query = query.filter(Scan.patient_name.ilike(f"%{search}%"))
     if verdict:
         query = query.filter(Report.verdict == verdict)
+    if no_patient:
+        query = query.filter(Scan.user_id == None)
 
     order_col = Scan.created_at.asc() if sort_order == "asc" else Scan.created_at.desc()
     query = query.order_by(order_col)

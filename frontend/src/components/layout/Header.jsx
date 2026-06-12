@@ -55,7 +55,7 @@ const Header = () => {
                       Upload
                     </button>
                     <button onClick={() => navigate('/doctor')} className={NAV_LINK_CLASS}>
-                      Patients
+                      Scans & Patients
                     </button>
                   </>
                 )}

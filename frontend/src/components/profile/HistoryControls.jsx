@@ -6,7 +6,7 @@ const VERDICT_OPTIONS = [
   { label: 'Abnormal', value: 'Abnormal' },
 ]
 
-const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sortOrder, onSortChange }) => {
+const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sortOrder, onSortChange, noPatient, onNoPatientChange }) => {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
       <div className="relative flex-1 max-w-xs">
@@ -38,6 +38,24 @@ const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sor
           </button>
         ))}
       </div>
+
+      {onNoPatientChange && (
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <span
+            onClick={() => onNoPatientChange(!noPatient)}
+            className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors"
+            style={{ borderColor: '#233970', backgroundColor: noPatient ? '#233970' : 'transparent' }}
+          >
+            {noPatient && <span className="w-1.5 h-1.5 rounded-full bg-white block" />}
+          </span>
+          <span
+            onClick={() => onNoPatientChange(!noPatient)}
+            className="font-outfit text-xs text-primary-dark opacity-60 hover:opacity-100 transition-opacity"
+          >
+            Without patient
+          </span>
+        </label>
+      )}
 
       <button
         onClick={() => onSortChange(sortOrder === 'desc' ? 'asc' : 'desc')}
