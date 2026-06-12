@@ -26,7 +26,7 @@ const RegisterForm = ({ onSubmit, loading, error }) => {
     <form onSubmit={handleSubmit} className="space-y-6">
       {/* Email */}
       <div>
-        <label className="block font-outfit font-normal text-[18px] text-primary-dark mb-2">
+        <label className="block font-outfit font-normal text-lg text-primary-dark mb-2">
           EMAIL
         </label>
         <input
@@ -48,7 +48,7 @@ const RegisterForm = ({ onSubmit, loading, error }) => {
 
       {/* Password */}
       <div>
-        <label className="block font-outfit font-normal text-[18px] text-primary-dark mb-2">
+        <label className="block font-outfit font-normal text-lg text-primary-dark mb-2">
           PASSWORD
         </label>
         <div className="relative">
@@ -81,7 +81,7 @@ const RegisterForm = ({ onSubmit, loading, error }) => {
 
       {/* Confirm Password */}
       <div>
-        <label className="block font-outfit font-normal text-[18px] text-primary-dark mb-2">
+        <label className="block font-outfit font-normal text-lg text-primary-dark mb-2">
           CONFIRM PASSWORD
         </label>
         <div className="relative">
@@ -111,7 +111,7 @@ const RegisterForm = ({ onSubmit, loading, error }) => {
       </div>
 
       {/* Error message */}
-      {error && <div className="font-outfit text-sm text-red-600">{error}</div>}
+      {error && <div className="font-outfit text-base text-red-600">{error}</div>}
 
       {/* Submit Button */}
       <button

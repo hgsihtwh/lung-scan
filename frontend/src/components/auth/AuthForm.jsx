@@ -155,7 +155,7 @@ const AuthForm = () => {
         <div className="flex gap-8 mb-12">
           <button
             onClick={() => switchMode('signin')}
-            className={`font-outfit text-[45px] font-semibold transition-colors relative ${
+            className={`font-outfit text-3xl font-semibold transition-colors relative ${
               mode === 'signin' ? 'text-primary-dark' : 'text-gray-400'
             }`}
           >
@@ -166,7 +166,7 @@ const AuthForm = () => {
           </button>
           <button
             onClick={() => switchMode('signup')}
-            className={`font-outfit text-[45px] font-semibold transition-colors relative ${
+            className={`font-outfit text-3xl font-semibold transition-colors relative ${
               mode === 'signup' ? 'text-primary-dark' : 'text-gray-400'
             }`}
           >
@@ -180,13 +180,13 @@ const AuthForm = () => {
 
       {mode === 'verify' && (
         <div className="mb-12">
-          <h2 className="font-outfit text-[45px] font-semibold text-primary-dark">VERIFY</h2>
+          <h2 className="font-outfit text-3xl font-semibold text-primary-dark">VERIFY</h2>
         </div>
       )}
 
       {mode === 'forgot' && (
         <div className="mb-12">
-          <h2 className="font-outfit text-[45px] font-semibold text-primary-dark">RESET</h2>
+          <h2 className="font-outfit text-3xl font-semibold text-primary-dark">RESET</h2>
         </div>
       )}
 
@@ -225,13 +225,13 @@ const AuthForm = () => {
         {/* Switch mode link — скрываем на шагах verify и forgot */}
         {mode !== 'verify' && mode !== 'forgot' && (
           <div className="text-center mt-6">
-            <span className="font-outfit font-normal text-xs text-primary-dark opacity-60">
+            <span className="font-outfit font-normal text-base text-primary-dark opacity-60">
               {mode === 'signin' ? 'not a member? ' : 'already have an account? '}
             </span>
             <button
               type="button"
               onClick={() => switchMode(mode === 'signin' ? 'signup' : 'signin')}
-              className="font-outfit font-normal text-xs text-primary-dark hover:opacity-100 transition-opacity underline"
+              className="font-outfit font-normal text-base text-primary-dark hover:opacity-100 transition-opacity underline"
             >
               {mode === 'signin' ? 'Sign up now' : 'Sign in'}
             </button>

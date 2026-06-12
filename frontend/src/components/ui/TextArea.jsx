@@ -15,7 +15,7 @@ const TextArea = ({
   return (
     <div className={className}>
       {label && (
-        <label className="block font-outfit font-normal text-[18px] text-primary-dark mb-2">
+        <label className="block font-outfit font-normal text-lg text-primary-dark mb-2">
           {label}
         </label>
       )}
@@ -29,7 +29,7 @@ const TextArea = ({
         maxLength={maxLength}
         rows={rows}
         className={`
-          w-full p-3 lg:p-4 rounded-xl font-outfit text-sm lg:text-base 
+          w-full p-3 lg:p-4 rounded-xl font-outfit text-base lg:text-base 
           resize-none focus:outline-none transition-colors
           disabled:opacity-50 disabled:cursor-not-allowed
           ${error ? 'border-red-500' : ''}
@@ -45,16 +45,16 @@ const TextArea = ({
 
       {/* Hint or character count */}
       <div className="flex justify-between mt-1">
-        {hint && <p className="font-outfit text-xs text-primary-dark opacity-60">{hint}</p>}
+        {hint && <p className="font-outfit text-base text-primary-dark opacity-60">{hint}</p>}
         {maxLength && (
-          <p className="font-outfit text-xs text-primary-dark opacity-60">
+          <p className="font-outfit text-base text-primary-dark opacity-60">
             {value?.length || 0}/{maxLength}
           </p>
         )}
       </div>
 
       {/* Error message */}
-      {error && <p className="font-outfit text-sm text-red-600 mt-1">{error}</p>}
+      {error && <p className="font-outfit text-base text-red-600 mt-1">{error}</p>}
     </div>
   )
 }

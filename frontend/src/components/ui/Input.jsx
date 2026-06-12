@@ -23,7 +23,7 @@ const Input = ({
   return (
     <div className={className}>
       {label && (
-        <label className="block font-outfit font-normal text-[18px] text-primary-dark mb-2">
+        <label className="block font-outfit font-normal text-lg text-primary-dark mb-2">
           {label}
           {required && <span className="text-red-500 ml-1">*</span>}
         </label>
@@ -72,7 +72,7 @@ const Input = ({
       </div>
 
       {/* Error message */}
-      {error && <p className="font-outfit text-sm text-red-600 mt-1">{error}</p>}
+      {error && <p className="font-outfit text-base text-red-600 mt-1">{error}</p>}
     </div>
   )
 }

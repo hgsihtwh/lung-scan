@@ -49,3 +49,11 @@ export const resetPassword = async (token, new_password) => {
     body: JSON.stringify({ token, new_password }),
   })
 }
+
+export const changePassword = async (current_password, new_password, token) => {
+  return apiClient('/api/users/me/password', {
+    method: 'PUT',
+    body: JSON.stringify({ current_password, new_password }),
+    token,
+  })
+}

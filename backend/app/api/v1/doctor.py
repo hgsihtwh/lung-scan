@@ -1,7 +1,7 @@
 from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, aliased
 
 from ...database import get_db
 from ...models import Report, Scan, User
@@ -23,10 +23,16 @@ async def get_doctor_scans(
     db: Session = Depends(get_db),
     current_user: User = Depends(require_doctor),
 ):
-    query = db.query(Scan).outerjoin(Scan.report).filter(Scan.uploaded_by_id == current_user.id)
+    PatientUser = aliased(User)
+    query = (
+        db.query(Scan)
+        .outerjoin(Scan.report)
+        .outerjoin(PatientUser, Scan.owner)
+        .filter(Scan.uploaded_by_id == current_user.id)
+    )
 
     if search:
-        query = query.filter(Scan.patient_name.ilike(f"%{search}%"))
+        query = query.filter(PatientUser.email.ilike(f"%{search}%"))
     if verdict:
         query = query.filter(Report.verdict == verdict)
     if no_patient:

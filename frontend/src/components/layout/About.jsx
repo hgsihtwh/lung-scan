@@ -1,16 +1,66 @@
 import { useState } from 'react'
 import { ChevronUp } from 'lucide-react'
+import { useAuthStore } from '@/store'
+
+const contentByRole = {
+  patient: {
+    description: [
+      'Chest Scan gives you access to your chest CT scan results analyzed by our AI model. Once your doctor uploads your study, you can review the CT slices and view the AI analysis results.',
+      'All findings are available in a detailed downloadable report that you can share with other specialists.',
+    ],
+    workflowSteps: [
+      { number: '01', label: 'Access your scan' },
+      { number: '02', label: 'Review CT slices' },
+      { number: '03', label: 'View AI analysis' },
+      { number: '04', label: 'Download report' },
+    ],
+  },
+  doctor: {
+    description: [
+      'Chest Scan is a service designed to automatically identify truly normal chest CT scans — studies with no signs of any pathology. Upload your patients\' DICOM archives, review CT slices, add annotations, and let the AI assist in prioritizing abnormal cases.',
+      'Our deep learning model has been trained on thousands of chest CT scans, achieving high accuracy in distinguishing between normal anatomy and pathological findings.',
+    ],
+    workflowSteps: [
+      { number: '01', label: 'Upload DICOM Archive' },
+      { number: '02', label: 'Review CT slices' },
+      { number: '03', label: 'Add annotations' },
+      { number: '04', label: 'Run AI analysis' },
+      { number: '05', label: 'Download report' },
+    ],
+  },
+  admin: {
+    description: [
+      'Chest Scan platform gives you full control over user management and system monitoring. Manage user roles, assign patients to doctors, and keep track of all platform activity.',
+      'Our deep learning model has been trained on thousands of chest CT scans, achieving high accuracy in distinguishing between normal anatomy and pathological findings.',
+    ],
+    workflowSteps: [
+      { number: '01', label: 'Manage users & roles' },
+      { number: '02', label: 'Assign patients to doctors' },
+      { number: '03', label: 'Monitor audit log' },
+    ],
+  },
+  default: {
+    description: [
+      'Chest Scan is a service designed to automatically identify truly normal chest CT scans - studies with no signs of any pathology. Unlike traditional AI solutions that detect specific diseases, Chest Scan defines the \'Normal\' class, helping radiologists prioritize abnormal cases.',
+      'Our deep learning model has been trained on thousands of chest CT scans, achieving high accuracy in distinguishing between normal anatomy and pathological findings.',
+    ],
+    workflowSteps: [
+      { number: '01', label: 'Upload DICOM Archive' },
+      { number: '02', label: 'Review CT slices' },
+      { number: '03', label: 'Run AI analysis' },
+      { number: '04', label: 'View Results' },
+      { number: '05', label: 'Download detailed report' },
+    ],
+  },
+}
 
 const About = () => {
   const [isExpanded, setIsExpanded] = useState(true)
+  const { user } = useAuthStore()
 
-  const workflowSteps = [
-    { number: '01', label: 'Upload DICOM Archive' },
-    { number: '02', label: 'Review CT slices' },
-    { number: '03', label: 'Run AI analysis' },
-    { number: '04', label: 'View Results' },
-    { number: '05', label: 'Download detailed report' },
-  ]
+  const role = user?.role ?? 'default'
+  const content = contentByRole[role] ?? contentByRole.default
+  const { description, workflowSteps } = content
 
   return (
     <section
@@ -19,7 +69,7 @@ const About = () => {
     >
       <div className="flex justify-between items-center mb-12 sm:mb-16 lg:mb-[120px]">
         <h2
-          className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px]"
+          className="font-outfit font-semibold text-3xl sm:text-3xl md:text-3xl"
           style={{ color: 'var(--color-text)' }}
         >
           ABOUT CHEST SCAN
@@ -43,7 +93,7 @@ const About = () => {
             {/* Model Performance Card */}
             <div className="card-scan rounded-2xl p-6 sm:p-8" style={{ backgroundColor: 'var(--color-bg)' }}>
               <h3
-                className="font-outfit font-medium text-lg sm:text-[20px] mb-6 sm:mb-8 lg:mb-10"
+                className="font-outfit font-medium text-lg sm:text-lg mb-6 sm:mb-8 lg:mb-10"
                 style={{ color: 'var(--color-text)' }}
               >
                 MODEL PERFORMANCE
@@ -52,45 +102,45 @@ const About = () => {
               <div className="grid grid-cols-2 gap-y-6 sm:gap-y-8">
                 <div>
                   <p
-                    className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
+                    className="font-outfit font-normal text-base sm:text-base mb-1"
                     style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     TRAINING SET
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-text)' }}>
+                  <p className="font-outfit font-semibold text-3xl" style={{ color: 'var(--color-text)' }}>
                     1921
                   </p>
                 </div>
                 <div>
                   <p
-                    className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
+                    className="font-outfit font-normal text-base sm:text-base mb-1"
                     style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     VALIDATION
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-text)' }}>
+                  <p className="font-outfit font-semibold text-3xl" style={{ color: 'var(--color-text)' }}>
                     236
                   </p>
                 </div>
                 <div>
                   <p
-                    className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
+                    className="font-outfit font-normal text-base sm:text-base mb-1"
                     style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     ACCURACY
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-navy-accent)' }}>
+                  <p className="font-outfit font-semibold text-3xl" style={{ color: 'var(--color-navy-accent)' }}>
                     89,83%
                   </p>
                 </div>
                 <div>
                   <p
-                    className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
+                    className="font-outfit font-normal text-base sm:text-base mb-1"
                     style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     ROC-AUC
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-navy-accent)' }}>
+                  <p className="font-outfit font-semibold text-3xl" style={{ color: 'var(--color-navy-accent)' }}>
                     0,962
                   </p>
                 </div>
@@ -98,37 +148,30 @@ const About = () => {
             </div>
 
             <div className="flex flex-col justify-center">
-              <p
-                className="font-outfit font-normal text-base sm:text-lg lg:text-[20px] leading-relaxed mb-6"
-                style={{ color: 'var(--color-text)' }}
-              >
-                Chest Scan is a service designed to automatically identify truly normal chest CT
-                scans - studies with no signs of any pathology. Unlike traditional AI solutions that
-                detect specific diseases, Chest Scan defines the 'Normal' class, helping
-                radiologists prioritize abnormal cases.
-              </p>
-              <p
-                className="font-outfit font-normal text-base sm:text-lg lg:text-[20px] leading-relaxed"
-                style={{ color: 'var(--color-text)' }}
-              >
-                Our deep learning model has been trained on thousands of chest CT scans, achieving
-                high accuracy in distinguishing between normal anatomy and pathological findings.
-              </p>
+              {description.map((para, i) => (
+                <p
+                  key={i}
+                  className={`font-outfit font-normal text-base sm:text-lg lg:text-lg leading-relaxed ${i < description.length - 1 ? 'mb-6' : ''}`}
+                  style={{ color: 'var(--color-text)' }}
+                >
+                  {para}
+                </p>
+              ))}
             </div>
           </div>
 
-          {/* User Workflow */}
+          {/* Workflow */}
           <div>
             <h3
-              className="font-outfit font-semibold text-2xl sm:text-[30px] mb-12 sm:mb-14 lg:mb-16"
+              className="font-outfit font-semibold text-3xl sm:text-3xl mb-12 sm:mb-14 lg:mb-16"
               style={{ color: 'var(--color-text)' }}
             >
-              USER WORKFLOW
+              {role === 'patient' ? 'YOUR WORKFLOW' : 'USER WORKFLOW'}
             </h3>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 sm:gap-4">
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-8 sm:gap-x-12 lg:gap-x-16">
               {workflowSteps.map((step, index) => (
-                <div key={index} className="flex flex-col items-center text-center">
+                <div key={index} className="flex flex-col items-center text-center w-32 sm:w-36 lg:w-40">
                   <div className="h-[60px] sm:h-[70px] lg:h-[80px] overflow-hidden mb-3">
                     <div
                       className="font-outfit font-thin text-[100px] sm:text-[110px] lg:text-[120px] leading-none select-none"
@@ -141,7 +184,7 @@ const About = () => {
                     </div>
                   </div>
                   <p
-                    className="font-outfit font-normal text-base sm:text-lg lg:text-[20px]"
+                    className="font-outfit font-normal text-base sm:text-lg lg:text-lg"
                     style={{ color: 'var(--color-text)' }}
                   >
                     {step.label}

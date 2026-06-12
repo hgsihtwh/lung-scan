@@ -13,7 +13,7 @@ const ViewerCanvas = ({
   annotations,
   isAnnotationMode,
   isDoctor,
-  onToggleAnnotation,
+  onAnnotationModeChange,
   onAnnotationCreate,
   onAnnotationDelete,
   onAnnotationUpdate,
@@ -21,6 +21,21 @@ const ViewerCanvas = ({
   const viewerRef = useRef(null)
   const [isViewerEnabled, setIsViewerEnabled] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [activeTool, setActiveTool] = useState(null)
+  const activeToolCleanupRef = useRef(null)
+  const activeToolTimeoutRef = useRef(null)
+
+  const cleanupActiveTool = () => {
+    if (activeToolCleanupRef.current) {
+      activeToolCleanupRef.current()
+      activeToolCleanupRef.current = null
+    }
+    if (activeToolTimeoutRef.current) {
+      clearTimeout(activeToolTimeoutRef.current)
+      activeToolTimeoutRef.current = null
+    }
+    setActiveTool(null)
+  }
 
   useEffect(() => {
     if (viewerRef.current && !isViewerEnabled && sliceNumbers.length > 0) {
@@ -92,6 +107,7 @@ const ViewerCanvas = ({
 
   const handleZoomIn = () => {
     if (!viewerRef.current || !isViewerEnabled) return
+    cleanupActiveTool()
     const viewport = cornerstone.getViewport(viewerRef.current)
     if (viewport) {
       viewport.scale += 0.25
@@ -101,6 +117,7 @@ const ViewerCanvas = ({
 
   const handleZoomOut = () => {
     if (!viewerRef.current || !isViewerEnabled) return
+    cleanupActiveTool()
     const viewport = cornerstone.getViewport(viewerRef.current)
     if (viewport) {
       viewport.scale = Math.max(0.25, viewport.scale - 0.25)
@@ -110,6 +127,7 @@ const ViewerCanvas = ({
 
   const handleRotate = () => {
     if (!viewerRef.current || !isViewerEnabled) return
+    cleanupActiveTool()
     const viewport = cornerstone.getViewport(viewerRef.current)
     if (viewport) {
       viewport.rotation += 90
@@ -119,6 +137,13 @@ const ViewerCanvas = ({
 
   const handlePan = () => {
     if (!viewerRef.current || !isViewerEnabled) return
+
+    if (activeTool === 'pan') {
+      cleanupActiveTool()
+      return
+    }
+
+    cleanupActiveTool()
 
     let isDragging = false
     let lastX = 0
@@ -147,25 +172,39 @@ const ViewerCanvas = ({
 
     const onMouseUp = () => {
       isDragging = false
-      element.style.cursor = 'default'
+      element.style.cursor = 'grab'
     }
 
+    element.style.cursor = 'grab'
     element.addEventListener('mousedown', onMouseDown)
     element.addEventListener('mousemove', onMouseMove)
     element.addEventListener('mouseup', onMouseUp)
     element.addEventListener('mouseleave', onMouseUp)
 
-    setTimeout(() => {
+    activeToolCleanupRef.current = () => {
       element.removeEventListener('mousedown', onMouseDown)
       element.removeEventListener('mousemove', onMouseMove)
       element.removeEventListener('mouseup', onMouseUp)
       element.removeEventListener('mouseleave', onMouseUp)
       element.style.cursor = 'default'
+    }
+
+    setActiveTool('pan')
+
+    activeToolTimeoutRef.current = setTimeout(() => {
+      cleanupActiveTool()
     }, 30000)
   }
 
   const handleWindowLevel = () => {
     if (!viewerRef.current || !isViewerEnabled) return
+
+    if (activeTool === 'windowLevel') {
+      cleanupActiveTool()
+      return
+    }
+
+    cleanupActiveTool()
 
     let isDragging = false
     let startX = 0
@@ -198,21 +237,39 @@ const ViewerCanvas = ({
 
     const onMouseUp = () => {
       isDragging = false
-      element.style.cursor = 'default'
+      element.style.cursor = 'crosshair'
     }
 
+    element.style.cursor = 'crosshair'
     element.addEventListener('mousedown', onMouseDown)
     element.addEventListener('mousemove', onMouseMove)
     element.addEventListener('mouseup', onMouseUp)
     element.addEventListener('mouseleave', onMouseUp)
 
-    setTimeout(() => {
+    activeToolCleanupRef.current = () => {
       element.removeEventListener('mousedown', onMouseDown)
       element.removeEventListener('mousemove', onMouseMove)
       element.removeEventListener('mouseup', onMouseUp)
       element.removeEventListener('mouseleave', onMouseUp)
       element.style.cursor = 'default'
+    }
+
+    setActiveTool('windowLevel')
+
+    activeToolTimeoutRef.current = setTimeout(() => {
+      cleanupActiveTool()
     }, 30000)
+  }
+
+  const handleAnnotationToggle = () => {
+    if (activeTool === 'annotation') {
+      cleanupActiveTool()
+      return
+    }
+    cleanupActiveTool()
+    activeToolCleanupRef.current = () => onAnnotationModeChange(false)
+    setActiveTool('annotation')
+    onAnnotationModeChange(true)
   }
 
   const totalSlices = sliceNumbers.length
@@ -231,7 +288,7 @@ const ViewerCanvas = ({
       )}
 
       <div className="absolute top-4 left-4 bg-primary-beige px-3 py-2 rounded-md shadow-sm" style={{ zIndex: 20 }}>
-        <span className="font-outfit font-normal text-[13px]" style={{ color: 'var(--color-text-muted)' }}>
+        <span className="font-outfit font-normal text-base" style={{ color: 'var(--color-text-muted)' }}>
           slice {currentSlice}/{totalSlices}
         </span>
       </div>
@@ -253,8 +310,8 @@ const ViewerCanvas = ({
           onPan={handlePan}
           onRotate={handleRotate}
           onWindowLevel={handleWindowLevel}
-          isAnnotationMode={isAnnotationMode}
-          onToggleAnnotation={onToggleAnnotation}
+          activeTool={activeTool}
+          onToggleAnnotation={handleAnnotationToggle}
           isDoctor={isDoctor}
         />
       </div>

@@ -34,10 +34,10 @@ const UploadStatus = ({ status, progress, error }) => {
   return (
     <>
       <Upload size={64} className="text-primary-navy mb-6 sm:mb-8" strokeWidth={1.5} />
-      <p className="font-outfit font-normal text-lg sm:text-xl md:text-[20px] text-primary-dark text-center px-4">
+      <p className="font-outfit font-normal text-lg sm:text-lg md:text-lg text-primary-dark text-center px-4">
         Drag DICOM archive here or click to browse
       </p>
-      <p className="font-outfit font-light text-sm sm:text-base text-primary-dark opacity-60 mt-4 text-center px-4">
+      <p className="font-outfit font-light text-base sm:text-base text-primary-dark opacity-60 mt-4 text-center px-4">
         Supported format: .zip
       </p>
     </>

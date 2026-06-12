@@ -3,7 +3,7 @@ import { useAuthStore } from './store'
 import { Header, Footer, Hero, About } from './components/layout'
 import { ProfilePage } from './components/profile'
 import { AuthPage, ResetPasswordPage, DoctorPage, AdminPage, UploadPage, ScansPage, DynamicsPage } from './pages'
-import lungAscii from './assets/blue-lung-ascii.svg'
+import lungAscii from './assets/dark-mode-lung.svg'
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuthStore()
@@ -28,7 +28,7 @@ function MainPage() {
       <img
         src={lungAscii}
         alt=""
-        className="absolute -right-10 -top-20 w-[1200px] pointer-events-none select-none z-10 opacity-90 dark:opacity-10"
+        className="absolute -right-32 -top-20 w-[1200px] pointer-events-none select-none z-10 opacity-40 dark:opacity-60"
       />
       <div className="relative z-20">
         <Header />
