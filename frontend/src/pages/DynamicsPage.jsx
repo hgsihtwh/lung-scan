@@ -36,7 +36,7 @@ const CustomTooltip = ({ active, payload }) => {
     <div className="rounded-xl px-4 py-3 shadow-lg" style={{ backgroundColor: '#EFEDE3' }}>
       <p className="font-outfit font-medium text-sm text-primary-dark">{d.date}</p>
       <p className="font-outfit text-sm text-primary-dark opacity-70">
-        Probability: {d.probability}%
+        Pathology probability: {d.probability}%
       </p>
       {d.verdict && (
         <p className="font-outfit text-sm" style={{ color: verdictColor }}>
@@ -86,7 +86,9 @@ const DynamicsPage = () => {
     .map((s) => ({
       id: s.id,
       date: formatDate(s.created_at),
-      probability: Math.round(s.probability * 100),
+      probability: Math.round(
+        (s.verdict === 'Normal' ? 1 - s.probability : s.probability) * 100
+      ),
       verdict: s.verdict,
     }))
 
