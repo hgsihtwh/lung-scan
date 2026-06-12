@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
-import { useAuthStore } from '@/store'
+import { Moon, Sun } from 'lucide-react'
+import { useAuthStore, useThemeStore } from '@/store'
 
 const NAV_LINK_CLASS =
   'font-outfit font-normal text-base sm:text-lg md:text-[20px] text-primary-navy hover:opacity-70 transition-opacity'
@@ -7,6 +8,7 @@ const NAV_LINK_CLASS =
 const Header = () => {
   const navigate = useNavigate()
   const { isAuthenticated, user } = useAuthStore()
+  const { isDark, toggle } = useThemeStore()
   const role = user?.role
 
   return (
@@ -33,6 +35,13 @@ const Header = () => {
 
           {/* Navigation */}
           <nav className="flex items-center gap-6">
+            <button
+              onClick={toggle}
+              className="text-primary-dark opacity-60 hover:opacity-100 transition-opacity"
+              title={isDark ? 'Light mode' : 'Dark mode'}
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
             {role !== 'admin' && (
               <a
                 href="/#about"
