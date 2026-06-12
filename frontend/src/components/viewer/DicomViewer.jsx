@@ -154,7 +154,7 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
             annotations={sliceAnnotations}
             isAnnotationMode={isAnnotationMode}
             isDoctor={isDoctor}
-            onToggleAnnotation={() => setIsAnnotationMode((v) => !v)}
+            onAnnotationModeChange={setIsAnnotationMode}
             onAnnotationCreate={handleAnnotationCreate}
             onAnnotationDelete={handleAnnotationDelete}
             onAnnotationUpdate={handleAnnotationUpdate}
