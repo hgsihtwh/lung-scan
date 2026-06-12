@@ -3,8 +3,21 @@ import { getSlice } from '@/api'
 import { cornerstone, cornerstoneWADOImageLoader } from '@/utils/cornerstone'
 import ViewerControls from './ViewerControls'
 import StudyInfoPanel from './panels/StudyInfoPanel'
+import AnnotationLayer from './AnnotationLayer'
 
-const ViewerCanvas = ({ scanId, currentSlice, token, sliceNumbers }) => {
+const ViewerCanvas = ({
+  scanId,
+  currentSlice,
+  token,
+  sliceNumbers,
+  annotations,
+  isAnnotationMode,
+  isDoctor,
+  onToggleAnnotation,
+  onAnnotationCreate,
+  onAnnotationDelete,
+  onAnnotationUpdate,
+}) => {
   const viewerRef = useRef(null)
   const [isViewerEnabled, setIsViewerEnabled] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -13,7 +26,6 @@ const ViewerCanvas = ({ scanId, currentSlice, token, sliceNumbers }) => {
     if (viewerRef.current && !isViewerEnabled && sliceNumbers.length > 0) {
       try {
         cornerstone.enable(viewerRef.current)
-        // Force resize so canvas matches the actual rendered dimensions
         setTimeout(() => {
           if (viewerRef.current) cornerstone.resize(viewerRef.current, true)
         }, 0)
@@ -37,24 +49,13 @@ const ViewerCanvas = ({ scanId, currentSlice, token, sliceNumbers }) => {
 
   useEffect(() => {
     const loadAndDisplaySlice = async () => {
-      if (!viewerRef.current || !isViewerEnabled || !currentSlice || !scanId || !token) {
-        console.log('Skip loading:', {
-          hasRef: !!viewerRef.current,
-          isViewerEnabled,
-          currentSlice,
-          scanId,
-        })
-        return
-      }
+      if (!viewerRef.current || !isViewerEnabled || !currentSlice || !scanId || !token) return
 
       setIsLoading(true)
-      console.log('Loading slice:', currentSlice)
 
       try {
         const result = await getSlice(scanId, currentSlice, token)
-
         if (!result.success) {
-          console.error('Failed to load slice:', result.error)
           setIsLoading(false)
           return
         }
@@ -78,7 +79,6 @@ const ViewerCanvas = ({ scanId, currentSlice, token, sliceNumbers }) => {
             viewport.voi.windowCenter = image.windowCenter || 40
             cornerstone.setViewport(viewerRef.current, viewport)
           }
-          console.log('Slice displayed:', currentSlice)
         }
       } catch (err) {
         console.error('Error displaying slice:', err)
@@ -123,7 +123,6 @@ const ViewerCanvas = ({ scanId, currentSlice, token, sliceNumbers }) => {
     let isDragging = false
     let lastX = 0
     let lastY = 0
-
     const element = viewerRef.current
 
     const onMouseDown = (e) => {
@@ -136,17 +135,63 @@ const ViewerCanvas = ({ scanId, currentSlice, token, sliceNumbers }) => {
 
     const onMouseMove = (e) => {
       if (!isDragging) return
-
-      const deltaX = e.clientX - lastX
-      const deltaY = e.clientY - lastY
-
-      lastX = e.clientX
-      lastY = e.clientY
-
       const viewport = cornerstone.getViewport(element)
       if (viewport) {
-        viewport.translation.x += deltaX / viewport.scale
-        viewport.translation.y += deltaY / viewport.scale
+        viewport.translation.x += (e.clientX - lastX) / viewport.scale
+        viewport.translation.y += (e.clientY - lastY) / viewport.scale
+        cornerstone.setViewport(element, viewport)
+      }
+      lastX = e.clientX
+      lastY = e.clientY
+    }
+
+    const onMouseUp = () => {
+      isDragging = false
+      element.style.cursor = 'default'
+    }
+
+    element.addEventListener('mousedown', onMouseDown)
+    element.addEventListener('mousemove', onMouseMove)
+    element.addEventListener('mouseup', onMouseUp)
+    element.addEventListener('mouseleave', onMouseUp)
+
+    setTimeout(() => {
+      element.removeEventListener('mousedown', onMouseDown)
+      element.removeEventListener('mousemove', onMouseMove)
+      element.removeEventListener('mouseup', onMouseUp)
+      element.removeEventListener('mouseleave', onMouseUp)
+      element.style.cursor = 'default'
+    }, 30000)
+  }
+
+  const handleWindowLevel = () => {
+    if (!viewerRef.current || !isViewerEnabled) return
+
+    let isDragging = false
+    let startX = 0
+    let startY = 0
+    let startWW = 0
+    let startWC = 0
+    const element = viewerRef.current
+
+    const onMouseDown = (e) => {
+      isDragging = true
+      startX = e.clientX
+      startY = e.clientY
+      const viewport = cornerstone.getViewport(element)
+      if (viewport) {
+        startWW = viewport.voi.windowWidth
+        startWC = viewport.voi.windowCenter
+      }
+      element.style.cursor = 'col-resize'
+    }
+
+    const onMouseMove = (e) => {
+      if (!isDragging) return
+      const viewport = cornerstone.getViewport(element)
+      if (viewport) {
+        viewport.voi.windowWidth = Math.max(1, startWW + (e.clientX - startX) * 4)
+        viewport.voi.windowCenter = startWC + (e.clientY - startY) * 2
         cornerstone.setViewport(element, viewport)
       }
     }
@@ -181,22 +226,38 @@ const ViewerCanvas = ({ scanId, currentSlice, token, sliceNumbers }) => {
 
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
         </div>
       )}
 
-      <div className="absolute top-4 left-4 bg-primary-beige px-3 py-2 rounded-md shadow-sm">
+      <div className="absolute top-4 left-4 bg-primary-beige px-3 py-2 rounded-md shadow-sm" style={{ zIndex: 20 }}>
         <span className="font-outfit font-normal text-[13px]" style={{ color: '#787771' }}>
           slice {currentSlice}/{totalSlices}
         </span>
       </div>
 
-      <ViewerControls
-        onZoomIn={handleZoomIn}
-        onZoomOut={handleZoomOut}
-        onPan={handlePan}
-        onRotate={handleRotate}
+      <AnnotationLayer
+        annotations={annotations}
+        viewerRef={viewerRef}
+        isAnnotationMode={isAnnotationMode}
+        isDoctor={isDoctor}
+        onCreate={onAnnotationCreate}
+        onDelete={onAnnotationDelete}
+        onUpdate={onAnnotationUpdate}
       />
+
+      <div style={{ zIndex: 20, position: 'relative' }}>
+        <ViewerControls
+          onZoomIn={handleZoomIn}
+          onZoomOut={handleZoomOut}
+          onPan={handlePan}
+          onRotate={handleRotate}
+          onWindowLevel={handleWindowLevel}
+          isAnnotationMode={isAnnotationMode}
+          onToggleAnnotation={onToggleAnnotation}
+          isDoctor={isDoctor}
+        />
+      </div>
 
       <StudyInfoPanel />
     </div>
