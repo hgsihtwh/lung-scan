@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import { ChevronDown } from 'lucide-react'
 
 const Select = ({
@@ -11,12 +12,17 @@ const Select = ({
 }) => {
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
-  const ref = useRef(null)
+  const [dropdownStyle, setDropdownStyle] = useState({})
+  const buttonRef = useRef(null)
+  const dropdownRef = useRef(null)
   const searchRef = useRef(null)
 
   useEffect(() => {
     const handler = (e) => {
-      if (ref.current && !ref.current.contains(e.target)) {
+      if (
+        buttonRef.current && !buttonRef.current.contains(e.target) &&
+        dropdownRef.current && !dropdownRef.current.contains(e.target)
+      ) {
         setOpen(false)
         setSearch('')
       }
@@ -26,8 +32,18 @@ const Select = ({
   }, [])
 
   useEffect(() => {
-    if (open && searchable && searchRef.current) {
-      searchRef.current.focus()
+    if (open) {
+      if (searchable && searchRef.current) searchRef.current.focus()
+      if (buttonRef.current) {
+        const rect = buttonRef.current.getBoundingClientRect()
+        setDropdownStyle({
+          position: 'fixed',
+          top: rect.bottom + 4,
+          left: rect.left,
+          minWidth: rect.width,
+          zIndex: 9999,
+        })
+      }
     }
   }, [open, searchable])
 
@@ -44,8 +60,9 @@ const Select = ({
   }
 
   return (
-    <div ref={ref} className="relative inline-block">
+    <div className="relative inline-block w-full">
       <button
+        ref={buttonRef}
         type="button"
         disabled={disabled}
         onClick={handleToggle}
@@ -59,10 +76,15 @@ const Select = ({
         />
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
-          className="absolute left-0 z-50 mt-1 w-full min-w-max rounded-2xl shadow-lg overflow-hidden"
-          style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
+          ref={dropdownRef}
+          className="rounded-2xl shadow-lg overflow-hidden"
+          style={{
+            ...dropdownStyle,
+            backgroundColor: 'var(--color-bg)',
+            border: '1px solid var(--color-input-border)',
+          }}
         >
           {searchable && (
             <div className="px-3 pt-2 pb-1">
@@ -79,7 +101,7 @@ const Select = ({
             </div>
           )}
 
-          <div className="max-h-52 overflow-y-auto">
+          <div className="max-h-52 overflow-y-auto scroll-styled">
             {filtered.length === 0 ? (
               <p className="px-4 py-2.5 font-outfit text-sm text-primary-dark opacity-50">
                 Not found
@@ -106,7 +128,8 @@ const Select = ({
               ))
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )
