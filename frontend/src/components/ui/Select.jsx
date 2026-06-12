@@ -33,7 +33,7 @@ const Select = ({
 
   useEffect(() => {
     if (open) {
-      if (searchable && searchRef.current) searchRef.current.focus()
+      if (searchable && searchRef.current) searchRef.current.focus({ preventScroll: true })
       if (buttonRef.current) {
         const rect = buttonRef.current.getBoundingClientRect()
         setDropdownStyle({
