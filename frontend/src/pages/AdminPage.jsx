@@ -217,7 +217,7 @@ const DoctorRow = ({ doctor, token, allPatients }) => {
   ]
 
   return (
-    <div className="card" style={{ backgroundColor: 'var(--color-surface)', borderRadius: '16px' }}>
+    <div className="card" style={{ backgroundColor: 'var(--color-bg)', borderRadius: '16px' }}>
       <button
         onClick={handleExpand}
         className="w-full flex items-center justify-between px-6 py-4 text-left"
@@ -485,7 +485,7 @@ const AuditLogBlock = ({ token }) => {
         <p className="font-outfit text-primary-dark opacity-60 py-8">No records found.</p>
       ) : (
         <>
-          <div className="overflow-x-auto rounded-2xl scroll-styled" style={{ backgroundColor: 'var(--color-surface)' }}>
+          <div className="overflow-x-auto rounded-2xl scroll-styled" style={{ backgroundColor: 'var(--color-bg)' }}>
             <table className="w-full text-sm font-outfit">
               <thead>
                 <tr style={{ borderBottom: '1px solid rgba(28,28,28,0.08)' }}>
@@ -666,7 +666,7 @@ const AdminPage = () => {
                   <div
                     key={u.id}
                     className="card flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 rounded-2xl"
-                    style={{ backgroundColor: 'var(--color-surface)' }}
+                    style={{ backgroundColor: 'var(--color-bg)' }}
                   >
                     <div className="flex-1 min-w-0">
                       <p className="font-outfit font-medium text-base text-primary-dark truncate">{u.email}</p>
