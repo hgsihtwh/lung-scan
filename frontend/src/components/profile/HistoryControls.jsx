@@ -9,19 +9,21 @@ const VERDICT_OPTIONS = [
 const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sortOrder, onSortChange, noPatient, onNoPatientChange }) => {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
-      <div className="relative flex-1 max-w-xs">
-        <Search
-          size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-dark opacity-40 pointer-events-none"
-        />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search by patient"
-          className="w-full pl-9 pr-3 py-2 text-sm font-outfit bg-transparent border border-primary-dark/20 rounded-lg focus:outline-none focus:border-primary-navy text-primary-dark placeholder:opacity-40"
-        />
-      </div>
+      {onSearchChange && (
+        <div className="relative flex-1 max-w-xs">
+          <Search
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-dark opacity-40 pointer-events-none"
+          />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Search by patient"
+            className="w-full pl-9 pr-3 py-2 text-sm font-outfit bg-transparent border border-primary-dark/20 rounded-lg focus:outline-none focus:border-primary-navy text-primary-dark placeholder:opacity-40"
+          />
+        </div>
+      )}
 
       <div className="flex items-center gap-1">
         {VERDICT_OPTIONS.map(({ label, value }) => (

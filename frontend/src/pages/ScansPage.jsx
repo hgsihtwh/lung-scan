@@ -21,29 +21,21 @@ const ScansPage = () => {
   const [hasMore, setHasMore] = useState(false)
   const [page, setPage] = useState(1)
 
-  const [searchInput, setSearchInput] = useState('')
-  const [debouncedSearch, setDebouncedSearch] = useState('')
   const [verdict, setVerdict] = useState('')
   const [sortOrder, setSortOrder] = useState('desc')
 
-  const prevFiltersRef = useRef({ search: '', verdict: '', sortOrder: 'desc' })
+  const prevFiltersRef = useRef({ verdict: '', sortOrder: 'desc' })
 
   useEffect(() => {
     initCornerstone()
   }, [])
 
   useEffect(() => {
-    const timer = setTimeout(() => setDebouncedSearch(searchInput), 400)
-    return () => clearTimeout(timer)
-  }, [searchInput])
-
-  useEffect(() => {
     const filtersChanged =
-      prevFiltersRef.current.search !== debouncedSearch ||
       prevFiltersRef.current.verdict !== verdict ||
       prevFiltersRef.current.sortOrder !== sortOrder
 
-    prevFiltersRef.current = { search: debouncedSearch, verdict, sortOrder }
+    prevFiltersRef.current = { verdict, sortOrder }
 
     if (filtersChanged && page !== 1) {
       setPage(1)
@@ -57,7 +49,6 @@ const ScansPage = () => {
       setLoading(true)
       try {
         const result = await getScans(token, {
-          search: debouncedSearch,
           verdict,
           sort_order: sortOrder,
           page: currentPage,
@@ -74,7 +65,7 @@ const ScansPage = () => {
     }
 
     load()
-  }, [token, debouncedSearch, verdict, sortOrder, page])
+  }, [token, verdict, sortOrder, page])
 
   const handleScanClick = (scanId) => {
     setCurrentScanId(scanId)
@@ -98,8 +89,6 @@ const ScansPage = () => {
         ) : (
           <>
             <HistoryControls
-              search={searchInput}
-              onSearchChange={setSearchInput}
               verdict={verdict}
               onVerdictChange={setVerdict}
               sortOrder={sortOrder}
