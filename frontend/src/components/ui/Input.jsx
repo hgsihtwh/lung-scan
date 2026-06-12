@@ -46,10 +46,10 @@ const Input = ({
             ${error ? 'border-red-500' : ''}
           `}
           style={{
-            backgroundColor: 'var(--color-surface)',
+            backgroundColor: 'var(--color-bg)',
             borderWidth: '1px',
             borderStyle: 'solid',
-            borderColor: error ? '#EF4444' : 'var(--color-border)',
+            borderColor: error ? '#EF4444' : 'var(--color-input-border)',
           }}
           {...props}
         />

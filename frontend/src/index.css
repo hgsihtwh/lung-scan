@@ -7,6 +7,7 @@
   --color-surface: #EEEEEE;
   --color-surface-alt: #F6F6F6;
   --color-border: rgba(20, 20, 20, 0.12);
+  --color-input-border: rgba(20, 20, 20, 0.28);
   --color-text: #141414;
   --color-text-muted: rgba(20, 20, 20, 0.45);
   --color-navy: #003DD6;
@@ -32,6 +33,7 @@
   --color-annotation-fill: rgba(0, 61, 214, 0.15);
   --color-chart-grid: rgba(246, 246, 246, 0.12);
   --color-overlay-subtle: rgba(255, 255, 255, 0.07);
+  --color-input-border: rgba(246, 246, 246, 0.28);
 }
 
 body {
@@ -72,7 +74,8 @@ body {
 button.card:hover,
 a.card:hover,
 button.card-scan:hover,
-a.card-scan:hover {
+a.card-scan:hover,
+.card-interactive:hover {
   border-color: var(--color-navy);
 }
 

@@ -50,7 +50,7 @@ const Select = ({
         disabled={disabled}
         onClick={handleToggle}
         className="flex items-center justify-between gap-2 w-full px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+        style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
       >
         <span className="truncate">{selected ? selected.label : placeholder}</span>
         <ChevronDown
@@ -62,7 +62,7 @@ const Select = ({
       {open && (
         <div
           className="absolute left-0 z-50 mt-1 w-full min-w-max rounded-2xl shadow-lg overflow-hidden"
-          style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+          style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
         >
           {searchable && (
             <div className="px-3 pt-2 pb-1">

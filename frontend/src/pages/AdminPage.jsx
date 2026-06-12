@@ -132,7 +132,7 @@ const MaintenanceBlock = ({ token }) => {
               value={days}
               onChange={(e) => setDays(Number(e.target.value))}
               className="w-20 px-3 py-2 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
-              style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+              style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
             />
             <button
               onClick={handleCleanOld}
@@ -217,7 +217,7 @@ const DoctorRow = ({ doctor, token, allPatients }) => {
   ]
 
   return (
-    <div className="card" style={{ backgroundColor: 'var(--color-bg)', borderRadius: '16px' }}>
+    <div className="card card-interactive" style={{ backgroundColor: 'var(--color-bg)', borderRadius: '16px' }}>
       <button
         onClick={handleExpand}
         className="w-full flex items-center justify-between px-6 py-4 text-left"
@@ -433,7 +433,7 @@ const AuditLogBlock = ({ token }) => {
             onChange={(e) => setUserEmail(e.target.value)}
             placeholder="Filter by email..."
             className="px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none w-48"
-            style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+            style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
           />
         </div>
         <div>
@@ -443,7 +443,7 @@ const AuditLogBlock = ({ token }) => {
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
             className="px-3 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
-            style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+            style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
           />
         </div>
         <div>
@@ -453,7 +453,7 @@ const AuditLogBlock = ({ token }) => {
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
             className="px-3 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
-            style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+            style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
           />
         </div>
         <button
@@ -634,7 +634,7 @@ const AdminPage = () => {
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by email..."
               className="px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none w-full max-w-xs"
-              style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
+              style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
             />
             <Select
               value={roleFilter}
@@ -675,12 +675,20 @@ const AdminPage = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Select
-                        value={u.role}
-                        onChange={(newRole) => handleRoleChange(u.id, newRole)}
-                        options={ROLE_OPTIONS}
-                        disabled={updatingId === u.id}
-                      />
+                      <div className="relative flex items-center">
+                        <select
+                          value={u.role}
+                          onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                          disabled={updatingId === u.id}
+                          className="appearance-none pr-6 pl-1 py-1 font-outfit text-sm font-medium bg-transparent border-none outline-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          style={{ color: 'var(--color-navy)' }}
+                        >
+                          {ROLE_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>{o.label}</option>
+                          ))}
+                        </select>
+                        <ChevronDown size={13} className="absolute right-0 pointer-events-none" style={{ color: 'var(--color-navy)' }} />
+                      </div>
                       <button
                         onClick={() => setConfirmTarget(u)}
                         className="p-2 rounded-full hover:bg-red-50 text-primary-dark opacity-40 hover:opacity-80 hover:text-red-600 transition-all"
