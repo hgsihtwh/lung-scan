@@ -33,6 +33,7 @@ class UploadResponse(BaseModel):
     scan_id: int
     message: str
     slice_count: int
+    anonymized_fields: list[str] = []
 
 
 class PaginatedScansResponse(BaseModel):

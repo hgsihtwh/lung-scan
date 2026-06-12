@@ -13,6 +13,19 @@ PROCESSED_DIR = Path("data/processed")
 UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
 PROCESSED_DIR.mkdir(parents=True, exist_ok=True)
 
+SENSITIVE_TAGS = [
+    "PatientName",
+    "PatientID",
+    "PatientBirthDate",
+    "PatientSex",
+    "PatientAge",
+    "PatientWeight",
+    "PatientAddress",
+    "ReferringPhysicianName",
+    "InstitutionName",
+    "InstitutionAddress",
+]
+
 
 class DicomService:
     @staticmethod
@@ -35,6 +48,33 @@ class DicomService:
             raise ValueError(f"Invalid ZIP archive: {e!s}")
 
         return extract_dir
+
+    @staticmethod
+    def anonymize_dicom_files(extract_dir: Path) -> list[str]:
+        cleared: set[str] = set()
+
+        for root, _, files in os.walk(extract_dir):
+            for f in files:
+                if f.startswith("."):
+                    continue
+
+                file_path = Path(root) / f
+                try:
+                    ds = pydicom.dcmread(file_path, defer_size=256)
+
+                    for tag_name in SENSITIVE_TAGS:
+                        if tag_name in ds:
+                            if tag_name == "PatientName":
+                                ds.PatientName = "ANONYMOUS"
+                            else:
+                                delattr(ds, tag_name)
+                            cleared.add(tag_name)
+
+                    ds.save_as(file_path)
+                except Exception:
+                    continue
+
+        return sorted(cleared)
 
     @staticmethod
     def parse_dicom_files(extract_dir: Path) -> dict:
