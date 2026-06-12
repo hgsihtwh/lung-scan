@@ -29,14 +29,14 @@ const Hero = () => {
     >
       <h1 
         className="font-outfit font-semibold text-[80px] sm:text-[100px] lg:text-[150px] leading-none"
-        style={{ color: '#302F2C' }}
+        style={{ color: 'var(--color-text)' }}
       >
         CHEST SCAN
       </h1>
 
       <p 
         className="font-outfit font-normal text-[17px] mt-4 whitespace-nowrap"
-        style={{ color: '#302F2C' }}
+        style={{ color: 'var(--color-text)' }}
       >
         Classification of chest CT scans: Normal vs Pathology detection
       </p>
@@ -51,11 +51,11 @@ const Hero = () => {
       <div className="flex items-start gap-4 mt-8 sm:mt-10">
         <div 
           className="w-1 h-12 rounded-full flex-shrink-0"
-          style={{ backgroundColor: '#233970' }}
+          style={{ backgroundColor: 'var(--color-navy-accent)' }}
         ></div>
         <p 
           className="font-outfit font-normal text-[17px] max-w-[500px] opacity-70"
-          style={{ color: '#302F2C' }}
+          style={{ color: 'var(--color-text)' }}
         >
           Research Prototype - This is a demonstration of medical imaging analysis. Not intended for clinical diagnosis or treatment decisions.
         </p>

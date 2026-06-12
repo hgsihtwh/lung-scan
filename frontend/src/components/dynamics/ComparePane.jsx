@@ -104,7 +104,7 @@ const ComparePane = ({ scanId }) => {
 
   return (
     <div className="space-y-4">
-      <div className="rounded-xl p-4" style={{ backgroundColor: '#EFEDE3' }}>
+      <div className="rounded-xl p-4" style={{ backgroundColor: 'var(--color-bg)' }}>
         <p className="font-outfit font-medium text-sm text-primary-dark">
           {formatDate(scanDetails?.created_at)}
         </p>
@@ -125,7 +125,7 @@ const ComparePane = ({ scanId }) => {
         <div ref={viewerRef} className="absolute inset-0" />
 
         <div className="absolute top-4 left-4 bg-primary-beige px-3 py-2 rounded-md shadow-sm">
-          <span className="font-outfit font-normal text-[13px]" style={{ color: '#787771' }}>
+          <span className="font-outfit font-normal text-[13px]" style={{ color: 'var(--color-text-muted)' }}>
             slice {currentSlice}/{sliceNumbers.length}
           </span>
         </div>

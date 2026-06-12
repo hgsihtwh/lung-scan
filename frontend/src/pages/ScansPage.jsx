@@ -89,7 +89,7 @@ const ScansPage = () => {
           <button
             onClick={() => navigate('/dynamics')}
             className="px-5 py-2 rounded-full font-outfit font-medium text-sm transition-colors"
-            style={{ backgroundColor: '#233970', color: '#F5F3EA' }}
+            style={{ backgroundColor: 'var(--color-navy-accent)', color: 'var(--color-bg)' }}
           >
             Dynamics
           </button>

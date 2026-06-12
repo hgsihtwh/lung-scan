@@ -129,10 +129,10 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
   return (
     <div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 sm:mb-12 gap-4">
-        <p className="font-outfit font-normal text-[15px]" style={{ color: '#787771' }}>
+        <p className="font-outfit font-normal text-[15px]" style={{ color: 'var(--color-text-muted)' }}>
           Chest CT Scan Analysis · {totalSlices} slices loaded
           {isAnnotationMode && (
-            <span className="ml-3 text-[#233970] font-medium">· Annotation mode</span>
+            <span className="ml-3 text-[var(--color-navy-accent)] font-medium">· Annotation mode</span>
           )}
         </p>
         <button

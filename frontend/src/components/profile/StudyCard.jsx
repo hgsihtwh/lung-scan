@@ -5,7 +5,7 @@ import { formatDate } from '@/utils/helpers'
 
 const DeleteConfirmModal = ({ onConfirm, onCancel }) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-    <div className="rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl" style={{ backgroundColor: '#EFEDE3' }}>
+    <div className="rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl" style={{ backgroundColor: 'var(--color-bg)' }}>
       <h3 className="font-outfit font-semibold text-xl text-primary-dark mb-3">Delete scan?</h3>
       <p className="font-outfit text-sm text-primary-dark opacity-70 mb-8">
         The scan and all its data will be permanently deleted. This cannot be undone.
@@ -14,7 +14,7 @@ const DeleteConfirmModal = ({ onConfirm, onCancel }) => (
         <button
           onClick={onCancel}
           className="flex-1 h-11 rounded-full font-outfit text-sm text-primary-dark hover:opacity-70 transition-opacity"
-          style={{ border: '1px solid #BEBCB3' }}
+          style={{ border: '1px solid var(--color-border)' }}
         >
           Cancel
         </button>
@@ -63,7 +63,7 @@ const StudyCard = ({ scan, token, onClick, onDelete }) => {
         className={`rounded-2xl overflow-hidden transition-all text-left ${
           isHovered ? 'border border-primary-navy shadow-lg' : 'border border-transparent'
         }`}
-        style={{ backgroundColor: '#EFEDE3' }}
+        style={{ backgroundColor: 'var(--color-bg)' }}
       >
         <div className="p-5">
           {/* Preview */}

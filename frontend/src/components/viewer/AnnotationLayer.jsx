@@ -145,8 +145,8 @@ const AnnotationLayer = ({
                 y={ann.cy}
                 width={ann.cw}
                 height={ann.ch}
-                fill="rgba(35, 57, 112, 0.12)"
-                stroke="#4A6FA5"
+                fill="var(--color-annotation-fill)"
+                stroke="var(--color-annotation)"
                 strokeWidth={isSelected ? 2 : 1.5}
                 strokeDasharray={isSelected ? 'none' : '5 3'}
               />
@@ -154,7 +154,7 @@ const AnnotationLayer = ({
                 <text
                   x={ann.cx + 4}
                   y={ann.cy - 5}
-                  fill="#4A6FA5"
+                  fill="var(--color-annotation)"
                   fontSize="11"
                   fontFamily="Outfit, sans-serif"
                   style={{ pointerEvents: 'none' }}
@@ -172,8 +172,8 @@ const AnnotationLayer = ({
             y={drawingRect.y}
             width={drawingRect.w}
             height={drawingRect.h}
-            fill="rgba(35, 57, 112, 0.12)"
-            stroke="#4A6FA5"
+            fill="var(--color-annotation-fill)"
+            stroke="var(--color-annotation)"
             strokeWidth={1.5}
             strokeDasharray="5 3"
             style={{ pointerEvents: 'none' }}
@@ -188,7 +188,7 @@ const AnnotationLayer = ({
           <div
             className="absolute z-20 rounded-xl p-3 shadow-lg"
             style={{
-              backgroundColor: '#EFEDE3',
+              backgroundColor: 'var(--color-bg)',
               left: rect.cx,
               top: rect.cy + rect.ch + 6,
               minWidth: 180,
@@ -202,14 +202,14 @@ const AnnotationLayer = ({
               placeholder="Label (optional)"
               disabled={!isDoctor}
               className="w-full px-2 py-1 rounded-lg text-sm font-outfit text-primary-dark focus:outline-none mb-2"
-              style={{ backgroundColor: '#E1DFD5' }}
+              style={{ backgroundColor: 'var(--color-surface)' }}
             />
             <div className="flex gap-2">
               {isDoctor && (
                 <button
                   onClick={handleSaveLabel}
                   className="flex-1 text-xs font-outfit py-1 px-2 rounded-lg"
-                  style={{ backgroundColor: '#233970', color: '#F5F3EA' }}
+                  style={{ backgroundColor: 'var(--color-navy-accent)', color: 'var(--color-bg)' }}
                 >
                   Save
                 </button>
@@ -226,7 +226,7 @@ const AnnotationLayer = ({
               <button
                 onClick={() => setSelected(null)}
                 className="text-xs font-outfit py-1 px-2 rounded-lg"
-                style={{ backgroundColor: '#E1DFD5', color: '#787771' }}
+                style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text-muted)' }}
               >
                 ✕
               </button>

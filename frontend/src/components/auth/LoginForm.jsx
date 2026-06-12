@@ -35,10 +35,10 @@ const LoginForm = ({ onSubmit, onForgotPassword, loading, error }) => {
           placeholder="user@example.com"
           className="w-full px-4 py-3 rounded-full font-outfit text-base focus:outline-none transition-colors"
           style={{
-            backgroundColor: '#E1DFD5',
+            backgroundColor: 'var(--color-surface)',
             borderWidth: '1px',
             borderStyle: 'solid',
-            borderColor: '#BEBCB3',
+            borderColor: 'var(--color-border)',
           }}
           required
         />
@@ -65,10 +65,10 @@ const LoginForm = ({ onSubmit, onForgotPassword, loading, error }) => {
             placeholder="••••••••"
             className="w-full px-4 py-3 pr-12 rounded-full font-outfit text-base focus:outline-none transition-colors"
             style={{
-              backgroundColor: '#E1DFD5',
+              backgroundColor: 'var(--color-surface)',
               borderWidth: '1px',
               borderStyle: 'solid',
-              borderColor: '#BEBCB3',
+              borderColor: 'var(--color-border)',
             }}
             required
           />

@@ -22,12 +22,8 @@ const FeedbackPanel = () => {
     setIsSaving(true)
     setError('')
 
-    console.log('Saving feedback:', feedbackValue)
-
     try {
       const result = await saveFeedback(currentScanId, isAccurate, token)
-
-      console.log('Save feedback result:', result)
 
       if (!result.success) {
         setError(result.error || 'Failed to save feedback')
@@ -64,7 +60,7 @@ const FeedbackPanel = () => {
                 feedback === 'accurate' ? 'text-white' : 'text-primary-dark hover:opacity-80'
               } disabled:opacity-50`}
               style={{
-                backgroundColor: feedback === 'accurate' ? '#1F7819' : '#E1DFD5',
+                backgroundColor: feedback === 'accurate' ? '#1F7819' : 'var(--color-surface)',
               }}
             >
               <span className="text-lg">{feedback === 'accurate' ? '●' : '○'}</span>
@@ -79,7 +75,7 @@ const FeedbackPanel = () => {
                 feedback === 'inaccurate' ? 'text-white' : 'text-primary-dark hover:opacity-80'
               } disabled:opacity-50`}
               style={{
-                backgroundColor: feedback === 'inaccurate' ? '#7E2F2F' : '#E1DFD5',
+                backgroundColor: feedback === 'inaccurate' ? '#7E2F2F' : 'var(--color-surface)',
               }}
             >
               <span className="text-lg">{feedback === 'inaccurate' ? '●' : '○'}</span>

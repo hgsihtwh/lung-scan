@@ -65,10 +65,10 @@ const CommentsPanel = ({ readOnly = false }) => {
         placeholder={readOnly ? 'No comments yet' : 'Add your comments here...'}
         className="w-full h-32 p-3 lg:p-4 rounded-xl font-outfit text-sm lg:text-base resize-none focus:outline-none transition-colors"
         style={{
-          backgroundColor: '#E1DFD5',
+          backgroundColor: 'var(--color-surface)',
           borderWidth: '1px',
           borderStyle: 'solid',
-          borderColor: '#BEBCB3',
+          borderColor: 'var(--color-border)',
           cursor: readOnly ? 'default' : undefined,
         }}
       />

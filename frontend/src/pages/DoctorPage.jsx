@@ -101,7 +101,7 @@ const PatientsTab = ({ token }) => {
           <button
             onClick={() => navigate(`/dynamics/${selectedPatient.id}`)}
             className="px-5 py-2 rounded-full font-outfit font-medium text-sm transition-colors"
-            style={{ backgroundColor: '#233970', color: '#F5F3EA' }}
+            style={{ backgroundColor: 'var(--color-navy-accent)', color: 'var(--color-bg)' }}
           >
             Dynamics
           </button>
@@ -136,7 +136,7 @@ const PatientsTab = ({ token }) => {
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search by email..."
           className="w-full max-w-md px-4 py-3 rounded-full font-outfit text-base focus:outline-none"
-          style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+          style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}
         />
       </div>
 
@@ -159,7 +159,7 @@ const PatientsTab = ({ token }) => {
                 key={p.id}
                 onClick={() => handleSelectPatient(p)}
                 className="w-full flex items-center justify-between px-6 py-4 rounded-2xl text-left transition-all hover:border-primary-navy"
-                style={{ backgroundColor: '#EFEDE3', border: '1px solid transparent' }}
+                style={{ backgroundColor: 'var(--color-bg)', border: '1px solid transparent' }}
               >
                 <div>
                   <p className="font-outfit font-medium text-base text-primary-dark">{p.email}</p>
@@ -347,8 +347,8 @@ const DoctorPage = () => {
               className="px-5 py-2 rounded-full font-outfit font-medium text-sm transition-colors"
               style={
                 activeTab === tab.id
-                  ? { backgroundColor: '#233970', color: '#F5F3E9' }
-                  : { backgroundColor: '#EFEDE3', color: '#1C1C1C' }
+                  ? { backgroundColor: 'var(--color-navy-accent)', color: 'var(--color-bg)' }
+                  : { backgroundColor: 'var(--color-bg)', color: 'var(--color-text)' }
               }
             >
               {tab.label}

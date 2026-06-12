@@ -46,7 +46,7 @@ const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sor
           <span
             onClick={() => onNoPatientChange(!noPatient)}
             className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors"
-            style={{ borderColor: '#233970', backgroundColor: noPatient ? '#233970' : 'transparent' }}
+            style={{ borderColor: 'var(--color-navy-accent)', backgroundColor: noPatient ? 'var(--color-navy-accent)' : 'transparent' }}
           >
             {noPatient && <span className="w-1.5 h-1.5 rounded-full bg-white block" />}
           </span>
