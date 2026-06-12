@@ -1,4 +1,5 @@
 from .annotation import AnnotationCreate, AnnotationResponse, AnnotationUpdate
+from .audit_log import AuditLogEntry, PaginatedAuditLogResponse
 from .auth import (
     ChangePassword,
     UpdateProfile,
@@ -21,6 +22,8 @@ from .scan import PaginatedPatientsResponse, PaginatedScansResponse, PaginatedUs
 
 __all__ = [
     "AnnotationCreate",
+    "AuditLogEntry",
+    "PaginatedAuditLogResponse",
     "AnnotationResponse",
     "AnnotationUpdate",
     "AnalysisResult",
