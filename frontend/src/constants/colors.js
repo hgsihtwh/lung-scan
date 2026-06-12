@@ -1,10 +1,10 @@
 export const COLORS = {
   // Primary
   primary: {
-    beige: '#F5F3EA',
-    dark: '#1A1A1A',
-    navy: '#1E3A5F',
-    navyDark: '#152A45',
+    beige: 'var(--color-bg)',
+    dark: 'var(--color-text)',
+    navy: 'var(--color-navy)',
+    navyDark: 'var(--color-navy-dark)',
   },
 
   // Status
@@ -16,12 +16,12 @@ export const COLORS = {
 
   // UI
   ui: {
-    inputBg: '#E1DFD5',
-    inputBorder: '#BEBCB3',
-    cardBg: '#EFEDE3',
-    textMuted: '#787771',
-    sliderTrack: '#D2D1C8',
-    sliderThumb: '#797872',
+    inputBg: 'var(--color-surface)',
+    inputBorder: 'var(--color-border)',
+    cardBg: 'var(--color-bg)',
+    textMuted: 'var(--color-text-muted)',
+    sliderTrack: 'var(--color-chart-grid)',
+    sliderThumb: 'var(--color-text-muted)',
   },
 
   // Feedback

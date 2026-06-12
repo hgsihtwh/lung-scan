@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-bg: #EFEDE3;
+  --color-surface: #E1DFD5;
+  --color-surface-alt: #F5F3EA;
+  --color-border: #BEBCB3;
+  --color-text: #302F2C;
+  --color-text-muted: #787771;
+  --color-navy: #1E3A5F;
+  --color-navy-dark: #152844;
+  --color-navy-accent: #233970;
+  --color-annotation: #4A6FA5;
+  --color-annotation-fill: rgba(35, 57, 112, 0.12);
+  --color-chart-grid: #D2D1C8;
+  --color-overlay-subtle: rgba(0, 0, 0, 0.07);
+}
+
+.dark {
+  --color-bg: #1A1917;
+  --color-surface: #252320;
+  --color-surface-alt: #2E2B28;
+  --color-border: #3D3B38;
+  --color-text: #E8E6DC;
+  --color-text-muted: #9C9A93;
+  --color-navy: #C9B99A;
+  --color-navy-dark: #B5A484;
+  --color-navy-accent: #CDBD9E;
+  --color-annotation: #C9B99A;
+  --color-annotation-fill: rgba(201, 185, 154, 0.15);
+  --color-chart-grid: #3D3B38;
+  --color-overlay-subtle: rgba(255, 255, 255, 0.07);
+}
+
 body {
   margin: 0;
   font-family:
@@ -9,11 +41,13 @@ body {
     'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 
 .scroll-styled {
   scrollbar-width: thin;
-  scrollbar-color: #BEBCB3 transparent;
+  scrollbar-color: var(--color-border) transparent;
 }
 
 .scroll-styled::-webkit-scrollbar {
@@ -26,10 +60,10 @@ body {
 }
 
 .scroll-styled::-webkit-scrollbar-thumb {
-  background-color: #BEBCB3;
+  background-color: var(--color-border);
   border-radius: 99px;
 }
 
 .scroll-styled::-webkit-scrollbar-thumb:hover {
-  background-color: #9C9A93;
+  background-color: var(--color-text-muted);
 }
