@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { ArrowLeft } from 'lucide-react'
 import { useAuthStore, useScanStore, useUIStore } from '@/store'
-import { getScanDetails, getSliceNumbers } from '@/api'
+import { getScanDetails, getSliceNumbers, getAnnotations, createAnnotation, updateAnnotation, deleteAnnotation } from '@/api'
 import { initCornerstone } from '@/utils/cornerstone'
 
 import ViewerCanvas from './ViewerCanvas'
@@ -11,7 +11,7 @@ import ThumbnailGrid from './ThumbnailGrid'
 import { AnalysisPanel, CommentsPanel, FeedbackPanel, ExportPanel } from './panels'
 
 const DicomViewer = ({ onBack, readOnly = false }) => {
-  const { token } = useAuthStore()
+  const { token, user } = useAuthStore()
   const {
     currentScanId,
     currentScanDetails,
@@ -27,6 +27,10 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
     resetScan,
   } = useScanStore()
   const { setCurrentStep } = useUIStore()
+
+  const isDoctor = user?.role === 'doctor' || user?.role === 'admin'
+  const [annotations, setAnnotations] = useState([])
+  const [isAnnotationMode, setIsAnnotationMode] = useState(false)
 
   useEffect(() => {
     initCornerstone()
@@ -62,8 +66,36 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
     loadScanData()
   }, [currentScanId, token])
 
+  useEffect(() => {
+    if (!currentScanId || !token) return
+    const load = async () => {
+      const result = await getAnnotations(currentScanId, token)
+      if (result.success) setAnnotations(result.data)
+    }
+    load()
+  }, [currentScanId, token])
+
+  const sliceAnnotations = annotations.filter((a) => a.slice_number === currentSlice)
+
+  const handleAnnotationCreate = async (rect) => {
+    if (!currentScanId || !currentSlice) return
+    const result = await createAnnotation(currentScanId, { ...rect, slice_number: currentSlice }, token)
+    if (result.success) setAnnotations((prev) => [...prev, result.data])
+  }
+
+  const handleAnnotationDelete = async (id) => {
+    const result = await deleteAnnotation(currentScanId, id, token)
+    if (result.success) setAnnotations((prev) => prev.filter((a) => a.id !== id))
+  }
+
+  const handleAnnotationUpdate = async (id, label) => {
+    const result = await updateAnnotation(currentScanId, id, { label }, token)
+    if (result.success) setAnnotations((prev) => prev.map((a) => (a.id === id ? { ...a, label } : a)))
+  }
+
   const handleChangeStudy = () => {
     resetScan()
+    setIsAnnotationMode(false)
     if (onBack) onBack()
     else setCurrentStep('upload')
   }
@@ -96,10 +128,12 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
 
   return (
     <div>
-      {/* Subtitle + Change Study */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 sm:mb-12 gap-4">
         <p className="font-outfit font-normal text-[15px]" style={{ color: '#787771' }}>
           Chest CT Scan Analysis · {totalSlices} slices loaded
+          {isAnnotationMode && (
+            <span className="ml-3 text-[#233970] font-medium">· Annotation mode</span>
+          )}
         </p>
         <button
           onClick={handleChangeStudy}
@@ -110,15 +144,20 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
         </button>
       </div>
 
-      {/* Main content */}
       <div className="grid grid-cols-1 xl:grid-cols-[1fr_380px] gap-6 lg:gap-8">
-        {/* Left: Viewer */}
         <div className="space-y-4 lg:space-y-6">
           <ViewerCanvas
             scanId={currentScanId}
             currentSlice={currentSlice}
             token={token}
             sliceNumbers={sliceNumbers}
+            annotations={sliceAnnotations}
+            isAnnotationMode={isAnnotationMode}
+            isDoctor={isDoctor}
+            onToggleAnnotation={() => setIsAnnotationMode((v) => !v)}
+            onAnnotationCreate={handleAnnotationCreate}
+            onAnnotationDelete={handleAnnotationDelete}
+            onAnnotationUpdate={handleAnnotationUpdate}
           />
           <SliceNavigator
             sliceNumbers={sliceNumbers}
@@ -134,7 +173,6 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
           />
         </div>
 
-        {/* Right: Panels */}
         <div className="space-y-4 lg:space-y-6">
           <AnalysisPanel readOnly={readOnly} />
           <CommentsPanel readOnly={readOnly} />

@@ -29,3 +29,6 @@ class Scan(Base):
     feedback = relationship(
         "Feedback", back_populates="scan", uselist=False, cascade="all, delete-orphan"
     )
+    annotations = relationship(
+        "Annotation", back_populates="scan", cascade="all, delete-orphan"
+    )
