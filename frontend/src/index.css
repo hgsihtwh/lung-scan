@@ -92,6 +92,13 @@ body {
 
 .footer-glow {
   position: relative;
+  background-color: var(--color-navy);
+  color: var(--color-bg);
+}
+
+.dark .footer-glow {
+  background-color: var(--color-bg);
+  color: var(--color-text);
 }
 
 .dark .footer-glow::before {
