@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
 import Header from './Header'
 import Footer from './Footer'
-import lungAscii from '@/assets/blue-lung-ascii.svg'
+import lungAscii from '@/assets/dark-mode-lung.svg'
 
 const PageLayout = ({ children, showBackground = true, className = '' }) => {
   const location = useLocation()
@@ -33,7 +33,7 @@ const PageLayout = ({ children, showBackground = true, className = '' }) => {
           alt=""
           className={`${
             isProfilePage ? 'fixed' : 'absolute'
-          } -right-10 -top-20 w-[1200px] pointer-events-none select-none z-10 opacity-90 dark:opacity-10`}
+          } -right-32 -top-20 w-[1200px] pointer-events-none select-none z-10 opacity-40 dark:opacity-60`}
         />
       )}
 
