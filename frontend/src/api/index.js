@@ -14,6 +14,10 @@ export {
   saveComment,
   deleteScan,
   getScansHistory,
+  getAnnotations,
+  createAnnotation,
+  updateAnnotation,
+  deleteAnnotation,
 } from './scans'
 
 export { downloadScanReport } from './reports'

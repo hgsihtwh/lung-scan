@@ -90,3 +90,30 @@ export const deleteScan = async (scanId, token) => {
 export const getScansHistory = async (token) => {
   return apiClient('/api/scans/history', { token })
 }
+
+export const getAnnotations = async (scanId, token) => {
+  return apiClient(`/api/scans/${scanId}/annotations`, { token })
+}
+
+export const createAnnotation = async (scanId, data, token) => {
+  return apiClient(`/api/scans/${scanId}/annotations`, {
+    method: 'POST',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export const updateAnnotation = async (scanId, annotationId, data, token) => {
+  return apiClient(`/api/scans/${scanId}/annotations/${annotationId}`, {
+    method: 'PUT',
+    token,
+    body: JSON.stringify(data),
+  })
+}
+
+export const deleteAnnotation = async (scanId, annotationId, token) => {
+  return apiClient(`/api/scans/${scanId}/annotations/${annotationId}`, {
+    method: 'DELETE',
+    token,
+  })
+}
