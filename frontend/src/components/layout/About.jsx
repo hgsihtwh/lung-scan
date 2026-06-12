@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ChevronUp } from 'lucide-react'
 
 const About = () => {
   const [isExpanded, setIsExpanded] = useState(true)
@@ -26,10 +27,13 @@ const About = () => {
 
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="font-outfit font-normal text-base sm:text-lg lg:text-[20px] hover:opacity-70 transition-opacity"
+          className="opacity-50 hover:opacity-100 transition-all"
           style={{ color: 'var(--color-text)' }}
         >
-          {isExpanded ? 'Hide' : 'Show'}
+          <ChevronUp
+            size={24}
+            className={`transition-transform duration-300 ${isExpanded ? '' : 'rotate-180'}`}
+          />
         </button>
       </div>
 
@@ -37,7 +41,7 @@ const About = () => {
         <>
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-12 mb-16 sm:mb-20 lg:mb-28">
             {/* Model Performance Card */}
-            <div className="border rounded-2xl p-6 sm:p-8" style={{ borderColor: 'var(--color-text)' }}>
+            <div className="border rounded-2xl p-6 sm:p-8" style={{ borderColor: 'var(--color-border)', backgroundColor: 'var(--color-surface)' }}>
               <h3
                 className="font-outfit font-medium text-lg sm:text-[20px] mb-6 sm:mb-8 lg:mb-10"
                 style={{ color: 'var(--color-text)' }}
