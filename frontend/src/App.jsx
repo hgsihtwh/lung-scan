@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { useAuthStore } from './store'
 import { Header, Footer, Hero, About } from './components/layout'
 import { ProfilePage } from './components/profile'
-import { AuthPage, ResetPasswordPage, DoctorPage, AdminPage, UploadPage, ScansPage } from './pages'
+import { AuthPage, ResetPasswordPage, DoctorPage, AdminPage, UploadPage, ScansPage, DynamicsPage } from './pages'
 import lungAscii from './assets/blue-lung-ascii.svg'
 
 const ProtectedRoute = ({ children }) => {
@@ -95,6 +95,24 @@ function App() {
           element={
             <RoleRoute roles={['admin']}>
               <AdminPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/dynamics"
+          element={
+            <RoleRoute roles={['patient']}>
+              <DynamicsPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/dynamics/:patientId"
+          element={
+            <RoleRoute roles={['doctor', 'admin']}>
+              <DynamicsPage />
             </RoleRoute>
           }
         />

@@ -16,7 +16,7 @@ from .auth import (
 )
 from .feedback import CommentCreate, FeedbackCreate, FeedbackResponse
 from .report import AnalysisResult, ReportResponse
-from .scan import PaginatedPatientsResponse, PaginatedScansResponse, PaginatedUsersResponse, ScanDetailResponse, ScanResponse, UploadResponse
+from .scan import PaginatedPatientsResponse, PaginatedScansResponse, PaginatedUsersResponse, ScanDetailResponse, ScanHistoryItem, ScanHistoryResponse, ScanResponse, UploadResponse
 
 __all__ = [
     "AnalysisResult",
@@ -34,6 +34,8 @@ __all__ = [
     "ResetPassword",
     "ReportResponse",
     "ScanDetailResponse",
+    "ScanHistoryItem",
+    "ScanHistoryResponse",
     "ScanResponse",
     "Token",
     "TokenPair",

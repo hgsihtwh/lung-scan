@@ -12,7 +12,7 @@ from ...models.user import ROLE_DOCTOR
 from ...services import DicomService
 from ...services.cleanup_service import CleanupService
 from ..deps import get_current_user
-from ...schemas import PaginatedScansResponse, ScanDetailResponse, ScanResponse
+from ...schemas import PaginatedScansResponse, ScanDetailResponse, ScanHistoryResponse, ScanResponse
 
 router = APIRouter(prefix="/scans")
 
@@ -72,6 +72,31 @@ async def get_scans(
         size=size,
         pages=pages,
     )
+
+
+@router.get("/history", response_model=ScanHistoryResponse)
+async def get_scan_history(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    scans = (
+        db.query(Scan)
+        .outerjoin(Scan.report)
+        .filter(Scan.user_id == current_user.id)
+        .order_by(Scan.created_at.asc())
+        .all()
+    )
+    items = [
+        {
+            "id": scan.id,
+            "created_at": scan.created_at,
+            "verdict": scan.report.verdict if scan.report else None,
+            "probability": scan.report.probability if scan.report else None,
+            "slice_count": scan.slice_count,
+        }
+        for scan in scans
+    ]
+    return ScanHistoryResponse(items=items)
 
 
 @router.get("/{scan_id}", response_model=ScanDetailResponse)
