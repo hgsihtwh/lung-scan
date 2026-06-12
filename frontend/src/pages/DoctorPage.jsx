@@ -28,7 +28,7 @@ const PatientsTab = ({ token }) => {
   const [scans, setScans] = useState([])
   const [scansLoading, setScansLoading] = useState(false)
   const [scansTotal, setScansTotal] = useState(0)
-  const [viewing, setViewing] = useState(!!currentScanId)
+  const [viewing, setViewing] = useState(false)
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 400)
@@ -202,7 +202,7 @@ const PatientsTab = ({ token }) => {
 
 const MyScansTab = ({ token }) => {
   const { currentScanId, setCurrentScanId, resetScan } = useScanStore()
-  const [viewing, setViewing] = useState(!!currentScanId)
+  const [viewing, setViewing] = useState(false)
 
   const [scans, setScans] = useState([])
   const [loading, setLoading] = useState(true)
