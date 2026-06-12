@@ -20,7 +20,7 @@ const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sor
             value={search}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search by patient"
-            className="w-full pl-9 pr-3 py-2 text-sm font-outfit bg-transparent border border-primary-dark/20 rounded-lg focus:outline-none focus:border-primary-navy text-primary-dark placeholder:opacity-40"
+            className="w-full pl-9 pr-3 py-2 text-sm font-outfit bg-transparent border border-primary-dark/20 rounded-full focus:outline-none focus:border-primary-navy text-primary-dark placeholder:opacity-40"
           />
         </div>
       )}
@@ -30,7 +30,7 @@ const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sor
           <button
             key={label}
             onClick={() => onVerdictChange(value)}
-            className={`px-3 py-1.5 text-xs font-outfit rounded-lg transition-colors ${
+            className={`px-3 py-1.5 text-xs font-outfit rounded-full transition-colors ${
               verdict === value
                 ? 'bg-primary-navy text-white'
                 : 'text-primary-dark opacity-60 hover:opacity-100'
