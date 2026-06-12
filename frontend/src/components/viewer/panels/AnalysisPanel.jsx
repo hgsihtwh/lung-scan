@@ -74,7 +74,7 @@ const AnalysisPanel = ({ readOnly = false }) => {
 
   return (
     <div className="card bg-primary-beige rounded-xl sm:rounded-2xl p-5 lg:p-6">
-      <h3 className="font-outfit font-medium text-lg lg:text-xl text-primary-dark mb-4">
+      <h3 className="font-outfit font-medium text-lg lg:text-lg text-primary-dark mb-4">
         ANALYSIS
       </h3>
 
@@ -94,7 +94,7 @@ const AnalysisPanel = ({ readOnly = false }) => {
               {(currentScanDetails.probability * 100).toFixed(2)}%
             </span>
           </div>
-          <p className="font-outfit text-sm text-primary-dark opacity-60 mt-1">
+          <p className="font-outfit text-base text-primary-dark opacity-60 mt-1">
             {isNormal ? 'No signs of pathology detected' : 'Potential pathology detected'}
           </p>
         </div>
@@ -102,7 +102,7 @@ const AnalysisPanel = ({ readOnly = false }) => {
 
       {analysisError && (
         <div className="mb-4">
-          <p className="font-outfit text-sm text-primary-dark opacity-60">{analysisError}</p>
+          <p className="font-outfit text-base text-primary-dark opacity-60">{analysisError}</p>
         </div>
       )}
 
@@ -110,7 +110,7 @@ const AnalysisPanel = ({ readOnly = false }) => {
         <button
           onClick={handleStartAnalysis}
           disabled={isAnalyzing || hasVerdict}
-          className="w-full h-10 sm:h-11 md:h-12 bg-primary-navy text-primary-beige font-outfit font-normal text-[15px] rounded-full hover:bg-primary-navyDark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full h-10 sm:h-11 md:h-12 bg-primary-navy text-primary-beige font-outfit font-normal text-base rounded-full hover:bg-primary-navyDark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isAnalyzing ? 'Analyzing...' : hasVerdict ? 'Analysis Complete' : 'Start Analysis'}
         </button>

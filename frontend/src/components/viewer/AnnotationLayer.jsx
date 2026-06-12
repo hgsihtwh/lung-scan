@@ -201,14 +201,14 @@ const AnnotationLayer = ({
               onKeyDown={(e) => e.key === 'Enter' && isDoctor && handleSaveLabel()}
               placeholder="Label (optional)"
               disabled={!isDoctor}
-              className="w-full px-2 py-1 rounded-lg text-sm font-outfit text-primary-dark focus:outline-none mb-2"
+              className="w-full px-2 py-1 rounded-lg text-base font-outfit text-primary-dark focus:outline-none mb-2"
               style={{ backgroundColor: 'var(--color-surface)' }}
             />
             <div className="flex gap-2">
               {isDoctor && (
                 <button
                   onClick={handleSaveLabel}
-                  className="flex-1 text-xs font-outfit py-1 px-2 rounded-lg"
+                  className="flex-1 text-base font-outfit py-1 px-2 rounded-lg"
                   style={{ backgroundColor: 'var(--color-navy-accent)', color: 'var(--color-bg)' }}
                 >
                   Save
@@ -217,7 +217,7 @@ const AnnotationLayer = ({
               {isDoctor && (
                 <button
                   onClick={handleDelete}
-                  className="text-xs font-outfit py-1 px-2 rounded-lg"
+                  className="text-base font-outfit py-1 px-2 rounded-lg"
                   style={{ backgroundColor: '#FEE2E2', color: '#7E2F2F' }}
                 >
                   Delete
@@ -225,7 +225,7 @@ const AnnotationLayer = ({
               )}
               <button
                 onClick={() => setSelected(null)}
-                className="text-xs font-outfit py-1 px-2 rounded-lg"
+                className="text-base font-outfit py-1 px-2 rounded-lg"
                 style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text-muted)' }}
               >
                 ✕

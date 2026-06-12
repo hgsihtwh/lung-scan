@@ -10,7 +10,7 @@ const Header = () => {
   const role = user?.role
 
   const navClass = (path) =>
-    `nav-link font-outfit font-normal text-base sm:text-lg md:text-[20px] hover:opacity-70 transition-opacity ${
+    `nav-link font-outfit font-normal text-base sm:text-lg md:text-lg hover:opacity-70 transition-opacity ${
       location.pathname === path ? 'nav-active' : ''
     }`
 
@@ -31,7 +31,7 @@ const Header = () => {
                 }
               }, 100)
             }}
-            className="font-outfit font-medium text-base sm:text-lg md:text-[20px] text-primary-dark hover:opacity-70 transition-opacity"
+            className="font-outfit font-medium text-base sm:text-lg md:text-lg text-primary-dark hover:opacity-70 transition-opacity"
           >
             Chest Scan
           </button>
@@ -48,7 +48,7 @@ const Header = () => {
             {role !== 'admin' && (
               <a
                 href="/#about"
-                className={`nav-link font-outfit font-normal text-base sm:text-lg md:text-[20px] hover:opacity-70 transition-opacity ${location.pathname === '/' ? 'nav-active' : ''}`}
+                className={`nav-link font-outfit font-normal text-base sm:text-lg md:text-lg hover:opacity-70 transition-opacity ${location.pathname === '/' ? 'nav-active' : ''}`}
               >
                 About
               </a>

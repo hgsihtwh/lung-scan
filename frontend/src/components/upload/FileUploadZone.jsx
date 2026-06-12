@@ -72,7 +72,7 @@ const FileUploadZone = ({ patientId = null }) => {
     <div>
       {error && (
         <div className="mb-6 p-4 rounded-2xl" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
-          <p className="font-outfit text-sm text-primary-dark opacity-70">{error}</p>
+          <p className="font-outfit text-base text-primary-dark opacity-70">{error}</p>
         </div>
       )}
 
@@ -94,19 +94,19 @@ const FileUploadZone = ({ patientId = null }) => {
         {loading ? (
           <>
             <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-primary-navy mb-6" />
-            <p className="font-outfit font-normal text-lg sm:text-xl text-primary-dark">
+            <p className="font-outfit font-normal text-lg sm:text-lg text-primary-dark">
               {uploadProgress}
             </p>
           </>
         ) : (
           <>
             <Upload size={64} className="text-primary-navy mb-6 sm:mb-8" strokeWidth={1.5} />
-            <p className="font-outfit font-normal text-lg sm:text-xl md:text-[20px] text-primary-dark text-center px-4">
+            <p className="font-outfit font-normal text-lg sm:text-lg md:text-lg text-primary-dark text-center px-4">
               {isDragActive
                 ? 'Drop the DICOM archive here...'
                 : 'Drag DICOM archive here or click to browse'}
             </p>
-            <p className="font-outfit font-light text-sm sm:text-base text-primary-dark opacity-60 mt-4 text-center px-4">
+            <p className="font-outfit font-light text-base sm:text-base text-primary-dark opacity-60 mt-4 text-center px-4">
               Supported format: .zip
             </p>
           </>

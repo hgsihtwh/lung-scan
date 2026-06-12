@@ -31,20 +31,20 @@ const ExportPanel = ({ comments = '' }) => {
 
   return (
     <div className="card bg-primary-beige rounded-xl sm:rounded-2xl p-5 lg:p-6">
-      <h3 className="font-outfit font-medium text-lg lg:text-xl text-primary-dark mb-4">
+      <h3 className="font-outfit font-medium text-lg lg:text-lg text-primary-dark mb-4">
         EXPORT REPORT
       </h3>
 
       {error && (
         <div className="mb-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-surface)' }}>
-          <p className="font-outfit text-sm text-primary-dark opacity-60">{error}</p>
+          <p className="font-outfit text-base text-primary-dark opacity-60">{error}</p>
         </div>
       )}
 
       <button
         onClick={handleDownload}
         disabled={!hasVerdict || isDownloading}
-        className={`w-full h-10 sm:h-11 md:h-12 font-outfit font-normal text-[15px] rounded-full flex items-center justify-center gap-2 transition-colors ${
+        className={`w-full h-10 sm:h-11 md:h-12 font-outfit font-normal text-base rounded-full flex items-center justify-center gap-2 transition-colors ${
           hasVerdict
             ? 'bg-primary-navy text-primary-beige hover:bg-primary-navyDark cursor-pointer'
             : 'bg-gray-400 text-white cursor-not-allowed opacity-50'
@@ -55,7 +55,7 @@ const ExportPanel = ({ comments = '' }) => {
       </button>
 
       {!hasVerdict && (
-        <p className="font-outfit font-normal text-[10px] text-primary-dark opacity-50 text-center mt-2 lg:mt-3">
+        <p className="font-outfit font-normal text-base text-primary-dark opacity-50 text-center mt-2 lg:mt-3">
           Complete analysis first
         </p>
       )}

@@ -26,12 +26,12 @@ const VerifyCodeForm = ({ email, onSubmit, onResend, loading, error }) => {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       <div>
-        <p className="font-outfit font-normal text-sm text-primary-dark opacity-70 mb-6">
+        <p className="font-outfit font-normal text-base text-primary-dark opacity-70 mb-6">
           We sent a 6-digit code to{' '}
           <span className="opacity-100 font-medium">{email}</span>
         </p>
 
-        <label className="block font-outfit font-normal text-[18px] text-primary-dark mb-2">
+        <label className="block font-outfit font-normal text-lg text-primary-dark mb-2">
           VERIFICATION CODE
         </label>
         <input
@@ -52,7 +52,7 @@ const VerifyCodeForm = ({ email, onSubmit, onResend, loading, error }) => {
         />
       </div>
 
-      {error && <div className="font-outfit text-sm text-red-600">{error}</div>}
+      {error && <div className="font-outfit text-base text-red-600">{error}</div>}
 
       <button
         type="submit"
@@ -63,14 +63,14 @@ const VerifyCodeForm = ({ email, onSubmit, onResend, loading, error }) => {
       </button>
 
       <div className="text-center">
-        <span className="font-outfit font-normal text-xs text-primary-dark opacity-60">
+        <span className="font-outfit font-normal text-base text-primary-dark opacity-60">
           Didn&apos;t receive the code?{' '}
         </span>
         <button
           type="button"
           onClick={handleResend}
           disabled={cooldown > 0}
-          className="font-outfit font-normal text-xs text-primary-dark underline disabled:opacity-40 hover:opacity-100 transition-opacity"
+          className="font-outfit font-normal text-base text-primary-dark underline disabled:opacity-40 hover:opacity-100 transition-opacity"
         >
           {cooldown > 0 ? `Resend in ${cooldown}s` : 'Resend'}
         </button>

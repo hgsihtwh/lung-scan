@@ -8,7 +8,7 @@ const PasswordInput = ({ label, name, value, onChange, placeholder }) => {
   const [show, setShow] = useState(false)
   return (
     <div>
-      <label className="block font-outfit font-normal text-[15px] text-primary-dark opacity-60 mb-1.5">
+      <label className="block font-outfit font-normal text-base text-primary-dark opacity-60 mb-1.5">
         {label}
       </label>
       <div className="relative">
@@ -95,13 +95,13 @@ const ProfileInfo = () => {
 
   return (
     <div className="max-w-[300px] mb-32 sm:mb-40 lg:mb-[200px]">
-      <p className="font-outfit font-normal text-[20px] text-primary-dark opacity-60 mb-1">EMAIL</p>
+      <p className="font-outfit font-normal text-lg text-primary-dark opacity-60 mb-1">EMAIL</p>
       <p className="font-outfit font-normal text-base text-primary-dark mb-6">{user?.email}</p>
 
       {!isChangingPassword ? (
         <button
           onClick={() => setIsChangingPassword(true)}
-          className="font-outfit font-normal text-sm text-primary-dark opacity-50 hover:opacity-100 transition-opacity mb-6 block"
+          className="font-outfit font-normal text-base text-primary-dark opacity-50 hover:opacity-100 transition-opacity mb-6 block"
         >
           Change password
         </button>
@@ -129,21 +129,21 @@ const ProfileInfo = () => {
             placeholder="••••••••"
           />
 
-          {error && <p className="font-outfit text-sm text-red-500">{error}</p>}
-          {success && <p className="font-outfit text-sm text-green-600">Password changed successfully</p>}
+          {error && <p className="font-outfit text-base text-red-500">{error}</p>}
+          {success && <p className="font-outfit text-base text-green-600">Password changed successfully</p>}
 
           <div className="flex gap-3 pt-1">
             <button
               type="submit"
               disabled={isLoading}
-              className="flex-1 h-10 bg-primary-navy text-primary-beige font-outfit font-normal text-sm rounded-full hover:bg-primary-navyDark transition-colors disabled:opacity-50"
+              className="flex-1 h-10 bg-primary-navy text-primary-beige font-outfit font-normal text-base rounded-full hover:bg-primary-navyDark transition-colors disabled:opacity-50"
             >
               {isLoading ? '...' : 'Save'}
             </button>
             <button
               type="button"
               onClick={handleCancel}
-              className="flex-1 h-10 font-outfit font-normal text-sm text-primary-dark opacity-50 hover:opacity-100 transition-opacity rounded-full"
+              className="flex-1 h-10 font-outfit font-normal text-base text-primary-dark opacity-50 hover:opacity-100 transition-opacity rounded-full"
               style={{ border: '1px solid var(--color-border)' }}
             >
               Cancel

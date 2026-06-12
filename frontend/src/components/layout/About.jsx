@@ -69,7 +69,7 @@ const About = () => {
     >
       <div className="flex justify-between items-center mb-12 sm:mb-16 lg:mb-[120px]">
         <h2
-          className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px]"
+          className="font-outfit font-semibold text-3xl sm:text-3xl md:text-3xl"
           style={{ color: 'var(--color-text)' }}
         >
           ABOUT CHEST SCAN
@@ -93,7 +93,7 @@ const About = () => {
             {/* Model Performance Card */}
             <div className="card-scan rounded-2xl p-6 sm:p-8" style={{ backgroundColor: 'var(--color-bg)' }}>
               <h3
-                className="font-outfit font-medium text-lg sm:text-[20px] mb-6 sm:mb-8 lg:mb-10"
+                className="font-outfit font-medium text-lg sm:text-lg mb-6 sm:mb-8 lg:mb-10"
                 style={{ color: 'var(--color-text)' }}
               >
                 MODEL PERFORMANCE
@@ -102,45 +102,45 @@ const About = () => {
               <div className="grid grid-cols-2 gap-y-6 sm:gap-y-8">
                 <div>
                   <p
-                    className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
+                    className="font-outfit font-normal text-base sm:text-base mb-1"
                     style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     TRAINING SET
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-text)' }}>
+                  <p className="font-outfit font-semibold text-3xl" style={{ color: 'var(--color-text)' }}>
                     1921
                   </p>
                 </div>
                 <div>
                   <p
-                    className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
+                    className="font-outfit font-normal text-base sm:text-base mb-1"
                     style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     VALIDATION
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-text)' }}>
+                  <p className="font-outfit font-semibold text-3xl" style={{ color: 'var(--color-text)' }}>
                     236
                   </p>
                 </div>
                 <div>
                   <p
-                    className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
+                    className="font-outfit font-normal text-base sm:text-base mb-1"
                     style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     ACCURACY
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-navy-accent)' }}>
+                  <p className="font-outfit font-semibold text-3xl" style={{ color: 'var(--color-navy-accent)' }}>
                     89,83%
                   </p>
                 </div>
                 <div>
                   <p
-                    className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
+                    className="font-outfit font-normal text-base sm:text-base mb-1"
                     style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     ROC-AUC
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-navy-accent)' }}>
+                  <p className="font-outfit font-semibold text-3xl" style={{ color: 'var(--color-navy-accent)' }}>
                     0,962
                   </p>
                 </div>
@@ -151,7 +151,7 @@ const About = () => {
               {description.map((para, i) => (
                 <p
                   key={i}
-                  className={`font-outfit font-normal text-base sm:text-lg lg:text-[20px] leading-relaxed ${i < description.length - 1 ? 'mb-6' : ''}`}
+                  className={`font-outfit font-normal text-base sm:text-lg lg:text-lg leading-relaxed ${i < description.length - 1 ? 'mb-6' : ''}`}
                   style={{ color: 'var(--color-text)' }}
                 >
                   {para}
@@ -163,7 +163,7 @@ const About = () => {
           {/* Workflow */}
           <div>
             <h3
-              className="font-outfit font-semibold text-2xl sm:text-[30px] mb-12 sm:mb-14 lg:mb-16"
+              className="font-outfit font-semibold text-3xl sm:text-3xl mb-12 sm:mb-14 lg:mb-16"
               style={{ color: 'var(--color-text)' }}
             >
               {role === 'patient' ? 'YOUR WORKFLOW' : 'USER WORKFLOW'}
@@ -184,7 +184,7 @@ const About = () => {
                     </div>
                   </div>
                   <p
-                    className="font-outfit font-normal text-base sm:text-lg lg:text-[20px]"
+                    className="font-outfit font-normal text-base sm:text-lg lg:text-lg"
                     style={{ color: 'var(--color-text)' }}
                   >
                     {step.label}

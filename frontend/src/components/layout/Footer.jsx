@@ -5,19 +5,19 @@ const Footer = () => {
         <div className="flex flex-col sm:flex-row justify-between gap-6">
           {/* Left side */}
           <div>
-            <h3 className="font-outfit font-semibold text-2xl mb-2">CHEST SCAN</h3>
-            <p className="font-outfit font-light text-[15px] opacity-60">Research Project</p>
-            <p className="font-outfit font-light text-[15px] opacity-60">2025</p>
+            <h3 className="font-outfit font-semibold text-3xl mb-2">CHEST SCAN</h3>
+            <p className="font-outfit font-light text-base opacity-60">Research Project</p>
+            <p className="font-outfit font-light text-base opacity-60">2025</p>
           </div>
 
           {/* Right side */}
           <div>
-            <h4 className="font-outfit font-semibold text-[15px] mb-2">RESOURCES</h4>
+            <h4 className="font-outfit font-semibold text-base mb-2">RESOURCES</h4>
             <a
               href="https://github.com/hgsihtwh/lung-scan"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-outfit font-normal text-[15px] opacity-60 hover:opacity-100 transition-opacity"
+              className="font-outfit font-normal text-base opacity-60 hover:opacity-100 transition-opacity"
             >
               GitHub Repository
             </a>

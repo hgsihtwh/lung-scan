@@ -11,7 +11,7 @@ const ForgotPasswordForm = ({ onSubmit, onBack, loading, error, success }) => {
   if (success) {
     return (
       <div className="space-y-6">
-        <p className="font-outfit text-sm text-primary-dark opacity-70">
+        <p className="font-outfit text-base text-primary-dark opacity-70">
           If this email is registered, you will receive a password reset link shortly.
         </p>
         <button
@@ -27,12 +27,12 @@ const ForgotPasswordForm = ({ onSubmit, onBack, loading, error, success }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <p className="font-outfit text-sm text-primary-dark opacity-70">
+      <p className="font-outfit text-base text-primary-dark opacity-70">
         Enter your email and we&apos;ll send you a link to reset your password.
       </p>
 
       <div>
-        <label className="block font-outfit font-normal text-[18px] text-primary-dark mb-2">
+        <label className="block font-outfit font-normal text-lg text-primary-dark mb-2">
           EMAIL
         </label>
         <input
@@ -51,7 +51,7 @@ const ForgotPasswordForm = ({ onSubmit, onBack, loading, error, success }) => {
         />
       </div>
 
-      {error && <div className="font-outfit text-sm text-red-600">{error}</div>}
+      {error && <div className="font-outfit text-base text-red-600">{error}</div>}
 
       <button
         type="submit"
@@ -65,7 +65,7 @@ const ForgotPasswordForm = ({ onSubmit, onBack, loading, error, success }) => {
         <button
           type="button"
           onClick={onBack}
-          className="font-outfit font-normal text-xs text-primary-dark opacity-60 hover:opacity-100 transition-opacity underline"
+          className="font-outfit font-normal text-base text-primary-dark opacity-60 hover:opacity-100 transition-opacity underline"
         >
           Back to sign in
         </button>

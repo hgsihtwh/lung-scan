@@ -45,16 +45,16 @@ const CommentsPanel = ({ readOnly = false }) => {
   return (
     <div className="card bg-primary-beige rounded-xl sm:rounded-2xl p-5 lg:p-6">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="font-outfit font-medium text-lg lg:text-xl text-primary-dark">COMMENTS</h3>
+        <h3 className="font-outfit font-medium text-lg lg:text-lg text-primary-dark">COMMENTS</h3>
 
         {!readOnly && isSaving && (
-          <span className="font-outfit text-xs text-primary-dark opacity-50">Saving...</span>
+          <span className="font-outfit text-base text-primary-dark opacity-50">Saving...</span>
         )}
         {!readOnly && saveStatus === 'saved' && (
-          <span className="font-outfit text-xs" style={{ color: '#003DD6' }}>Saved</span>
+          <span className="font-outfit text-base" style={{ color: '#003DD6' }}>Saved</span>
         )}
         {!readOnly && saveStatus === 'error' && (
-          <span className="font-outfit text-xs text-primary-dark opacity-50">Save failed</span>
+          <span className="font-outfit text-base text-primary-dark opacity-50">Save failed</span>
         )}
       </div>
 
@@ -63,7 +63,7 @@ const CommentsPanel = ({ readOnly = false }) => {
         onChange={readOnly ? undefined : (e) => setComments(e.target.value)}
         readOnly={readOnly}
         placeholder={readOnly ? 'No comments yet' : 'Add your comments here...'}
-        className="w-full h-32 p-3 lg:p-4 rounded-xl font-outfit text-sm lg:text-base resize-none focus:outline-none transition-colors"
+        className="w-full h-32 p-3 lg:p-4 rounded-xl font-outfit text-base lg:text-base resize-none focus:outline-none transition-colors"
         style={{
           backgroundColor: 'var(--color-surface)',
           borderWidth: '1px',
@@ -74,7 +74,7 @@ const CommentsPanel = ({ readOnly = false }) => {
       />
 
       {!readOnly && (
-        <p className="font-outfit text-xs text-primary-dark opacity-60 mt-2 text-center">
+        <p className="font-outfit text-base text-primary-dark opacity-60 mt-2 text-center">
           Comment will be included in the report
         </p>
       )}

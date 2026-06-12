@@ -66,7 +66,7 @@ const Select = ({
         type="button"
         disabled={disabled}
         onClick={handleToggle}
-        className="flex items-center justify-between gap-2 w-full px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
+        className="flex items-center justify-between gap-2 w-full px-4 py-2.5 rounded-full font-outfit text-base text-primary-dark focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
         style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
       >
         <span className="truncate">{selected ? selected.label : placeholder}</span>
@@ -95,7 +95,7 @@ const Select = ({
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Search..."
                 onClick={(e) => e.stopPropagation()}
-                className="w-full px-3 py-1.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
+                className="w-full px-3 py-1.5 rounded-full font-outfit text-base text-primary-dark focus:outline-none"
                 style={{ backgroundColor: 'var(--color-overlay-subtle)' }}
               />
             </div>
@@ -103,7 +103,7 @@ const Select = ({
 
           <div className="max-h-52 overflow-y-auto scroll-styled">
             {filtered.length === 0 ? (
-              <p className="px-4 py-2.5 font-outfit text-sm text-primary-dark opacity-50">
+              <p className="px-4 py-2.5 font-outfit text-base text-primary-dark opacity-50">
                 Not found
               </p>
             ) : (
@@ -116,7 +116,7 @@ const Select = ({
                     setOpen(false)
                     setSearch('')
                   }}
-                  className="w-full text-left px-4 py-2.5 font-outfit text-sm transition-colors hover:bg-black/5"
+                  className="w-full text-left px-4 py-2.5 font-outfit text-base transition-colors hover:bg-black/5"
                   style={
                     value === option.value
                       ? { backgroundColor: 'var(--color-navy-accent)', color: 'var(--color-surface-alt)' }

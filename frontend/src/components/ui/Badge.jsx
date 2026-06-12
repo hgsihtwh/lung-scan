@@ -22,7 +22,7 @@ const Badge = ({ children, variant = 'neutral', className = '' }) => {
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-outfit text-sm font-medium ${className}`}
+      className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-outfit text-base font-medium ${className}`}
       style={{
         backgroundColor: colors.bg,
         color: colors.text,

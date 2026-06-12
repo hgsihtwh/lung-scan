@@ -7,8 +7,8 @@ const variants = {
 }
 
 const sizes = {
-  sm: 'h-8 px-3 text-sm',
-  md: 'h-10 sm:h-11 md:h-12 px-4 text-[15px]',
+  sm: 'h-8 px-3 text-base',
+  md: 'h-10 sm:h-11 md:h-12 px-4 text-base',
   lg: 'h-12 sm:h-14 px-6 text-base',
 }
 

@@ -6,21 +6,21 @@ import { formatDate } from '@/utils/helpers'
 const DeleteConfirmModal = ({ onConfirm, onCancel }) => (
   <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
     <div className="rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl" style={{ backgroundColor: 'var(--color-bg)' }}>
-      <h3 className="font-outfit font-semibold text-xl text-primary-dark mb-3">Delete scan?</h3>
-      <p className="font-outfit text-sm text-primary-dark opacity-70 mb-8">
+      <h3 className="font-outfit font-semibold text-lg text-primary-dark mb-3">Delete scan?</h3>
+      <p className="font-outfit text-base text-primary-dark opacity-70 mb-8">
         The scan and all its data will be permanently deleted. This cannot be undone.
       </p>
       <div className="flex gap-3">
         <button
           onClick={onCancel}
-          className="flex-1 h-11 rounded-full font-outfit text-sm text-primary-dark hover:opacity-70 transition-opacity"
+          className="flex-1 h-11 rounded-full font-outfit text-base text-primary-dark hover:opacity-70 transition-opacity"
           style={{ border: '1px solid var(--color-border)' }}
         >
           Cancel
         </button>
         <button
           onClick={onConfirm}
-          className="flex-1 h-11 rounded-full bg-red-600 text-white font-outfit text-sm hover:bg-red-700 transition-colors"
+          className="flex-1 h-11 rounded-full bg-red-600 text-white font-outfit text-base hover:bg-red-700 transition-colors"
         >
           Delete
         </button>
@@ -77,17 +77,17 @@ const StudyCard = ({ scan, token, onClick, onDelete }) => {
             <p className="font-outfit font-medium text-base text-primary-dark mb-1">
               Study ID: {scan.patient_name || 'Unknown'}
             </p>
-            <p className="font-outfit text-sm text-primary-dark opacity-60 mb-2">
+            <p className="font-outfit text-base text-primary-dark opacity-60 mb-2">
               {scan.slice_count} slices
             </p>
-            <p className="font-outfit font-medium text-sm" style={{ color: getStatusColor() }}>
+            <p className="font-outfit font-medium text-base" style={{ color: getStatusColor() }}>
               {getStatusText()}
             </p>
           </div>
 
           {/* Bottom Row */}
           <div className="flex items-center justify-between">
-            <p className="font-outfit text-xs text-primary-dark opacity-60">
+            <p className="font-outfit text-base text-primary-dark opacity-60">
               {formatDate(scan.created_at)}
             </p>
 
