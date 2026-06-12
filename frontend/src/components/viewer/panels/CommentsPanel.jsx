@@ -43,7 +43,7 @@ const CommentsPanel = ({ readOnly = false }) => {
   }, [comments, currentScanId, token])
 
   return (
-    <div className="bg-primary-beige border border-primary-dark rounded-xl sm:rounded-2xl p-5 lg:p-6">
+    <div className="card bg-primary-beige rounded-xl sm:rounded-2xl p-5 lg:p-6">
       <div className="flex items-center justify-between mb-4">
         <h3 className="font-outfit font-medium text-lg lg:text-xl text-primary-dark">COMMENTS</h3>
 
@@ -51,10 +51,10 @@ const CommentsPanel = ({ readOnly = false }) => {
           <span className="font-outfit text-xs text-primary-dark opacity-50">Saving...</span>
         )}
         {!readOnly && saveStatus === 'saved' && (
-          <span className="font-outfit text-xs text-green-600">Saved</span>
+          <span className="font-outfit text-xs" style={{ color: '#003DD6' }}>Saved</span>
         )}
         {!readOnly && saveStatus === 'error' && (
-          <span className="font-outfit text-xs text-red-600">Save failed</span>
+          <span className="font-outfit text-xs text-primary-dark opacity-50">Save failed</span>
         )}
       </div>
 
@@ -65,10 +65,10 @@ const CommentsPanel = ({ readOnly = false }) => {
         placeholder={readOnly ? 'No comments yet' : 'Add your comments here...'}
         className="w-full h-32 p-3 lg:p-4 rounded-xl font-outfit text-sm lg:text-base resize-none focus:outline-none transition-colors"
         style={{
-          backgroundColor: '#E1DFD5',
+          backgroundColor: 'var(--color-surface)',
           borderWidth: '1px',
           borderStyle: 'solid',
-          borderColor: '#BEBCB3',
+          borderColor: 'var(--color-border)',
           cursor: readOnly ? 'default' : undefined,
         }}
       />

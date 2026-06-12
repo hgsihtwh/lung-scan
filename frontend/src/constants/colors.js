@@ -1,49 +1,49 @@
 export const COLORS = {
   // Primary
   primary: {
-    beige: '#F5F3EA',
-    dark: '#1A1A1A',
-    navy: '#1E3A5F',
-    navyDark: '#152A45',
+    beige: 'var(--color-bg)',
+    dark: 'var(--color-text)',
+    navy: 'var(--color-navy)',
+    navyDark: 'var(--color-navy-dark)',
   },
 
   // Status
   status: {
-    normal: '#1F7819',
-    pathology: '#7E2F2F',
-    pending: '#9CA3AF',
+    normal: '#003DD6',
+    pathology: 'var(--color-text)',
+    pending: 'var(--color-text-muted)',
   },
 
   // UI
   ui: {
-    inputBg: '#E1DFD5',
-    inputBorder: '#BEBCB3',
-    cardBg: '#EFEDE3',
-    textMuted: '#787771',
-    sliderTrack: '#D2D1C8',
-    sliderThumb: '#797872',
+    inputBg: 'var(--color-surface)',
+    inputBorder: 'var(--color-border)',
+    cardBg: 'var(--color-bg)',
+    textMuted: 'var(--color-text-muted)',
+    sliderTrack: 'var(--color-chart-grid)',
+    sliderThumb: 'var(--color-text-muted)',
   },
 
   // Feedback
   feedback: {
-    success: '#1F7819',
-    error: '#7E2F2F',
-    warning: '#92400E',
+    success: '#003DD6',
+    error: 'var(--color-text)',
+    warning: 'var(--color-text-muted)',
   },
 }
 
 // Tailwind-совместимые классы
 export const STATUS_COLORS = {
   Normal: {
-    text: 'text-[#1F7819]',
-    bg: 'bg-[#DCFCE7]',
+    text: 'text-[#003DD6]',
+    bg: 'bg-[rgba(0,61,214,0.08)]',
   },
   Pathology: {
-    text: 'text-[#7E2F2F]',
-    bg: 'bg-[#FEE2E2]',
+    text: 'text-primary-dark',
+    bg: 'bg-[rgba(20,20,20,0.06)]',
   },
   pending: {
-    text: 'text-gray-400',
-    bg: 'bg-gray-100',
+    text: 'text-primary-dark opacity-40',
+    bg: 'bg-transparent',
   },
 }

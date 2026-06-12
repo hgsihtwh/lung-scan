@@ -24,12 +24,11 @@ function MainPage() {
   if (user?.role === 'admin') return <Navigate to="/admin" replace />
 
   return (
-    <div className="min-h-screen bg-primary-beige relative">
+    <div className="min-h-screen bg-primary-beige relative transition-colors duration-200">
       <img
         src={lungAscii}
         alt=""
-        className="absolute -right-10 -top-20 w-[1200px] pointer-events-none select-none z-10"
-        style={{ opacity: 0.9 }}
+        className="absolute -right-10 -top-20 w-[1200px] pointer-events-none select-none z-10 opacity-90 dark:opacity-10"
       />
       <div className="relative z-20">
         <Header />

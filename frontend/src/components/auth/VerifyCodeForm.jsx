@@ -41,10 +41,10 @@ const VerifyCodeForm = ({ email, onSubmit, onResend, loading, error }) => {
           placeholder="000000"
           className="w-full px-4 py-3 rounded-full font-outfit text-base text-center tracking-[0.5em] focus:outline-none transition-colors"
           style={{
-            backgroundColor: '#E1DFD5',
+            backgroundColor: 'var(--color-surface)',
             borderWidth: '1px',
             borderStyle: 'solid',
-            borderColor: '#BEBCB3',
+            borderColor: 'var(--color-border)',
           }}
           required
           minLength={6}

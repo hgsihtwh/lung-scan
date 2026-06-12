@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ChevronUp } from 'lucide-react'
 
 const About = () => {
   const [isExpanded, setIsExpanded] = useState(true)
@@ -19,17 +20,20 @@ const About = () => {
       <div className="flex justify-between items-center mb-12 sm:mb-16 lg:mb-[120px]">
         <h2
           className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px]"
-          style={{ color: '#302F2C' }}
+          style={{ color: 'var(--color-text)' }}
         >
           ABOUT CHEST SCAN
         </h2>
 
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="font-outfit font-normal text-base sm:text-lg lg:text-[20px] hover:opacity-70 transition-opacity"
-          style={{ color: '#302F2C' }}
+          className="opacity-50 hover:opacity-100 transition-all"
+          style={{ color: 'var(--color-text)' }}
         >
-          {isExpanded ? 'Hide' : 'Show'}
+          <ChevronUp
+            size={24}
+            className={`transition-transform duration-300 ${isExpanded ? '' : 'rotate-180'}`}
+          />
         </button>
       </div>
 
@@ -37,10 +41,10 @@ const About = () => {
         <>
           <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-8 lg:gap-12 mb-16 sm:mb-20 lg:mb-28">
             {/* Model Performance Card */}
-            <div className="border rounded-2xl p-6 sm:p-8" style={{ borderColor: '#302F2C' }}>
+            <div className="card-scan rounded-2xl p-6 sm:p-8" style={{ backgroundColor: 'var(--color-bg)' }}>
               <h3
                 className="font-outfit font-medium text-lg sm:text-[20px] mb-6 sm:mb-8 lg:mb-10"
-                style={{ color: '#302F2C' }}
+                style={{ color: 'var(--color-text)' }}
               >
                 MODEL PERFORMANCE
               </h3>
@@ -49,44 +53,44 @@ const About = () => {
                 <div>
                   <p
                     className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
-                    style={{ color: '#302F2C', opacity: 0.6 }}
+                    style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     TRAINING SET
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: '#302F2C' }}>
+                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-text)' }}>
                     1921
                   </p>
                 </div>
                 <div>
                   <p
                     className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
-                    style={{ color: '#302F2C', opacity: 0.6 }}
+                    style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     VALIDATION
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: '#302F2C' }}>
+                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-text)' }}>
                     236
                   </p>
                 </div>
                 <div>
                   <p
                     className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
-                    style={{ color: '#302F2C', opacity: 0.6 }}
+                    style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     ACCURACY
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: '#233970' }}>
+                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-navy-accent)' }}>
                     89,83%
                   </p>
                 </div>
                 <div>
                   <p
                     className="font-outfit font-normal text-sm sm:text-[15px] mb-1"
-                    style={{ color: '#302F2C', opacity: 0.6 }}
+                    style={{ color: 'var(--color-text)', opacity: 0.6 }}
                   >
                     ROC-AUC
                   </p>
-                  <p className="font-outfit font-semibold text-2xl" style={{ color: '#233970' }}>
+                  <p className="font-outfit font-semibold text-2xl" style={{ color: 'var(--color-navy-accent)' }}>
                     0,962
                   </p>
                 </div>
@@ -96,7 +100,7 @@ const About = () => {
             <div className="flex flex-col justify-center">
               <p
                 className="font-outfit font-normal text-base sm:text-lg lg:text-[20px] leading-relaxed mb-6"
-                style={{ color: '#302F2C' }}
+                style={{ color: 'var(--color-text)' }}
               >
                 Chest Scan is a service designed to automatically identify truly normal chest CT
                 scans - studies with no signs of any pathology. Unlike traditional AI solutions that
@@ -105,7 +109,7 @@ const About = () => {
               </p>
               <p
                 className="font-outfit font-normal text-base sm:text-lg lg:text-[20px] leading-relaxed"
-                style={{ color: '#302F2C' }}
+                style={{ color: 'var(--color-text)' }}
               >
                 Our deep learning model has been trained on thousands of chest CT scans, achieving
                 high accuracy in distinguishing between normal anatomy and pathological findings.
@@ -117,7 +121,7 @@ const About = () => {
           <div>
             <h3
               className="font-outfit font-semibold text-2xl sm:text-[30px] mb-12 sm:mb-14 lg:mb-16"
-              style={{ color: '#302F2C' }}
+              style={{ color: 'var(--color-text)' }}
             >
               USER WORKFLOW
             </h3>
@@ -130,7 +134,7 @@ const About = () => {
                       className="font-outfit font-thin text-[100px] sm:text-[110px] lg:text-[120px] leading-none select-none"
                       style={{
                         color: 'transparent',
-                        WebkitTextStroke: '1.5px #233970',
+                        WebkitTextStroke: '1.5px var(--color-navy-accent)',
                       }}
                     >
                       {step.number}
@@ -138,7 +142,7 @@ const About = () => {
                   </div>
                   <p
                     className="font-outfit font-normal text-base sm:text-lg lg:text-[20px]"
-                    style={{ color: '#302F2C' }}
+                    style={{ color: 'var(--color-text)' }}
                   >
                     {step.label}
                   </p>

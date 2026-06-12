@@ -50,7 +50,7 @@ const Select = ({
         disabled={disabled}
         onClick={handleToggle}
         className="flex items-center justify-between gap-2 w-full px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+        style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
       >
         <span className="truncate">{selected ? selected.label : placeholder}</span>
         <ChevronDown
@@ -62,7 +62,7 @@ const Select = ({
       {open && (
         <div
           className="absolute left-0 z-50 mt-1 w-full min-w-max rounded-2xl shadow-lg overflow-hidden"
-          style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+          style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
         >
           {searchable && (
             <div className="px-3 pt-2 pb-1">
@@ -74,7 +74,7 @@ const Select = ({
                 placeholder="Search..."
                 onClick={(e) => e.stopPropagation()}
                 className="w-full px-3 py-1.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
-                style={{ backgroundColor: 'rgba(0,0,0,0.07)' }}
+                style={{ backgroundColor: 'var(--color-overlay-subtle)' }}
               />
             </div>
           )}
@@ -97,8 +97,8 @@ const Select = ({
                   className="w-full text-left px-4 py-2.5 font-outfit text-sm transition-colors hover:bg-black/5"
                   style={
                     value === option.value
-                      ? { backgroundColor: '#233970', color: '#F5F3EA' }
-                      : { color: '#1A1A2E' }
+                      ? { backgroundColor: 'var(--color-navy-accent)', color: 'var(--color-surface-alt)' }
+                      : { color: 'var(--color-text)' }
                   }
                 >
                   {option.label}

@@ -30,14 +30,14 @@ const ExportPanel = ({ comments = '' }) => {
   const hasVerdict = !!currentScanDetails?.verdict
 
   return (
-    <div className="bg-primary-beige border border-primary-dark rounded-xl sm:rounded-2xl p-5 lg:p-6">
+    <div className="card bg-primary-beige rounded-xl sm:rounded-2xl p-5 lg:p-6">
       <h3 className="font-outfit font-medium text-lg lg:text-xl text-primary-dark mb-4">
         EXPORT REPORT
       </h3>
 
       {error && (
-        <div className="mb-3 p-3 bg-red-50 rounded-lg">
-          <p className="font-outfit text-sm text-red-600">{error}</p>
+        <div className="mb-3 p-3 rounded-lg" style={{ backgroundColor: 'var(--color-surface)' }}>
+          <p className="font-outfit text-sm text-primary-dark opacity-60">{error}</p>
         </div>
       )}
 

@@ -42,11 +42,11 @@ const SliceNavigator = ({ sliceNumbers, currentSlice, onSliceChange }) => {
           onChange={handleSliderChange}
           className="w-full h-1 appearance-none cursor-pointer rounded-lg"
           style={{
-            background: `linear-gradient(to right, 
-              #1E3A5F 0%, 
-              #1E3A5F ${(currentSliceIndex / (totalSlices - 1)) * 100}%, 
-              #D2D1C8 ${(currentSliceIndex / (totalSlices - 1)) * 100}%, 
-              #D2D1C8 100%)`,
+            background: `linear-gradient(to right,
+              var(--color-navy) 0%,
+              var(--color-navy) ${(currentSliceIndex / (totalSlices - 1)) * 100}%,
+              var(--color-chart-grid) ${(currentSliceIndex / (totalSlices - 1)) * 100}%,
+              var(--color-chart-grid) 100%)`,
           }}
         />
       </div>

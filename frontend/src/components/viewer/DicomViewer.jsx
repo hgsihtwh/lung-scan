@@ -115,7 +115,7 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
     return (
       <div className="flex items-center justify-center py-32">
         <div className="text-center">
-          <p className="font-outfit text-lg text-red-600 mb-4">{scanError}</p>
+          <p className="font-outfit text-lg text-primary-dark opacity-60 mb-4">{scanError}</p>
           <button onClick={handleChangeStudy} className="font-outfit text-primary-navy hover:opacity-70">
             Back to Upload
           </button>
@@ -129,10 +129,10 @@ const DicomViewer = ({ onBack, readOnly = false }) => {
   return (
     <div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 sm:mb-12 gap-4">
-        <p className="font-outfit font-normal text-[15px]" style={{ color: '#787771' }}>
+        <p className="font-outfit font-normal text-[15px]" style={{ color: 'var(--color-text-muted)' }}>
           Chest CT Scan Analysis · {totalSlices} slices loaded
           {isAnnotationMode && (
-            <span className="ml-3 text-[#233970] font-medium">· Annotation mode</span>
+            <span className="ml-3 text-[var(--color-navy-accent)] font-medium">· Annotation mode</span>
           )}
         </p>
         <button

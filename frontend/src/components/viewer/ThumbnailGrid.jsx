@@ -65,7 +65,7 @@ const ThumbnailGrid = ({
           appearance: none;
           width: 100%;
           height: 4px;
-          background: #D2D1C8;
+          background: var(--color-chart-grid);
           border-radius: 2px;
           outline: none;
           cursor: pointer;

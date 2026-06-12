@@ -73,7 +73,7 @@ const AnalysisPanel = ({ readOnly = false }) => {
   const isNormal = currentScanDetails?.verdict === 'Normal'
 
   return (
-    <div className="bg-primary-beige border border-primary-dark rounded-xl sm:rounded-2xl p-5 lg:p-6">
+    <div className="card bg-primary-beige rounded-xl sm:rounded-2xl p-5 lg:p-6">
       <h3 className="font-outfit font-medium text-lg lg:text-xl text-primary-dark mb-4">
         ANALYSIS
       </h3>
@@ -83,13 +83,13 @@ const AnalysisPanel = ({ readOnly = false }) => {
           <div className="flex items-center justify-between">
             <span
               className="font-outfit font-semibold text-lg"
-              style={{ color: isNormal ? '#1F7819' : '#7E2F2F' }}
+              style={{ color: isNormal ? '#003DD6' : 'var(--color-text)' }}
             >
               {isNormal ? 'Normal' : 'Pathology'}
             </span>
             <span
               className="font-outfit font-medium text-base"
-              style={{ color: isNormal ? '#1F7819' : '#7E2F2F' }}
+              style={{ color: isNormal ? '#003DD6' : 'var(--color-text)' }}
             >
               {(currentScanDetails.probability * 100).toFixed(2)}%
             </span>
@@ -102,7 +102,7 @@ const AnalysisPanel = ({ readOnly = false }) => {
 
       {analysisError && (
         <div className="mb-4">
-          <p className="font-outfit text-sm text-red-600">{analysisError}</p>
+          <p className="font-outfit text-sm text-primary-dark opacity-60">{analysisError}</p>
         </div>
       )}
 

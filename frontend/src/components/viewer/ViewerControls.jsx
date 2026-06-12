@@ -5,8 +5,8 @@ const ToolButton = ({ onClick, title, icon: Icon, active = false }) => (
     onClick={onClick}
     className="p-2 rounded-md transition-all shadow-sm"
     style={{
-      backgroundColor: active ? '#233970' : '#F5F3EA',
-      color: active ? '#F5F3EA' : '#1E3A5F',
+      backgroundColor: active ? 'var(--color-navy-accent)' : 'var(--color-surface-alt)',
+      color: active ? 'var(--color-surface-alt)' : 'var(--color-navy)',
     }}
     title={title}
   >

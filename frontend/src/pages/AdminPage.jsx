@@ -13,7 +13,7 @@ import { formatDate, formatDateTime } from '@/utils/helpers'
 const Section = ({ title, children, defaultOpen = true, maxHeight = '560px' }) => {
   const [open, setOpen] = useState(defaultOpen)
   return (
-    <div className="mt-8 rounded-2xl" style={{ backgroundColor: '#EFEDE3' }}>
+    <div className="card mt-8 rounded-2xl" style={{ backgroundColor: 'var(--color-bg)' }}>
       <button
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center justify-between px-6 py-6 text-left"
@@ -58,7 +58,7 @@ const ConfirmModal = ({ isOpen, email, onConfirm, onCancel }) => {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
       <div
         className="rounded-2xl p-8 max-w-sm w-full mx-4 shadow-2xl"
-        style={{ backgroundColor: '#EFEDE3' }}
+        style={{ backgroundColor: 'var(--color-bg)' }}
       >
         <h3 className="font-outfit font-semibold text-xl text-primary-dark mb-3">
           Delete user?
@@ -71,7 +71,7 @@ const ConfirmModal = ({ isOpen, email, onConfirm, onCancel }) => {
           <button
             onClick={onCancel}
             className="flex-1 h-11 rounded-full font-outfit text-sm text-primary-dark hover:opacity-70 transition-opacity"
-            style={{ border: '1px solid #BEBCB3' }}
+            style={{ border: '1px solid var(--color-border)' }}
           >
             Cancel
           </button>
@@ -132,7 +132,7 @@ const MaintenanceBlock = ({ token }) => {
               value={days}
               onChange={(e) => setDays(Number(e.target.value))}
               className="w-20 px-3 py-2 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
-              style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+              style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
             />
             <button
               onClick={handleCleanOld}
@@ -217,7 +217,7 @@ const DoctorRow = ({ doctor, token, allPatients }) => {
   ]
 
   return (
-    <div style={{ backgroundColor: '#E1DFD5', borderRadius: '16px' }}>
+    <div className="card card-interactive" style={{ backgroundColor: 'var(--color-bg)', borderRadius: '16px' }}>
       <button
         onClick={handleExpand}
         className="w-full flex items-center justify-between px-6 py-4 text-left"
@@ -248,7 +248,7 @@ const DoctorRow = ({ doctor, token, allPatients }) => {
                   <span
                     key={p.id}
                     className="flex items-center gap-1.5 pl-3 pr-2 py-1 rounded-full font-outfit text-sm"
-                    style={{ backgroundColor: '#E1DFD5', color: '#1C1C1C' }}
+                    style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text)' }}
                   >
                     {p.email}
                     <button
@@ -337,17 +337,6 @@ const ACTION_OPTIONS = [
   { label: 'User Delete', value: 'user_delete' },
 ]
 
-const ACTION_BADGE_COLORS = {
-  login: { bg: '#DBEAFE', text: '#1D4ED8' },
-  scan_upload: { bg: '#DCFCE7', text: '#15803D' },
-  scan_view: { bg: '#E0F2FE', text: '#0369A1' },
-  scan_analyze: { bg: '#EDE9FE', text: '#6D28D9' },
-  report_download: { bg: '#DBEAFE', text: '#1D4ED8' },
-  scan_delete: { bg: '#FEE2E2', text: '#991B1B' },
-  annotation_create: { bg: '#DBEAFE', text: '#233970' },
-  user_role_change: { bg: '#FEF9C3', text: '#92400E' },
-  user_delete: { bg: '#FEE2E2', text: '#991B1B' },
-}
 
 const AuditLogBlock = ({ token }) => {
   const [logs, setLogs] = useState([])
@@ -380,7 +369,7 @@ const AuditLogBlock = ({ token }) => {
         dateFrom: applied.dateFrom || undefined,
         dateTo: applied.dateTo || undefined,
         page,
-        size: 50,
+        size: 10,
       })
       if (result.success) {
         setLogs(result.data.items)
@@ -400,13 +389,9 @@ const AuditLogBlock = ({ token }) => {
   }
 
   const badge = (action) => {
-    const c = ACTION_BADGE_COLORS[action] || { bg: '#E1DFD5', text: '#1C1C1C' }
     const label = ACTION_OPTIONS.find((o) => o.value === action)?.label || action
     return (
-      <span
-        className="inline-block px-2 py-0.5 rounded-full font-outfit text-xs font-medium"
-        style={{ backgroundColor: c.bg, color: c.text }}
-      >
+      <span className="font-outfit text-xs font-medium" style={{ color: 'var(--color-navy)' }}>
         {label}
       </span>
     )
@@ -433,7 +418,7 @@ const AuditLogBlock = ({ token }) => {
             onChange={(e) => setUserEmail(e.target.value)}
             placeholder="Filter by email..."
             className="px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none w-48"
-            style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+            style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
           />
         </div>
         <div>
@@ -443,7 +428,7 @@ const AuditLogBlock = ({ token }) => {
             value={dateFrom}
             onChange={(e) => setDateFrom(e.target.value)}
             className="px-3 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
-            style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+            style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
           />
         </div>
         <div>
@@ -453,7 +438,7 @@ const AuditLogBlock = ({ token }) => {
             value={dateTo}
             onChange={(e) => setDateTo(e.target.value)}
             className="px-3 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none"
-            style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+            style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
           />
         </div>
         <button
@@ -466,7 +451,7 @@ const AuditLogBlock = ({ token }) => {
           <button
             onClick={handleClearDates}
             className="px-5 py-2.5 rounded-full font-outfit text-sm hover:opacity-70 transition-opacity"
-            style={{ backgroundColor: '#E1DFD5', color: '#787771' }}
+            style={{ backgroundColor: 'var(--color-surface)', color: 'var(--color-text-muted)' }}
           >
             Clear
           </button>
@@ -485,7 +470,7 @@ const AuditLogBlock = ({ token }) => {
         <p className="font-outfit text-primary-dark opacity-60 py-8">No records found.</p>
       ) : (
         <>
-          <div className="overflow-x-auto rounded-2xl scroll-styled" style={{ backgroundColor: '#E1DFD5' }}>
+          <div className="overflow-x-auto rounded-2xl scroll-styled" style={{ backgroundColor: 'var(--color-bg)' }}>
             <table className="w-full text-sm font-outfit">
               <thead>
                 <tr style={{ borderBottom: '1px solid rgba(28,28,28,0.08)' }}>
@@ -619,7 +604,7 @@ const AdminPage = () => {
 
   return (
     <PageLayout>
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-24 sm:pt-32 lg:pt-[150px] pb-12 sm:pb-16 md:pb-20">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-36 sm:pt-44 lg:pt-[200px] pb-12 sm:pb-16 md:pb-20">
 
         <h2 className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px] text-primary-dark mb-8 sm:mb-10 lg:mb-[50px]">
           ADMIN PANEL
@@ -634,7 +619,7 @@ const AdminPage = () => {
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search by email..."
               className="px-4 py-2.5 rounded-full font-outfit text-sm text-primary-dark focus:outline-none w-full max-w-xs"
-              style={{ backgroundColor: '#E1DFD5', border: '1px solid #BEBCB3' }}
+              style={{ backgroundColor: 'var(--color-bg)', border: '1px solid var(--color-input-border)' }}
             />
             <Select
               value={roleFilter}
@@ -665,8 +650,8 @@ const AdminPage = () => {
                 {users.map((u) => (
                   <div
                     key={u.id}
-                    className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 rounded-2xl"
-                    style={{ backgroundColor: '#E1DFD5' }}
+                    className="card flex flex-col sm:flex-row sm:items-center justify-between gap-4 px-6 py-4 rounded-2xl"
+                    style={{ backgroundColor: 'var(--color-bg)' }}
                   >
                     <div className="flex-1 min-w-0">
                       <p className="font-outfit font-medium text-base text-primary-dark truncate">{u.email}</p>
@@ -675,12 +660,20 @@ const AdminPage = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <Select
-                        value={u.role}
-                        onChange={(newRole) => handleRoleChange(u.id, newRole)}
-                        options={ROLE_OPTIONS}
-                        disabled={updatingId === u.id}
-                      />
+                      <div className="relative flex items-center">
+                        <select
+                          value={u.role}
+                          onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                          disabled={updatingId === u.id}
+                          className="appearance-none pr-6 pl-1 py-1 font-outfit text-sm font-medium bg-transparent border-none outline-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                          style={{ color: 'var(--color-navy)' }}
+                        >
+                          {ROLE_OPTIONS.map((o) => (
+                            <option key={o.value} value={o.value}>{o.label}</option>
+                          ))}
+                        </select>
+                        <ChevronDown size={13} className="absolute right-0 pointer-events-none" style={{ color: 'var(--color-navy)' }} />
+                      </div>
                       <button
                         onClick={() => setConfirmTarget(u)}
                         className="p-2 rounded-full hover:bg-red-50 text-primary-dark opacity-40 hover:opacity-80 hover:text-red-600 transition-all"

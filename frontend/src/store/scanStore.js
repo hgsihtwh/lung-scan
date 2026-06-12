@@ -1,6 +1,9 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
-export const useScanStore = create((set, get) => ({
+export const useScanStore = create(
+  persist(
+    (set, get) => ({
   currentScanId: null,
   currentScanDetails: null,
   sliceNumbers: [],
@@ -84,4 +87,9 @@ export const useScanStore = create((set, get) => ({
       scanError: null,
       analysisError: null,
     }),
-}))
+  }),
+  {
+    name: 'chest-scan-scan',
+    partialize: (state) => ({ currentScanId: state.currentScanId }),
+  }
+))

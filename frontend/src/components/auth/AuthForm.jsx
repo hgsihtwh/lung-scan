@@ -191,7 +191,7 @@ const AuthForm = () => {
       )}
 
       {/* Form Container */}
-      <div className="border-2 border-primary-dark rounded-2xl p-8 bg-primary-beige">
+      <div className="card rounded-2xl p-8 bg-primary-beige">
         {mode === 'signin' && (
           <LoginForm
             onSubmit={handleLogin}

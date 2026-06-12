@@ -231,7 +231,7 @@ const ViewerCanvas = ({
       )}
 
       <div className="absolute top-4 left-4 bg-primary-beige px-3 py-2 rounded-md shadow-sm" style={{ zIndex: 20 }}>
-        <span className="font-outfit font-normal text-[13px]" style={{ color: '#787771' }}>
+        <span className="font-outfit font-normal text-[13px]" style={{ color: 'var(--color-text-muted)' }}>
           slice {currentSlice}/{totalSlices}
         </span>
       </div>

@@ -1,14 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  darkMode: 'class',
   theme: {
     extend: {
       colors: {
         primary: {
-          beige: "#EFEDE3",
-          navy: "#1E3A5F",
-          navyDark: "#152844",
-          dark: "#302F2C",
+          beige: 'var(--color-bg)',
+          navy: 'var(--color-navy)',
+          navyDark: 'var(--color-navy-dark)',
+          dark: 'var(--color-text)',
         },
       },
       fontFamily: {

@@ -22,12 +22,8 @@ const FeedbackPanel = () => {
     setIsSaving(true)
     setError('')
 
-    console.log('Saving feedback:', feedbackValue)
-
     try {
       const result = await saveFeedback(currentScanId, isAccurate, token)
-
-      console.log('Save feedback result:', result)
 
       if (!result.success) {
         setError(result.error || 'Failed to save feedback')
@@ -42,7 +38,7 @@ const FeedbackPanel = () => {
   const hasVerdict = !!currentScanDetails?.verdict
 
   return (
-    <div className="bg-primary-beige border border-primary-dark rounded-xl sm:rounded-2xl p-5 lg:p-6">
+    <div className="card bg-primary-beige rounded-xl sm:rounded-2xl p-5 lg:p-6">
       <h3 className="font-outfit font-medium text-lg lg:text-xl text-primary-dark mb-4">
         FEEDBACK
       </h3>
@@ -53,38 +49,38 @@ const FeedbackPanel = () => {
             Was this analysis accurate?
           </p>
 
-          {error && <p className="font-outfit text-sm text-red-600 mb-2">{error}</p>}
+          {error && (
+            <p className="font-outfit text-sm opacity-60 mb-2" style={{ color: 'var(--color-text)' }}>
+              {error}
+            </p>
+          )}
 
           <div className="space-y-2">
-            {/* Accurate button */}
-            <button
-              onClick={() => handleFeedback(true)}
-              disabled={isSaving}
-              className={`w-full h-10 px-4 rounded-full font-outfit text-sm transition-all flex items-center gap-2 ${
-                feedback === 'accurate' ? 'text-white' : 'text-primary-dark hover:opacity-80'
-              } disabled:opacity-50`}
-              style={{
-                backgroundColor: feedback === 'accurate' ? '#1F7819' : '#E1DFD5',
-              }}
-            >
-              <span className="text-lg">{feedback === 'accurate' ? '●' : '○'}</span>
-              Accurate
-            </button>
-
-            {/* Inaccurate button */}
-            <button
-              onClick={() => handleFeedback(false)}
-              disabled={isSaving}
-              className={`w-full h-10 px-4 rounded-full font-outfit text-sm transition-all flex items-center gap-2 ${
-                feedback === 'inaccurate' ? 'text-white' : 'text-primary-dark hover:opacity-80'
-              } disabled:opacity-50`}
-              style={{
-                backgroundColor: feedback === 'inaccurate' ? '#7E2F2F' : '#E1DFD5',
-              }}
-            >
-              <span className="text-lg">{feedback === 'inaccurate' ? '●' : '○'}</span>
-              Inaccurate
-            </button>
+            {[
+              { value: 'accurate', label: 'Accurate', isAccurate: true },
+              { value: 'inaccurate', label: 'Inaccurate', isAccurate: false },
+            ].map(({ value, label, isAccurate }) => {
+              const isSelected = feedback === value
+              return (
+                <button
+                  key={value}
+                  onClick={() => handleFeedback(isAccurate)}
+                  disabled={isSaving}
+                  className="w-full h-10 px-4 rounded-full font-outfit text-sm flex items-center gap-3 text-primary-dark hover:opacity-80 transition-opacity disabled:opacity-50"
+                  style={{ backgroundColor: 'var(--color-surface)' }}
+                >
+                  <span
+                    className="w-2.5 h-2.5 rounded-full flex-shrink-0 transition-all duration-200"
+                    style={
+                      isSelected
+                        ? { backgroundColor: '#003DD6', boxShadow: '0 0 8px rgba(0,61,214,0.9), 0 0 3px rgba(0,61,214,0.6)' }
+                        : { border: '1.5px solid var(--color-text-muted)' }
+                    }
+                  />
+                  {label}
+                </button>
+              )
+            })}
           </div>
         </div>
       ) : (
