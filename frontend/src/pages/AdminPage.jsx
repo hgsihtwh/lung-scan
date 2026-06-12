@@ -660,19 +660,13 @@ const AdminPage = () => {
                       </p>
                     </div>
                     <div className="flex items-center gap-3">
-                      <div className="relative flex items-center">
-                        <select
+                      <div className="w-32">
+                        <Select
                           value={u.role}
-                          onChange={(e) => handleRoleChange(u.id, e.target.value)}
+                          onChange={(newRole) => handleRoleChange(u.id, newRole)}
+                          options={ROLE_OPTIONS}
                           disabled={updatingId === u.id}
-                          className="appearance-none pr-6 pl-1 py-1 font-outfit text-sm font-medium bg-transparent border-none outline-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
-                          style={{ color: 'var(--color-navy)' }}
-                        >
-                          {ROLE_OPTIONS.map((o) => (
-                            <option key={o.value} value={o.value}>{o.label}</option>
-                          ))}
-                        </select>
-                        <ChevronDown size={13} className="absolute right-0 pointer-events-none" style={{ color: 'var(--color-navy)' }} />
+                        />
                       </div>
                       <button
                         onClick={() => setConfirmTarget(u)}
