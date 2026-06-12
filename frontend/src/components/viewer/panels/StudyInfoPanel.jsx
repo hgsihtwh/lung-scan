@@ -9,7 +9,7 @@ const StudyInfoPanel = () => {
     <div className="absolute bottom-4 left-4">
       <div className="space-y-1">
         <p className="font-outfit font-normal text-[13px]" style={{ color: '#F5F3EA' }}>
-          Study ID: {currentScanDetails?.patient_name || 'N/A'}
+          Scan #{currentScanDetails?.id || 'N/A'}
         </p>
         <p className="font-outfit font-normal text-[13px]" style={{ color: '#F5F3EA' }}>
           Slices: {totalSlices}
