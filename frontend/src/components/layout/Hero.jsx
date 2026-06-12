@@ -3,22 +3,21 @@ import { useNavigate } from 'react-router-dom'
 
 const Hero = () => {
   const navigate = useNavigate()
-  const { isAuthenticated } = useAuthStore()
+  const { isAuthenticated, user } = useAuthStore()
   const { currentScanId } = useScanStore()
 
   const handleStartAnalysis = () => {
     if (!isAuthenticated) {
       navigate('/auth')
-    } else if (currentScanId) {
-      const viewer = document.getElementById('viewer')
-      if (viewer) {
-        viewer.scrollIntoView({ behavior: 'smooth' })
-      }
-    } else {
-      const upload = document.getElementById('upload')
-      if (upload) {
-        upload.scrollIntoView({ behavior: 'smooth' })
-      }
+      return
+    }
+    const role = user?.role
+    if (role === 'doctor') {
+      navigate(currentScanId ? '/doctor' : '/upload')
+    } else if (role === 'patient') {
+      navigate('/scans')
+    } else if (role === 'admin') {
+      navigate('/admin')
     }
   }
 
