@@ -42,8 +42,12 @@ services:
       - MODEL_API_URL=http://model:8000/predict
       - REDIS_URL=redis://redis:6379
     depends_on:
-      - redis
-      - model
+      backend:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      model:
+        condition: service_started
     command: celery -A app.celery_app worker --loglevel=info
 
   redis:
