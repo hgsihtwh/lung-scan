@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 
 from ...database import get_db
 from ...models import Annotation, Scan, User
+from ...models.audit_log import ACTION_ANNOTATION_CREATE
 from ...schemas import AnnotationCreate, AnnotationResponse, AnnotationUpdate
+from ...services.audit_service import write_log
 from ..deps import get_current_user, require_doctor
 
 router = APIRouter(prefix="/scans")
@@ -54,6 +56,8 @@ async def create_annotation(
     db.add(annotation)
     db.commit()
     db.refresh(annotation)
+    write_log(db, current_user.id, ACTION_ANNOTATION_CREATE, resource_type="scan",
+              resource_id=scan_id, details=f"annotation_id={annotation.id}, slice={data.slice_number}")
     return annotation
 
 

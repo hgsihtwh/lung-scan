@@ -1,14 +1,65 @@
+from datetime import datetime
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
 from ...database import get_db
-from ...models import User
+from ...models import AuditLog, User
+from ...models.audit_log import ACTION_USER_DELETE, ACTION_USER_ROLE_CHANGE
 from ...models.user import ROLE_DOCTOR, ROLE_PATIENT
-from ...schemas import PaginatedUsersResponse, PaginatedPatientsResponse, UpdateRoleRequest, UserResponse
+from ...schemas import PaginatedAuditLogResponse, PaginatedUsersResponse, PaginatedPatientsResponse, UpdateRoleRequest, UserResponse
+from ...services.audit_service import write_log
 from ...services.cleanup_service import CleanupService
 from ..deps import require_admin
 
 router = APIRouter(prefix="/admin")
+
+
+@router.get("/audit-log", response_model=PaginatedAuditLogResponse)
+async def get_audit_log(
+    user_id: int | None = Query(None),
+    user_email: str | None = Query(None),
+    action: str | None = Query(None),
+    date_from: str | None = Query(None),
+    date_to: str | None = Query(None),
+    page: int = Query(1, ge=1),
+    size: int = Query(50, ge=1, le=100),
+    db: Session = Depends(get_db),
+    _: User = Depends(require_admin),
+):
+    query = db.query(AuditLog)
+    if user_email:
+        query = query.join(AuditLog.user).filter(User.email.ilike(f"%{user_email}%"))
+    if user_id is not None:
+        query = query.filter(AuditLog.user_id == user_id)
+    if action:
+        query = query.filter(AuditLog.action == action)
+    if date_from:
+        query = query.filter(AuditLog.created_at >= datetime.fromisoformat(date_from))
+    if date_to:
+        dt = datetime.fromisoformat(date_to)
+        if 'T' not in date_to:
+            dt = dt.replace(hour=23, minute=59, second=59)
+        query = query.filter(AuditLog.created_at <= dt)
+
+    total = query.count()
+    pages = max(1, (total + size - 1) // size)
+    logs = query.order_by(AuditLog.created_at.desc()).offset((page - 1) * size).limit(size).all()
+
+    items = [
+        {
+            "id": log.id,
+            "user_id": log.user_id,
+            "user_email": log.user.email if log.user else None,
+            "action": log.action,
+            "resource_type": log.resource_type,
+            "resource_id": log.resource_id,
+            "details": log.details,
+            "created_at": log.created_at,
+        }
+        for log in logs
+    ]
+    return PaginatedAuditLogResponse(items=items, total=total, page=page, size=size, pages=pages)
 
 
 @router.post("/cleanup/old-files")
@@ -60,9 +111,12 @@ async def update_user_role(
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    old_role = user.role
     user.role = body.role
     db.commit()
     db.refresh(user)
+    write_log(db, _.id, ACTION_USER_ROLE_CHANGE, resource_type="user", resource_id=user_id,
+              details=f"email={user.email}, {old_role}->{body.role}")
     return user
 
 
@@ -77,10 +131,14 @@ async def delete_user(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     if user.id == current_user.id:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Cannot delete your own account")
+    deleted_email = user.email
+    deleted_id = user.id
     for scan in user.scans:
         CleanupService.delete_scan_files(scan.file_id)
     db.delete(user)
     db.commit()
+    write_log(db, current_user.id, ACTION_USER_DELETE, resource_type="user", resource_id=deleted_id,
+              details=f"email={deleted_email}")
 
 
 @router.get("/doctors", response_model=PaginatedUsersResponse)
