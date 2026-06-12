@@ -169,9 +169,9 @@ const About = () => {
               {role === 'patient' ? 'YOUR WORKFLOW' : 'USER WORKFLOW'}
             </h3>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 sm:gap-4">
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-8 sm:gap-x-12 lg:gap-x-16">
               {workflowSteps.map((step, index) => (
-                <div key={index} className="flex flex-col items-center text-center">
+                <div key={index} className="flex flex-col items-center text-center w-32 sm:w-36 lg:w-40">
                   <div className="h-[60px] sm:h-[70px] lg:h-[80px] overflow-hidden mb-3">
                     <div
                       className="font-outfit font-thin text-[100px] sm:text-[110px] lg:text-[120px] leading-none select-none"
