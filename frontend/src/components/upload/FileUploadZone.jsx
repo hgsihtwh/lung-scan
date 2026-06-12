@@ -71,24 +71,23 @@ const FileUploadZone = ({ patientId = null }) => {
   return (
     <div>
       {error && (
-        <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-2xl">
-          <p className="font-outfit text-sm text-red-600">{error}</p>
+        <div className="mb-6 p-4 rounded-2xl" style={{ backgroundColor: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
+          <p className="font-outfit text-sm text-primary-dark opacity-70">{error}</p>
         </div>
       )}
 
       <div
         {...getRootProps()}
         className={`
-          border-2 border-dashed border-primary-dark rounded-2xl
+          upload-zone
+          border-2 border-dashed rounded-2xl
           min-h-[400px] sm:min-h-[500px]
           flex flex-col items-center justify-center
           transition-all duration-300
           ${loading ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}
-          ${isDragActive
-            ? 'bg-primary-dark bg-opacity-5 border-primary-navy'
-            : 'hover:bg-primary-dark hover:bg-opacity-5'
-          }
+          ${isDragActive ? 'drag-active' : ''}
         `}
+        style={{ borderColor: 'var(--color-border)' }}
       >
         <input {...getInputProps()} />
 

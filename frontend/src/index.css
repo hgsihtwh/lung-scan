@@ -76,6 +76,20 @@ body {
   background: radial-gradient(ellipse 60% 50% at 70% 40%, rgba(0, 61, 214, 0.18) 0%, transparent 70%);
 }
 
+.upload-zone:hover,
+.upload-zone.drag-active {
+  background-color: rgba(0, 61, 214, 0.04);
+  box-shadow: 0 0 0 1px rgba(0, 61, 214, 0.5), 0 0 24px rgba(0, 61, 214, 0.18);
+  border-color: rgba(0, 61, 214, 0.5) !important;
+}
+
+.dark .upload-zone:hover,
+.dark .upload-zone.drag-active {
+  background-color: rgba(246, 246, 246, 0.03);
+  box-shadow: 0 0 0 1px rgba(246, 246, 246, 0.25), 0 0 24px rgba(246, 246, 246, 0.08);
+  border-color: rgba(246, 246, 246, 0.25) !important;
+}
+
 .footer-glow {
   position: relative;
 }
