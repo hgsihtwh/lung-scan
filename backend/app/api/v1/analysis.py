@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from ...database import get_db
@@ -18,18 +19,15 @@ async def start_analysis(
 ):
     scan = (
         db.query(Scan)
-        .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+        .filter(
+            Scan.id == scan_id,
+            or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id),
+        )
         .first()
     )
 
     if not scan:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
-
-    if scan.status == "processing":
-        raise HTTPException(
-            status_code=status.HTTP_409_CONFLICT,
-            detail="Analysis already in progress",
-        )
 
     scan.status = "processing"
     db.commit()
@@ -47,7 +45,10 @@ async def get_analysis_status(
 ):
     scan = (
         db.query(Scan)
-        .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+        .filter(
+            Scan.id == scan_id,
+            or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id),
+        )
         .first()
     )
 

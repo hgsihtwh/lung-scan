@@ -42,7 +42,7 @@ const FeedbackPanel = () => {
   const hasVerdict = !!currentScanDetails?.verdict
 
   return (
-    <div className="border border-primary-dark rounded-xl sm:rounded-2xl p-5 lg:p-6">
+    <div className="bg-primary-beige border border-primary-dark rounded-xl sm:rounded-2xl p-5 lg:p-6">
       <h3 className="font-outfit font-medium text-lg lg:text-xl text-primary-dark mb-4">
         FEEDBACK
       </h3>

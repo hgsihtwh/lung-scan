@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:8000'
+export const API_URL = 'http://localhost:8000'
 
 export const apiClient = async (endpoint, options = {}) => {
   const { token, ...fetchOptions } = options
@@ -21,9 +21,15 @@ export const apiClient = async (endpoint, options = {}) => {
       headers,
     })
 
-    const data = await response.json()
+    const data = response.status === 204 ? null : await response.json()
 
     if (!response.ok) {
+      if (data.errors?.length) {
+        const message = data.errors
+          .map(e => e.message.replace(/^Value error,\s*/i, ''))
+          .join('. ')
+        throw new Error(message)
+      }
       throw new Error(data.detail || 'Request failed')
     }
 

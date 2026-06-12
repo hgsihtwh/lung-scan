@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { register, login, verifyCode, resendCode, forgotPassword } from '@/api'
+import { register, login, verifyCode, resendCode, forgotPassword, getMe } from '@/api'
 import { useAuthStore } from '@/store'
 import LoginForm from './LoginForm'
 import RegisterForm from './RegisterForm'
@@ -57,7 +57,10 @@ const AuthForm = () => {
         return
       }
 
-      saveAuth(result.data.access_token, formData.email)
+      const token = result.data.access_token
+      const meResult = await getMe(token)
+      const role = meResult.success ? meResult.data.role : 'patient'
+      saveAuth(token, formData.email, role)
       navigate('/')
     } catch (err) {
       setError('Something went wrong. Please try again.')
@@ -107,7 +110,10 @@ const AuthForm = () => {
         return
       }
 
-      saveAuth(verifyResult.data.access_token, pendingEmail)
+      const token = verifyResult.data.access_token
+      const meResult = await getMe(token)
+      const role = meResult.success ? meResult.data.role : 'patient'
+      saveAuth(token, pendingEmail, role)
       navigate('/')
     } catch (err) {
       setError('Something went wrong. Please try again.')

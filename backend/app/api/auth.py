@@ -14,6 +14,7 @@ from ..core.security import (
 )
 from ..database import get_db
 from ..models import RefreshToken, User
+from ..models.user import ROLE_ADMIN, ROLE_PATIENT
 from ..schemas import (
     ForgotPassword,
     RefreshRequest,
@@ -86,7 +87,15 @@ async def verify_code(verify_data: VerifyCode, db: Session = Depends(get_db)):
             detail="Registration session expired. Please start again.",
         )
 
-    new_user = User(email=verify_data.email, hashed_password=hashed_password)
+    is_admin = (
+        settings.FIRST_ADMIN_EMAIL
+        and verify_data.email.lower() == settings.FIRST_ADMIN_EMAIL.lower()
+    )
+    new_user = User(
+        email=verify_data.email,
+        hashed_password=hashed_password,
+        role=ROLE_ADMIN if is_admin else ROLE_PATIENT,
+    )
 
     try:
         db.add(new_user)

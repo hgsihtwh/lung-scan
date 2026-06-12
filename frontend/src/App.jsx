@@ -1,28 +1,27 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { useAuthStore, useScanStore, useUIStore } from './store'
+import { useAuthStore } from './store'
 import { Header, Footer, Hero, About } from './components/layout'
-import { FileUploadZone } from './components/upload'
-import { DicomViewer } from './components/viewer'
 import { ProfilePage } from './components/profile'
-import { AuthPage, ResetPasswordPage } from './pages'
+import { AuthPage, ResetPasswordPage, DoctorPage, AdminPage, UploadPage, ScansPage } from './pages'
 import lungAscii from './assets/blue-lung-ascii.svg'
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated } = useAuthStore()
+  if (!isAuthenticated) return <Navigate to="/auth" replace />
+  return children
+}
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth" replace />
-  }
-
+const RoleRoute = ({ children, roles }) => {
+  const { isAuthenticated, user } = useAuthStore()
+  if (!isAuthenticated) return <Navigate to="/auth" replace />
+  if (!roles.includes(user?.role)) return <Navigate to="/" replace />
   return children
 }
 
 function MainPage() {
-  const { isAuthenticated } = useAuthStore()
-  const { currentScanId } = useScanStore()
-  const { currentStep } = useUIStore()
+  const { user } = useAuthStore()
 
-  const shouldShowViewer = currentStep === 'viewer' || (isAuthenticated && currentScanId)
+  if (user?.role === 'admin') return <Navigate to="/admin" replace />
 
   return (
     <div className="min-h-screen bg-primary-beige relative">
@@ -32,14 +31,10 @@ function MainPage() {
         className="absolute -right-10 -top-20 w-[1200px] pointer-events-none select-none z-10"
         style={{ opacity: 0.9 }}
       />
-
       <div className="relative z-20">
         <Header />
         <Hero />
         <About />
-
-        {isAuthenticated && (shouldShowViewer ? <DicomViewer /> : <FileUploadZone />)}
-
         <Footer />
       </div>
     </div>
@@ -65,6 +60,42 @@ function App() {
             <ProtectedRoute>
               <ProfilePage />
             </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/scans"
+          element={
+            <RoleRoute roles={['patient']}>
+              <ScansPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/upload"
+          element={
+            <RoleRoute roles={['doctor']}>
+              <UploadPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/doctor"
+          element={
+            <RoleRoute roles={['doctor', 'admin']}>
+              <DoctorPage />
+            </RoleRoute>
+          }
+        />
+
+        <Route
+          path="/admin"
+          element={
+            <RoleRoute roles={['admin']}>
+              <AdminPage />
+            </RoleRoute>
           }
         />
 

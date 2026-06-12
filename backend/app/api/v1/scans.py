@@ -3,11 +3,14 @@ from typing import Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from fastapi.responses import FileResponse
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from ...database import get_db
 from ...models import Report, Scan, User
+from ...models.user import ROLE_DOCTOR
 from ...services import DicomService
+from ...services.cleanup_service import CleanupService
 from ..deps import get_current_user
 from ...schemas import PaginatedScansResponse, ScanDetailResponse, ScanResponse
 
@@ -79,7 +82,10 @@ async def get_scan(
 ):
     scan = (
         db.query(Scan)
-        .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+        .filter(
+            Scan.id == scan_id,
+            or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id),
+        )
         .first()
     )
 
@@ -104,6 +110,26 @@ async def get_scan(
     )
 
 
+@router.delete("/{scan_id}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_scan(
+    scan_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    scan = (
+        db.query(Scan)
+        .filter(Scan.id == scan_id, Scan.uploaded_by_id == current_user.id)
+        .first()
+    )
+
+    if not scan:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Scan not found")
+
+    CleanupService.delete_scan_files(scan.file_id)
+    db.delete(scan)
+    db.commit()
+
+
 @router.get("/{scan_id}/slices")
 async def get_slices(
     scan_id: int,
@@ -112,7 +138,10 @@ async def get_slices(
 ):
     scan = (
         db.query(Scan)
-        .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+        .filter(
+            Scan.id == scan_id,
+            or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id),
+        )
         .first()
     )
 
@@ -137,7 +166,10 @@ async def get_slice(
 ):
     scan = (
         db.query(Scan)
-        .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+        .filter(
+            Scan.id == scan_id,
+            or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id),
+        )
         .first()
     )
 

@@ -6,22 +6,24 @@ const VERDICT_OPTIONS = [
   { label: 'Abnormal', value: 'Abnormal' },
 ]
 
-const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sortOrder, onSortChange }) => {
+const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sortOrder, onSortChange, noPatient, onNoPatientChange }) => {
   return (
     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-8">
-      <div className="relative flex-1 max-w-xs">
-        <Search
-          size={16}
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-dark opacity-40 pointer-events-none"
-        />
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => onSearchChange(e.target.value)}
-          placeholder="Search by patient"
-          className="w-full pl-9 pr-3 py-2 text-sm font-outfit bg-transparent border border-primary-dark/20 rounded-lg focus:outline-none focus:border-primary-navy text-primary-dark placeholder:opacity-40"
-        />
-      </div>
+      {onSearchChange && (
+        <div className="relative flex-1 max-w-xs">
+          <Search
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-dark opacity-40 pointer-events-none"
+          />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => onSearchChange(e.target.value)}
+            placeholder="Search by patient"
+            className="w-full pl-9 pr-3 py-2 text-sm font-outfit bg-transparent border border-primary-dark/20 rounded-lg focus:outline-none focus:border-primary-navy text-primary-dark placeholder:opacity-40"
+          />
+        </div>
+      )}
 
       <div className="flex items-center gap-1">
         {VERDICT_OPTIONS.map(({ label, value }) => (
@@ -38,6 +40,24 @@ const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sor
           </button>
         ))}
       </div>
+
+      {onNoPatientChange && (
+        <label className="flex items-center gap-2 cursor-pointer select-none">
+          <span
+            onClick={() => onNoPatientChange(!noPatient)}
+            className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0 transition-colors"
+            style={{ borderColor: '#233970', backgroundColor: noPatient ? '#233970' : 'transparent' }}
+          >
+            {noPatient && <span className="w-1.5 h-1.5 rounded-full bg-white block" />}
+          </span>
+          <span
+            onClick={() => onNoPatientChange(!noPatient)}
+            className="font-outfit text-xs text-primary-dark opacity-60 hover:opacity-100 transition-opacity"
+          >
+            Without patient
+          </span>
+        </label>
+      )}
 
       <button
         onClick={() => onSortChange(sortOrder === 'desc' ? 'asc' : 'desc')}

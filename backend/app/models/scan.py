@@ -18,9 +18,11 @@ class Scan(Base):
     slice_count = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    uploaded_by_id = Column(Integer, ForeignKey("users.id"), nullable=True)
 
-    owner = relationship("User", back_populates="scans")
+    owner = relationship("User", foreign_keys=[user_id], back_populates="scans")
+    uploader = relationship("User", foreign_keys=[uploaded_by_id], back_populates="uploaded_scans")
     report = relationship(
         "Report", back_populates="scan", uselist=False, cascade="all, delete-orphan"
     )

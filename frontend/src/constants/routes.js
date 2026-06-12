@@ -2,6 +2,8 @@ export const ROUTES = {
   HOME: '/',
   AUTH: '/auth',
   PROFILE: '/profile',
+  DOCTOR: '/doctor',
+  ADMIN: '/admin',
   RESET_PASSWORD: '/reset-password',
 }
 
@@ -9,6 +11,7 @@ export const API_ROUTES = {
   // Auth
   REGISTER: '/api/auth/register',
   LOGIN: '/api/auth/login',
+  ME: '/api/users/me',
 
   // Scans
   SCANS: '/api/scans',
@@ -24,4 +27,12 @@ export const API_ROUTES = {
   // Reports
   REPORT_PDF: (id) => `/api/reports/pdf/${id}`,
   REPORT_REGISTRY: '/api/reports/registry',
+
+  // Doctor
+  DOCTOR_PATIENTS: '/api/doctor/patients',
+  DOCTOR_PATIENT_SCANS: (id) => `/api/doctor/patients/${id}/scans`,
+
+  // Admin
+  ADMIN_USERS: '/api/admin/users',
+  ADMIN_USER_ROLE: (id) => `/api/admin/users/${id}/role`,
 }

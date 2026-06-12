@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from ...database import get_db
@@ -19,7 +20,7 @@ async def save_comments(
     try:
         scan = (
             db.query(Scan)
-            .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+            .filter(Scan.id == scan_id, or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id))
             .first()
         )
 
@@ -61,7 +62,7 @@ async def save_feedback(
     try:
         scan = (
             db.query(Scan)
-            .filter(Scan.id == scan_id, Scan.user_id == current_user.id)
+            .filter(Scan.id == scan_id, or_(Scan.user_id == current_user.id, Scan.uploaded_by_id == current_user.id))
             .first()
         )
 

@@ -8,10 +8,10 @@ export const useAuthStore = create(
       token: null,
       isAuthenticated: false,
 
-      login: (token, email) =>
+      login: (token, email, role = 'patient') =>
         set({
           token,
-          user: { email },
+          user: { email, role },
           isAuthenticated: true,
         }),
 

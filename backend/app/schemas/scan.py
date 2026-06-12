@@ -49,3 +49,11 @@ class PaginatedPatientsResponse(BaseModel):
     page: int
     size: int
     pages: int
+
+
+class PaginatedUsersResponse(BaseModel):
+    items: list[UserResponse]
+    total: int
+    page: int
+    size: int
+    pages: int
