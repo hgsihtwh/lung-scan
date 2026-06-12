@@ -14,20 +14,11 @@ const ExportPanel = ({ comments = '' }) => {
     setError('')
     setIsDownloading(true)
 
-    console.log('=== DOWNLOADING REPORT ===')
-    console.log('Scan ID:', currentScanId)
-    console.log('Comment:', comments)
-
     try {
       const result = await downloadScanReport(currentScanId, comments, token)
 
-      console.log('Download result:', result)
-
       if (!result.success) {
         setError(result.error || 'Failed to download report')
-        console.error('Download failed:', result.error)
-      } else {
-        console.log('Download successful!')
       }
     } catch (err) {
       setError('Failed to download report. Please try again.')
