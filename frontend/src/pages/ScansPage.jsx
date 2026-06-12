@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PageLayout } from '@/components/layout'
 import { DicomViewer } from '@/components/viewer'
 import { useAuthStore, useScanStore } from '@/store'
@@ -13,6 +14,7 @@ const PAGE_SIZE = 20
 const ScansPage = () => {
   const { token } = useAuthStore()
   const { setCurrentScanId, resetScan } = useScanStore()
+  const navigate = useNavigate()
 
   const [viewing, setViewing] = useState(false)
 
@@ -80,9 +82,18 @@ const ScansPage = () => {
   return (
     <PageLayout>
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-24 sm:pt-32 lg:pt-[150px] pb-12 sm:pb-16 md:pb-20">
-        <h2 className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px] text-primary-dark mb-8 sm:mb-10 lg:mb-[50px]">
-          MY SCANS
-        </h2>
+        <div className="flex flex-wrap items-start justify-between gap-4 mb-8 sm:mb-10 lg:mb-[50px]">
+          <h2 className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px] text-primary-dark">
+            MY SCANS
+          </h2>
+          <button
+            onClick={() => navigate('/dynamics')}
+            className="px-5 py-2 rounded-full font-outfit font-medium text-sm transition-colors"
+            style={{ backgroundColor: '#233970', color: '#F5F3EA' }}
+          >
+            Dynamics
+          </button>
+        </div>
 
         {viewing ? (
           <DicomViewer onBack={handleBack} readOnly />

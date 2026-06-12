@@ -86,3 +86,7 @@ export const saveComment = async (scanId, comment, token) => {
 export const deleteScan = async (scanId, token) => {
   return apiClient(`/api/scans/${scanId}`, { method: 'DELETE', token })
 }
+
+export const getScansHistory = async (token) => {
+  return apiClient('/api/scans/history', { token })
+}

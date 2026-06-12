@@ -21,3 +21,7 @@ export const getDoctorScans = async (token, { search, verdict, no_patient = fals
   if (no_patient) params.set('no_patient', 'true')
   return apiClient(`/api/doctor/scans?${params}`, { token })
 }
+
+export const getPatientHistory = async (token, patientId) => {
+  return apiClient(`/api/doctor/patients/${patientId}/history`, { token })
+}

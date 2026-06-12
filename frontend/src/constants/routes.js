@@ -5,6 +5,8 @@ export const ROUTES = {
   DOCTOR: '/doctor',
   ADMIN: '/admin',
   RESET_PASSWORD: '/reset-password',
+  DYNAMICS: '/dynamics',
+  PATIENT_DYNAMICS: (patientId) => `/dynamics/${patientId}`,
 }
 
 export const API_ROUTES = {
@@ -23,6 +25,7 @@ export const API_ROUTES = {
   SCAN_FEEDBACK: (id) => `/api/scans/${id}/feedback`,
   SCAN_COMMENTS: (id) => `/api/scans/${id}/comments`,
   SCAN_REPORT: (id) => `/api/scans/${id}/report`,
+  SCAN_HISTORY: '/api/scans/history',
 
   // Reports
   REPORT_PDF: (id) => `/api/reports/pdf/${id}`,
@@ -31,6 +34,7 @@ export const API_ROUTES = {
   // Doctor
   DOCTOR_PATIENTS: '/api/doctor/patients',
   DOCTOR_PATIENT_SCANS: (id) => `/api/doctor/patients/${id}/scans`,
+  DOCTOR_PATIENT_HISTORY: (id) => `/api/doctor/patients/${id}/history`,
 
   // Admin
   ADMIN_USERS: '/api/admin/users',

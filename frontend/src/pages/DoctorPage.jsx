@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { PageLayout } from '@/components/layout'
 import { DicomViewer } from '@/components/viewer'
 import { useAuthStore, useScanStore } from '@/store'
@@ -14,6 +15,7 @@ const PAGE_SIZE = 20
 
 const PatientsTab = ({ token }) => {
   const { setCurrentScanId, resetScan } = useScanStore()
+  const navigate = useNavigate()
   const [patients, setPatients] = useState([])
   const [totalPatients, setTotalPatients] = useState(0)
   const [page, setPage] = useState(1)
@@ -92,9 +94,18 @@ const PatientsTab = ({ token }) => {
           ← Back to patients
         </button>
 
-        <h2 className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px] text-primary-dark mb-2">
-          SCANS
-        </h2>
+        <div className="flex flex-wrap items-start justify-between gap-4 mb-2">
+          <h2 className="font-outfit font-semibold text-3xl sm:text-4xl md:text-[45px] text-primary-dark">
+            SCANS
+          </h2>
+          <button
+            onClick={() => navigate(`/dynamics/${selectedPatient.id}`)}
+            className="px-5 py-2 rounded-full font-outfit font-medium text-sm transition-colors"
+            style={{ backgroundColor: '#233970', color: '#F5F3EA' }}
+          >
+            Dynamics
+          </button>
+        </div>
         <p className="font-outfit text-base text-primary-dark opacity-60 mb-8 sm:mb-10 lg:mb-[50px]">
           {selectedPatient.email} · {scansTotal} scans
         </p>
