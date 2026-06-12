@@ -76,6 +76,21 @@ body {
   background: radial-gradient(ellipse 60% 50% at 70% 40%, rgba(0, 61, 214, 0.18) 0%, transparent 70%);
 }
 
+.footer-glow {
+  position: relative;
+}
+
+.dark .footer-glow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5%;
+  right: 5%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0, 61, 214, 1) 50%, transparent);
+  box-shadow: 0 0 40px 6px rgba(0, 61, 214, 0.7);
+}
+
 .scroll-styled {
   scrollbar-width: thin;
   scrollbar-color: var(--color-border) transparent;

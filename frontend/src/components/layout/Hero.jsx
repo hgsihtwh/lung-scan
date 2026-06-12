@@ -28,7 +28,7 @@ const Hero = () => {
       className="max-w-[1440px] mx-auto px-4 sm:px-8 md:px-12 lg:px-[80px] pt-[180px] sm:pt-[260px] lg:pt-[350px] pb-16 sm:pb-24 lg:pb-32"
     >
       <h1
-        className="font-outfit font-semibold text-[80px] sm:text-[100px] lg:text-[150px] leading-none glow-text"
+        className="font-outfit font-semibold text-[80px] sm:text-[100px] lg:text-[150px] leading-none"
         style={{ color: 'var(--color-text)' }}
       >
         CHEST SCAN
