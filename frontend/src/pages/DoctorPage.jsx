@@ -13,6 +13,7 @@ const PAGE_SIZE = 20
 // ── Patients tab ────────────────────────────────────────────────────────────
 
 const PatientsTab = ({ token }) => {
+  const { setCurrentScanId, resetScan } = useScanStore()
   const [patients, setPatients] = useState([])
   const [totalPatients, setTotalPatients] = useState(0)
   const [page, setPage] = useState(1)
@@ -25,6 +26,7 @@ const PatientsTab = ({ token }) => {
   const [scans, setScans] = useState([])
   const [scansLoading, setScansLoading] = useState(false)
   const [scansTotal, setScansTotal] = useState(0)
+  const [viewing, setViewing] = useState(false)
 
   useEffect(() => {
     const t = setTimeout(() => setDebouncedSearch(search), 400)
@@ -58,6 +60,28 @@ const PatientsTab = ({ token }) => {
     setScansLoading(false)
   }
 
+  const handleScanClick = (scanId) => {
+    setCurrentScanId(scanId)
+    setViewing(true)
+  }
+
+  const handleBack = () => {
+    resetScan()
+    setViewing(false)
+  }
+
+  const handleDelete = async (scanId) => {
+    const result = await deleteScan(scanId, token)
+    if (result.success) {
+      setScans((prev) => prev.filter((s) => s.id !== scanId))
+      setScansTotal((t) => t - 1)
+    }
+  }
+
+  if (viewing) {
+    return <DicomViewer onBack={handleBack} />
+  }
+
   if (selectedPatient) {
     return (
       <>
@@ -80,35 +104,13 @@ const PatientsTab = ({ token }) => {
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-navy mx-auto mb-4" />
             <p className="font-outfit text-primary-dark">Loading scans...</p>
           </div>
-        ) : scans.length === 0 ? (
-          <p className="font-outfit text-primary-dark opacity-60 py-12">No scans found.</p>
         ) : (
-          <div className="space-y-3">
-            {scans.map((scan) => (
-              <div
-                key={scan.id}
-                className="flex items-center justify-between px-6 py-4 rounded-2xl"
-                style={{ backgroundColor: '#EFEDE3' }}
-              >
-                <div>
-                  <p className="font-outfit font-medium text-base text-primary-dark">
-                    {scan.patient_name || 'Unknown'}
-                  </p>
-                  <p className="font-outfit text-sm text-primary-dark opacity-60">
-                    {scan.slice_count} slices · {formatDate(scan.created_at)}
-                  </p>
-                </div>
-                <span
-                  className="font-outfit text-xs font-medium"
-                  style={{
-                    color: !scan.verdict ? '#9CA3AF' : scan.verdict === 'Normal' ? '#1F7819' : '#7E2F2F',
-                  }}
-                >
-                  {scan.verdict || scan.status || '—'}
-                </span>
-              </div>
-            ))}
-          </div>
+          <StudyGrid
+            scans={scans}
+            token={token}
+            onScanClick={handleScanClick}
+            onDelete={handleDelete}
+          />
         )}
       </>
     )
