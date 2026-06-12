@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from ...database import get_db
 from ...models import Report, Scan, User
 from ...models.user import ROLE_PATIENT
-from ...schemas import PaginatedScansResponse, PaginatedPatientsResponse, ScanResponse, UserResponse
+from ...schemas import PaginatedScansResponse, PaginatedPatientsResponse, ScanHistoryResponse, ScanResponse, UserResponse
 from ..deps import require_doctor
 
 router = APIRouter(prefix="/doctor")
@@ -79,6 +79,36 @@ async def get_patients(
         size=size,
         pages=pages,
     )
+
+
+@router.get("/patients/{patient_id}/history", response_model=ScanHistoryResponse)
+async def get_patient_history(
+    patient_id: int,
+    db: Session = Depends(get_db),
+    _: User = Depends(require_doctor),
+):
+    patient = db.query(User).filter(User.id == patient_id, User.role == ROLE_PATIENT).first()
+    if not patient:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Patient not found")
+
+    scans = (
+        db.query(Scan)
+        .outerjoin(Scan.report)
+        .filter(Scan.user_id == patient_id)
+        .order_by(Scan.created_at.asc())
+        .all()
+    )
+    items = [
+        {
+            "id": scan.id,
+            "created_at": scan.created_at,
+            "verdict": scan.report.verdict if scan.report else None,
+            "probability": scan.report.probability if scan.report else None,
+            "slice_count": scan.slice_count,
+        }
+        for scan in scans
+    ]
+    return ScanHistoryResponse(items=items)
 
 
 @router.get("/patients/{patient_id}/scans", response_model=PaginatedScansResponse)

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 from .auth import UserResponse
 
@@ -34,6 +34,21 @@ class UploadResponse(BaseModel):
     message: str
     slice_count: int
     anonymized_fields: list[str] = []
+
+
+class ScanHistoryItem(BaseModel):
+    id: int
+    created_at: datetime
+    verdict: str | None = None
+    probability: float | None = None
+    slice_count: int
+
+    class Config:
+        from_attributes = True
+
+
+class ScanHistoryResponse(BaseModel):
+    items: list[ScanHistoryItem]
 
 
 class PaginatedScansResponse(BaseModel):
