@@ -59,3 +59,13 @@ export const cleanupOrphanedFiles = async (token) => {
     token,
   })
 }
+
+export const getAuditLog = async (token, { userId, userEmail, action, dateFrom, dateTo, page = 1, size = 50 } = {}) => {
+  const params = new URLSearchParams({ page, size })
+  if (userId) params.set('user_id', userId)
+  if (userEmail) params.set('user_email', userEmail)
+  if (action) params.set('action', action)
+  if (dateFrom) params.set('date_from', dateFrom)
+  if (dateTo) params.set('date_to', dateTo)
+  return apiClient(`/api/admin/audit-log?${params}`, { token })
+}

@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from ...database import get_db
 from ...models import Scan, User
 from ...schemas import AnalysisResult
+from ...models.audit_log import ACTION_SCAN_ANALYZE
+from ...services.audit_service import write_log
 from ...tasks.analysis import run_analysis
 from ..deps import get_current_user
 
@@ -31,6 +33,7 @@ async def start_analysis(
 
     scan.status = "processing"
     db.commit()
+    write_log(db, current_user.id, ACTION_SCAN_ANALYZE, resource_type="scan", resource_id=scan_id)
 
     run_analysis.delay(scan_id)
 

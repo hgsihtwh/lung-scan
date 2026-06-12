@@ -6,7 +6,9 @@ from sqlalchemy.orm import Session
 
 from ...database import get_db
 from ...models import Feedback, Scan, User
+from ...models.audit_log import ACTION_REPORT_DOWNLOAD
 from ...services import DicomService, ReportService
+from ...services.audit_service import write_log
 from ..deps import get_current_user
 
 router = APIRouter(prefix="/scans")
@@ -68,6 +70,7 @@ async def download_scan_report(
             user_comment=user_comment,
         )
 
+        write_log(db, current_user.id, ACTION_REPORT_DOWNLOAD, resource_type="scan", resource_id=scan_id)
         return StreamingResponse(
             output,
             media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",

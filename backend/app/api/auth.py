@@ -25,7 +25,9 @@ from ..schemas import (
     UserRegister,
     VerifyCode,
 )
+from ..models.audit_log import ACTION_LOGIN
 from ..services import EmailService, VerificationService
+from ..services.audit_service import write_log
 
 
 router = APIRouter(prefix="/api/auth", tags=["Authentication"])
@@ -154,7 +156,7 @@ async def resend_code(resend_data: ResendCode):
 
 @router.post("/login", response_model=TokenPair)
 async def login(
-    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db),
 ):
     user = db.query(User).filter(User.email == form_data.username).first()
  
@@ -178,7 +180,8 @@ async def login(
     )
     db.add(db_refresh_token)
     db.commit()
- 
+    write_log(db, user.id, ACTION_LOGIN)
+
     return TokenPair(
         access_token=access_token,
         refresh_token=refresh_token_value,

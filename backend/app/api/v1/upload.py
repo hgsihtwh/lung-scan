@@ -5,7 +5,9 @@ from ...database import get_db
 from ...models import Scan, User
 from ...models.user import ROLE_PATIENT
 from ...schemas import UploadResponse
+from ...models.audit_log import ACTION_SCAN_UPLOAD
 from ...services import DicomService
+from ...services.audit_service import write_log
 from ..deps import require_doctor
 
 router = APIRouter(prefix="/scans")
@@ -83,6 +85,8 @@ async def upload_dicom(
         db.add(new_scan)
         db.commit()
         db.refresh(new_scan)
+        write_log(db, current_user.id, ACTION_SCAN_UPLOAD, resource_type="scan",
+                  resource_id=new_scan.id, details=f"slices={dicom_data['slice_count']}")
 
         return UploadResponse(
             status="success",

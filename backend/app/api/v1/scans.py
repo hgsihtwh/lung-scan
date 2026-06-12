@@ -9,7 +9,9 @@ from sqlalchemy.orm import Session
 from ...database import get_db
 from ...models import Report, Scan, User
 from ...models.user import ROLE_DOCTOR
+from ...models.audit_log import ACTION_SCAN_DELETE, ACTION_SCAN_VIEW
 from ...services import DicomService
+from ...services.audit_service import write_log
 from ...services.cleanup_service import CleanupService
 from ..deps import get_current_user
 from ...schemas import PaginatedScansResponse, ScanDetailResponse, ScanHistoryResponse, ScanResponse
@@ -120,6 +122,7 @@ async def get_scan(
             detail="Scan not found",
         )
 
+    write_log(db, current_user.id, ACTION_SCAN_VIEW, resource_type="scan", resource_id=scan_id)
     return ScanDetailResponse(
         id=scan.id,
         file_id=scan.file_id,
@@ -153,6 +156,7 @@ async def delete_scan(
     CleanupService.delete_scan_files(scan.file_id)
     db.delete(scan)
     db.commit()
+    write_log(db, current_user.id, ACTION_SCAN_DELETE, resource_type="scan", resource_id=scan_id)
 
 
 @router.get("/{scan_id}/slices")
