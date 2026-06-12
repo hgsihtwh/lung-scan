@@ -1,3 +1,4 @@
+from .annotation import AnnotationCreate, AnnotationResponse, AnnotationUpdate
 from .auth import (
     ChangePassword,
     UpdateProfile,
@@ -19,6 +20,9 @@ from .report import AnalysisResult, ReportResponse
 from .scan import PaginatedPatientsResponse, PaginatedScansResponse, PaginatedUsersResponse, ScanDetailResponse, ScanHistoryItem, ScanHistoryResponse, ScanResponse, UploadResponse
 
 __all__ = [
+    "AnnotationCreate",
+    "AnnotationResponse",
+    "AnnotationUpdate",
     "AnalysisResult",
     "ChangePassword",
     "UpdateProfile",

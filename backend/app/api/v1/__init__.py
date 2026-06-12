@@ -2,6 +2,7 @@ from fastapi import APIRouter
 
 from .admin import router as admin_router
 from .analysis import router as analysis_router
+from .annotations import router as annotations_router
 from .doctor import router as doctor_router
 from .feedback import router as feedback_router
 from .reports import router as reports_router
@@ -14,6 +15,7 @@ router = APIRouter(prefix="/api")
 router.include_router(scans_router, tags=["Scans"])
 router.include_router(upload_router, tags=["Upload"])
 router.include_router(analysis_router, tags=["Analysis"])
+router.include_router(annotations_router, tags=["Annotations"])
 router.include_router(feedback_router, tags=["Feedback"])
 router.include_router(reports_router, tags=["Reports"])
 router.include_router(users_router, tags=["Users"])
