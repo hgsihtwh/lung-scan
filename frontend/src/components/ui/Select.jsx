@@ -119,7 +119,7 @@ const Select = ({
                   className="w-full text-left px-4 py-2.5 font-outfit text-base transition-colors hover:bg-black/5"
                   style={
                     value === option.value
-                      ? { backgroundColor: 'var(--color-navy-accent)', color: 'var(--color-surface-alt)' }
+                      ? { backgroundColor: 'var(--color-navy-accent)', color: 'var(--color-bg)' }
                       : { color: 'var(--color-text)' }
                   }
                 >

@@ -32,7 +32,7 @@ const HistoryControls = ({ search, onSearchChange, verdict, onVerdictChange, sor
             onClick={() => onVerdictChange(value)}
             className={`px-3 py-1.5 text-base font-outfit rounded-full transition-colors ${
               verdict === value
-                ? 'bg-primary-navy text-white'
+                ? 'bg-primary-navy text-primary-beige'
                 : 'text-primary-dark opacity-60 hover:opacity-100'
             }`}
           >
