@@ -1,15 +1,18 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { Moon, Sun } from 'lucide-react'
 import { useAuthStore, useThemeStore } from '@/store'
 
-const NAV_LINK_CLASS =
-  'font-outfit font-normal text-base sm:text-lg md:text-[20px] text-primary-navy hover:opacity-70 transition-opacity'
-
 const Header = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { isAuthenticated, user } = useAuthStore()
   const { isDark, toggle } = useThemeStore()
   const role = user?.role
+
+  const navClass = (path) =>
+    `nav-link font-outfit font-normal text-base sm:text-lg md:text-[20px] hover:opacity-70 transition-opacity ${
+      location.pathname === path ? 'nav-active' : ''
+    }`
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-primary-beige z-30 pt-8 sm:pt-12 md:pt-[60px]">
@@ -45,7 +48,7 @@ const Header = () => {
             {role !== 'admin' && (
               <a
                 href="/#about"
-                className="font-outfit font-normal text-base sm:text-lg md:text-[20px] text-primary-dark hover:opacity-70 transition-opacity"
+                className={`nav-link font-outfit font-normal text-base sm:text-lg md:text-[20px] hover:opacity-70 transition-opacity ${location.pathname === '/' ? 'nav-active' : ''}`}
               >
                 About
               </a>
@@ -54,31 +57,31 @@ const Header = () => {
             {isAuthenticated ? (
               <>
                 {role === 'patient' && (
-                  <button onClick={() => navigate('/scans')} className={NAV_LINK_CLASS}>
+                  <button onClick={() => navigate('/scans')} className={navClass('/scans')}>
                     My Scans
                   </button>
                 )}
                 {role === 'doctor' && (
                   <>
-                    <button onClick={() => navigate('/upload')} className={NAV_LINK_CLASS}>
+                    <button onClick={() => navigate('/upload')} className={navClass('/upload')}>
                       Upload
                     </button>
-                    <button onClick={() => navigate('/doctor')} className={NAV_LINK_CLASS}>
+                    <button onClick={() => navigate('/doctor')} className={navClass('/doctor')}>
                       Scans & Patients
                     </button>
                   </>
                 )}
                 {role === 'admin' && (
-                  <button onClick={() => navigate('/admin')} className={NAV_LINK_CLASS}>
+                  <button onClick={() => navigate('/admin')} className={navClass('/admin')}>
                     Admin
                   </button>
                 )}
-                <button onClick={() => navigate('/profile')} className={NAV_LINK_CLASS}>
+                <button onClick={() => navigate('/profile')} className={navClass('/profile')}>
                   Profile
                 </button>
               </>
             ) : (
-              <button onClick={() => navigate('/auth')} className={NAV_LINK_CLASS}>
+              <button onClick={() => navigate('/auth')} className={navClass('/auth')}>
                 Sign In
               </button>
             )}

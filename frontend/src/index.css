@@ -101,6 +101,20 @@ body {
   color: var(--color-text);
 }
 
+/* Nav links: light — тёмные, active — синий; dark — синие, active — белый */
+.nav-link {
+  color: var(--color-text);
+}
+.nav-link.nav-active {
+  color: var(--color-navy);
+}
+.dark .nav-link {
+  color: var(--color-navy);
+}
+.dark .nav-link.nav-active {
+  color: var(--color-text);
+}
+
 .dark .footer-glow::before {
   content: '';
   position: absolute;
